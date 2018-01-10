@@ -1,0 +1,21 @@
+{
+  "require": {
+    "php": "^7.1",
+    "matthiasnoback/php-workshop-tools": "^0.12.0",
+    "matthiasnoback/naive-serializer": "^0.4.0"
+  },
+  "require-dev": {
+    "symfony/debug": "^4.0",
+    "phpunit/phpunit": "^6.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "": "test/"
+    }
+  }
+}

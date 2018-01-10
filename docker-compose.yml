@@ -1,0 +1,130 @@
+version: '2'
+
+services:
+    ingress:
+        image: traefik:1.3-alpine
+        command: --docker
+        ports:
+            - "80:80"
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+        labels:
+            - "traefik.frontend.rule=Host:traefik.localhost"
+            - "traefik.port=80"
+        networks:
+            - traefik
+            - default
+
+    dnsmasq:
+        container_name: dnsmasq
+        image: andyshinn/dnsmasq:latest
+        ports:
+            - "53535:53/tcp"
+            - "53535:53/udp"
+        cap_add:
+            - NET_ADMIN
+        command: "--address=/.${DOCKER_DNS_DOMAIN}/${DOCKER_MACHINE_IP}"
+        networks:
+            - traefik
+            - default
+
+    devtools:
+        image: matthiasnoback/php_workshop_tools_base
+        volumes:
+            - ./:/opt:cached
+            - ${COMPOSER_HOME}:/home/.composer:cached
+        environment:
+            COMPOSER_HOME: /home/.composer
+            XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_IP}"
+        user: ${HOST_UID}:${HOST_GID}
+
+    dashboard_web:
+        image: matthiasnoback/php_workshop_tools_simple_webserver
+        container_name: dashboard_web
+        command: src/Dashboard/public/
+        volumes:
+            - .:/opt
+        tty: true
+        env_file: .env
+        restart: always
+        environment:
+            PHP_IDE_CONFIG: "serverName=dashboard_web"
+            XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_IP}"
+        networks:
+            default:
+            traefik:
+        labels:
+            - "traefik.enable=true"
+            - "traefik.backend=dashboard_web"
+            - "traefik.frontend.rule=Host:dashboard.localhost"
+            - "traefik.port=80"
+            - "traefik.docker.network=traefik"
+
+    catalog_web:
+        image: matthiasnoback/php_workshop_tools_simple_webserver
+        container_name: catalog_web
+        command: src/Catalog/public/
+        volumes:
+            - .:/opt
+        tty: true
+        env_file: .env
+        restart: always
+        environment:
+            PHP_IDE_CONFIG: "serverName=catalog_web"
+            XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_IP}"
+        networks:
+            default:
+            traefik:
+        labels:
+            - "traefik.enable=true"
+            - "traefik.backend=catalog_web"
+            - "traefik.frontend.rule=Host:catalog.localhost"
+            - "traefik.port=80"
+            - "traefik.docker.network=traefik"
+
+    sales_web:
+        image: matthiasnoback/php_workshop_tools_simple_webserver
+        container_name: sales_web
+        command: src/Sales/public/
+        volumes:
+            - .:/opt
+        tty: true
+        env_file: .env
+        restart: always
+        environment:
+            PHP_IDE_CONFIG: "serverName=sales_web"
+            XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_IP}"
+        networks:
+            default:
+            traefik:
+        labels:
+            - "traefik.enable=true"
+            - "traefik.backend=sales_web"
+            - "traefik.frontend.rule=Host:sales.localhost"
+            - "traefik.port=80"
+            - "traefik.docker.network=traefik"
+
+    purchase_web:
+        image: matthiasnoback/php_workshop_tools_simple_webserver
+        container_name: purchase_web
+        command: src/Purchase/public/
+        volumes:
+            - .:/opt
+        tty: true
+        env_file: .env
+        restart: always
+        environment:
+            PHP_IDE_CONFIG: "serverName=purchase_web"
+            XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_IP}"
+        networks:
+            default:
+            traefik:
+        labels:
+            - "traefik.enable=true"
+            - "traefik.backend=purchase_web"
+            - "traefik.frontend.rule=Host:purchase.localhost"
+            - "traefik.port=80"
+            - "traefik.docker.network=traefik"
+
+networks:
+    traefik: ~
