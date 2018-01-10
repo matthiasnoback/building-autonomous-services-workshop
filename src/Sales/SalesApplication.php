@@ -34,7 +34,7 @@ final class SalesApplication
             exit;
         }
 
-        $products = Json::decodeFromRemoteUrl('http://catalog_web/listProducts');
+        $products = Json::decodeFromRemoteUrl('http://catalog_web:8080/listProducts');
 
         include __DIR__ . '/../Common/header.html';
 

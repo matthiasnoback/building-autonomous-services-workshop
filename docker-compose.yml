@@ -10,7 +10,7 @@ services:
             - /var/run/docker.sock:/var/run/docker.sock
         labels:
             - "traefik.frontend.rule=Host:traefik.localhost"
-            - "traefik.port=80"
+            - "traefik.port=8080"
         networks:
             - traefik
             - default
@@ -57,8 +57,9 @@ services:
             - "traefik.enable=true"
             - "traefik.backend=dashboard_web"
             - "traefik.frontend.rule=Host:dashboard.localhost"
-            - "traefik.port=80"
+            - "traefik.port=8080"
             - "traefik.docker.network=traefik"
+        user: ${HOST_UID}:${HOST_GID}
 
     catalog_web:
         image: matthiasnoback/php_workshop_tools_simple_webserver
@@ -79,8 +80,9 @@ services:
             - "traefik.enable=true"
             - "traefik.backend=catalog_web"
             - "traefik.frontend.rule=Host:catalog.localhost"
-            - "traefik.port=80"
+            - "traefik.port=8080"
             - "traefik.docker.network=traefik"
+        user: ${HOST_UID}:${HOST_GID}
 
     sales_web:
         image: matthiasnoback/php_workshop_tools_simple_webserver
@@ -101,8 +103,9 @@ services:
             - "traefik.enable=true"
             - "traefik.backend=sales_web"
             - "traefik.frontend.rule=Host:sales.localhost"
-            - "traefik.port=80"
+            - "traefik.port=8080"
             - "traefik.docker.network=traefik"
+        user: ${HOST_UID}:${HOST_GID}
 
     purchase_web:
         image: matthiasnoback/php_workshop_tools_simple_webserver
@@ -123,8 +126,9 @@ services:
             - "traefik.enable=true"
             - "traefik.backend=purchase_web"
             - "traefik.frontend.rule=Host:purchase.localhost"
-            - "traefik.port=80"
+            - "traefik.port=8080"
             - "traefik.docker.network=traefik"
+        user: ${HOST_UID}:${HOST_GID}
 
 networks:
     traefik: ~

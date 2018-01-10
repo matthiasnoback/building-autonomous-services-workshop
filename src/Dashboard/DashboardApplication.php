@@ -13,7 +13,7 @@ final class DashboardApplication
 
         ?><h1>Dashboard</h1><?php
 
-        $allProducts = Json::decodeFromRemoteUrl('http://catalog_web/listProducts');
+        $allProducts = Json::decodeFromRemoteUrl('http://catalog_web:8080/listProducts');
 
         $stockLevels = $this->calculateStockLevels();
 
@@ -49,14 +49,14 @@ final class DashboardApplication
     {
         $stockLevels = [];
 
-        $receipts = Json::decodeFromRemoteUrl('http://purchase_web/listReceipts');
+        $receipts = Json::decodeFromRemoteUrl('http://purchase_web:8080/listReceipts');
         foreach ($receipts as $receipt) {
             foreach ($receipt['lines'] as $line) {
                 $stockLevels[$line['productId']] = ($stockLevels[$line['productId']] ?? 0) + $line['quantity'];
             }
         }
 
-        $salesOrders = Json::decodeFromRemoteUrl('http://sales_web/listSalesOrders');
+        $salesOrders = Json::decodeFromRemoteUrl('http://sales_web:8080/listSalesOrders');
         foreach ($salesOrders as $salesOrder) {
             foreach ($salesOrder['lines'] as $line) {
                 $stockLevels[$line['productId']] = ($stockLevels[$line['productId']] ?? 0) - $line['quantity'];
