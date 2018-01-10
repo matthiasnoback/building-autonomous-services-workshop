@@ -130,5 +130,16 @@ services:
             - "traefik.docker.network=traefik"
         user: ${HOST_UID}:${HOST_GID}
 
+    consumer:
+        image: matthiasnoback/php_workshop_tools_base
+        command: php src/Common/consumer.php
+        volumes:
+            - ./:/opt:cached
+        env_file: .env
+        environment:
+            PHP_IDE_CONFIG: "serverName=consumer"
+            XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_IP}"
+        user: ${HOST_UID}:${HOST_GID}
+
 networks:
     traefik: ~
