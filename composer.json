@@ -1,7 +1,7 @@
 {
   "require": {
     "php": "^7.1",
-    "matthiasnoback/php-workshop-tools": "^0.16",
+    "matthiasnoback/php-workshop-tools": "^0.17",
     "matthiasnoback/naive-serializer": "^0.4.0"
   },
   "require-dev": {

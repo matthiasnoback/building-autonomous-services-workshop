@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Dashboard;
 
-use Common\Json;
+use Common\Web\HttpApi;
 
 final class DashboardApplication
 {
@@ -13,7 +13,7 @@ final class DashboardApplication
 
         ?><h1>Dashboard</h1><?php
 
-        $allProducts = Json::decodeFromRemoteUrl('http://catalog_web:8080/listProducts');
+        $allProducts = HttpApi::fetchDecodedJsonResponse('http://catalog_web:8080/listProducts');
 
         $stockLevels = $this->calculateStockLevels();
 
@@ -31,9 +31,9 @@ final class DashboardApplication
             foreach ($allProducts as $productData) {
                 ?>
                 <tr>
-                    <td><?php echo htmlspecialchars((string)$productData['productId']); ?></td>
-                    <td><?php echo htmlspecialchars($productData['name']); ?></td>
-                    <td><?php echo $stockLevels[$productData['productId']] ?? 0; ?></td>
+                    <td><?php echo htmlspecialchars((string)$productData->productId); ?></td>
+                    <td><?php echo htmlspecialchars($productData->name); ?></td>
+                    <td><?php echo $stockLevels[$productData->productId] ?? 0; ?></td>
                 </tr>
                 <?php
             }
@@ -49,17 +49,17 @@ final class DashboardApplication
     {
         $stockLevels = [];
 
-        $receipts = Json::decodeFromRemoteUrl('http://purchase_web:8080/listReceipts');
+        $receipts = HttpApi::fetchDecodedJsonResponse('http://purchase_web:8080/listReceipts');
         foreach ($receipts as $receipt) {
-            foreach ($receipt['lines'] as $line) {
-                $stockLevels[$line['productId']] = ($stockLevels[$line['productId']] ?? 0) + $line['quantity'];
+            foreach ($receipt->lines as $line) {
+                $stockLevels[$line->productId] = ($stockLevels[$line->productId] ?? 0) + $line->quantity;
             }
         }
 
-        $salesOrders = Json::decodeFromRemoteUrl('http://sales_web:8080/listSalesOrders');
+        $salesOrders = HttpApi::fetchDecodedJsonResponse('http://sales_web:8080/listSalesOrders');
         foreach ($salesOrders as $salesOrder) {
-            foreach ($salesOrder['lines'] as $line) {
-                $stockLevels[$line['productId']] = ($stockLevels[$line['productId']] ?? 0) - $line['quantity'];
+            foreach ($salesOrder->lines as $line) {
+                $stockLevels[$line->productId] = ($stockLevels[$line->productId] ?? 0) - $line->quantity;
             }
         }
 

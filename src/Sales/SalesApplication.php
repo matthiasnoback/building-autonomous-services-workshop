@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Sales;
 
-use Common\Json;
 use Common\Persistence\Database;
+use Common\Web\HttpApi;
 use NaiveSerializer\Serializer;
 
 final class SalesApplication
@@ -34,7 +34,7 @@ final class SalesApplication
             exit;
         }
 
-        $products = Json::decodeFromRemoteUrl('http://catalog_web:8080/listProducts');
+        $products = HttpApi::fetchDecodedJsonResponse('http://catalog_web:8080/listProducts');
 
         include __DIR__ . '/../Common/header.html';
 
@@ -58,7 +58,7 @@ final class SalesApplication
                         <td>
                             <select name="lines[<?php echo $i; ?>][productId]" class="form-control" title="Select a product">
                                 <?php foreach ($products as $product) { ?>
-                                    <option value="<?php echo $product['productId']; ?>"><?php echo $product['productId'] . ': ' . $product['name']; ?></option>
+                                    <option value="<?php echo $product->productId; ?>"><?php echo $product->productId . ': ' . $product->name; ?></option>
                                 <?php } ?>
                             </select>
                         </td>

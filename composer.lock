@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "b9788206f7ae9d13425d062a9f9dcddb",
+    "content-hash": "af7cd492ae3f0b334a17c33913089364",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -103,16 +103,16 @@
         },
         {
             "name": "matthiasnoback/php-workshop-tools",
-            "version": "v0.16.0",
+            "version": "v0.17.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/matthiasnoback/php-workshop-tools.git",
-                "reference": "5a974c5cd62863ceefc1ee9e7d662ae844b05d9b"
+                "reference": "d6e1d19271a2ad1df3ee88cde5e9dedf69868f50"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matthiasnoback/php-workshop-tools/zipball/5a974c5cd62863ceefc1ee9e7d662ae844b05d9b",
-                "reference": "5a974c5cd62863ceefc1ee9e7d662ae844b05d9b",
+                "url": "https://api.github.com/repos/matthiasnoback/php-workshop-tools/zipball/d6e1d19271a2ad1df3ee88cde5e9dedf69868f50",
+                "reference": "d6e1d19271a2ad1df3ee88cde5e9dedf69868f50",
                 "shasum": ""
             },
             "require": {
@@ -147,7 +147,7 @@
                     "email": "matthiasnoback@gmail.com"
                 }
             ],
-            "time": "2018-01-10T18:49:04+00:00"
+            "time": "2018-01-10T19:18:30+00:00"
         },
         {
             "name": "paragonie/random_compat",
