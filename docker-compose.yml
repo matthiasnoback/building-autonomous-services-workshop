@@ -116,6 +116,14 @@ services:
         volumes:
             - ./:/opt:cached
 
+    purchase_consumer:
+        extends:
+            file: docker/defaults.yml
+            service: php-cli
+        command: php src/Purchase/consumer.php
+        volumes:
+            - ./:/opt:cached
+
 networks:
     traefik: ~
     default: ~

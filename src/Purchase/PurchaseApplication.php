@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Purchase;
 
 use Common\Persistence\Database;
-use Common\Web\HttpApi;
 use NaiveSerializer\Serializer;
 
 final class PurchaseApplication
@@ -34,7 +33,8 @@ final class PurchaseApplication
             exit;
         }
 
-        $products = HttpApi::fetchDecodedJsonResponse('http://catalog_web/listProducts');
+        /** @var Product[] $products */
+        $products = Database::retrieveAll(Product::class);
 
         include __DIR__ . '/../Common/header.html';
 

@@ -3,6 +3,7 @@
 namespace Catalog;
 
 use Common\Persistence\Database;
+use Common\Stream\Stream;
 use NaiveSerializer\Serializer;
 
 final class CatalogApplication
@@ -18,6 +19,14 @@ final class CatalogApplication
                 (int)$_POST['minimum_stock_level'] ?: null
             );
             Database::persist($product);
+
+            Stream::produce(
+                'product_created',
+                [
+                    'productId' => $product->id(),
+                    'name' => $product->name()
+                ]
+            );
 
             header('Location: /listProducts');
             exit;
