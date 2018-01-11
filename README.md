@@ -24,3 +24,7 @@
     ```
 
 You should finally see a message asking you to open [http://dashboard.localhost](http://dashboard.localhost) in your browser. When you do this, you should see a nice web application. Feel free to click around.
+
+## A note for Windows users
+
+If you feel like you won't be able to install all the tools listed above on your Windows machine, I advise you to install Docker for Windows and set up a VM for running containers (see [Get started with Docker Machine and a local VM](https://docs.docker.com/machine/get-started/)).
