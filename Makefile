@@ -18,6 +18,8 @@ endif
 export HOST_UID := $(shell id -u)
 export HOST_GID := $(shell id -g)
 
+COMPOSER_RUN := docker run --rm --interactive --tty --volume ${PWD}:/app:cached --volume ${COMPOSER_HOME}:/tmp:cached --user ${HOST_UID}:${HOST_GID} composer:latest
+
 ## hosts-entry: Set up an entry for this project's host names in /etc/hosts
 .PHONY: hosts-entry
 hosts-entry:
@@ -27,7 +29,12 @@ hosts-entry:
 	mkdir -p ~/.composer
 
 vendor: ~/.composer composer.json composer.lock
-	docker run --rm --interactive --tty --volume ${PWD}:/app:cached --volume ${COMPOSER_HOME}:/tmp:cached --user ${HOST_UID}:${HOST_GID} composer:latest install
+	 ${COMPOSER_RUN} install
+
+## composer: entrypoint for running Composer (use bin/composer.sh)
+.PHONY: composer
+composer:
+	@${COMPOSER_RUN} $(ARGS) --ansi
 
 ## up: Start all services for this project
 .PHONY: up
