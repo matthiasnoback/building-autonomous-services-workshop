@@ -5,12 +5,9 @@ services:
         image: traefik:1.3-alpine
         command: --docker
         ports:
-            - "80:80"
+            - "8080:80"
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
-        labels:
-            - "traefik.frontend.rule=Host:traefik.localhost"
-            - "traefik.port=8080"
         networks:
             - traefik
             - default
