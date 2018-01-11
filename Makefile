@@ -12,7 +12,7 @@ $(error Unable to automatically determine DOCKER_HOST_NAME_OR_IP: please provide
 endif
 
 ifeq ($(COMPOSER_HOME),)
-export COMPOSER_HOME="~/.composer"
+export COMPOSER_HOME=~/.composer
 endif
 
 ifeq ($(HOST_UID),)
