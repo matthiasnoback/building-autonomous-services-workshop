@@ -21,7 +21,7 @@ export HOST_GID := $(shell id -g)
 ## hosts-entry: Set up an entry for this project's host names in /etc/hosts
 .PHONY: hosts-entry
 hosts-entry:
-	(grep "$(HOSTS_ENTRY)" /etc/hosts) || \ echo '$(HOSTS_ENTRY)' | sudo tee -a /etc/hosts
+	(grep "$(HOSTS_ENTRY)" /etc/hosts) || echo '$(HOSTS_ENTRY)' | sudo tee -a /etc/hosts
 
 ~/.composer:
 	mkdir -p ~/.composer
