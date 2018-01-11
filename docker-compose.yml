@@ -15,162 +15,109 @@ services:
             - traefik
             - default
 
-    devtools:
-        image: matthiasnoback/php_workshop_tools_base
+    dashboard_web:
+        extends:
+            file: docker/defaults.yml
+            service: web
         volumes:
             - ./:/opt:cached
-            - ${COMPOSER_HOME}:/home/.composer:cached
-        env_file: .env
-        environment:
-            COMPOSER_HOME: /home/.composer
-            XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_IP}"
-        user: ${HOST_UID}:${HOST_GID}
-
-    dashboard_web:
-        image: matthiasnoback/php_workshop_tools_templated_nginx
-        volumes:
-            - ./:/opt
         depends_on:
             - dashboard_php
-        restart: on-failure
-        networks:
-            - traefik
-            - default
         environment:
             - SERVER_NAME=dashboard.localhost
             - PHP_BACKEND=dashboard_php
             - ROOT=/opt/src/Dashboard/public
         labels:
-            - "traefik.enable=true"
             - "traefik.backend=dashboard_web"
             - "traefik.frontend.rule=Host:dashboard.localhost"
-            - "traefik.port=80"
-            - "traefik.docker.network=traefik"
 
     dashboard_php:
-        image: matthiasnoback/php_workshop_tools_php_fpm
+        extends:
+            file: docker/defaults.yml
+            service: php-fpm
         volumes:
-            - ./:/opt
-        restart: on-failure
-        networks:
-            - traefik
-            - default
-        env_file: .env
-        environment:
-            XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_IP}"
-        user: ${HOST_UID}:${HOST_GID}
+            - ./:/opt:cached
+        depends_on:
+            - catalog_web
+            - purchase_web
+            - sales_web
 
     catalog_web:
-        image: matthiasnoback/php_workshop_tools_templated_nginx
+        extends:
+            file: docker/defaults.yml
+            service: web
         volumes:
-            - ./:/opt
+            - ./:/opt:cached
         depends_on:
             - catalog_php
-        restart: on-failure
-        networks:
-            - traefik
-            - default
         environment:
             - SERVER_NAME=catalog.localhost
             - PHP_BACKEND=catalog_php
             - ROOT=/opt/src/Catalog/public
         labels:
-            - "traefik.enable=true"
             - "traefik.backend=catalog_web"
             - "traefik.frontend.rule=Host:catalog.localhost"
-            - "traefik.port=80"
-            - "traefik.docker.network=traefik"
 
     catalog_php:
-        image: matthiasnoback/php_workshop_tools_php_fpm
+        extends:
+            file: docker/defaults.yml
+            service: php-fpm
         volumes:
-            - ./:/opt
-        restart: on-failure
-        networks:
-            - traefik
-            - default
-        env_file: .env
-        environment:
-            XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_IP}"
-        user: ${HOST_UID}:${HOST_GID}
+            - ./:/opt:cached
 
     sales_web:
-        image: matthiasnoback/php_workshop_tools_templated_nginx
+        extends:
+            file: docker/defaults.yml
+            service: web
         volumes:
-            - ./:/opt
+            - ./:/opt:cached
         depends_on:
             - sales_php
-        restart: on-failure
-        networks:
-            - traefik
-            - default
         environment:
             - SERVER_NAME=sales.localhost
             - PHP_BACKEND=sales_php
             - ROOT=/opt/src/Sales/public
         labels:
-            - "traefik.enable=true"
             - "traefik.backend=sales_web"
             - "traefik.frontend.rule=Host:sales.localhost"
-            - "traefik.port=80"
-            - "traefik.docker.network=traefik"
 
     sales_php:
-        image: matthiasnoback/php_workshop_tools_php_fpm
+        extends:
+            file: docker/defaults.yml
+            service: php-fpm
         volumes:
-            - ./:/opt
-        restart: on-failure
-        networks:
-            - traefik
-            - default
-        env_file: .env
-        environment:
-            XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_IP}"
-        user: ${HOST_UID}:${HOST_GID}
+            - ./:/opt:cached
 
     purchase_web:
-        image: matthiasnoback/php_workshop_tools_templated_nginx
+        extends:
+            file: docker/defaults.yml
+            service: web
         volumes:
-            - ./:/opt
+            - ./:/opt:cached
         depends_on:
             - purchase_php
-        restart: on-failure
-        networks:
-            - traefik
-            - default
         environment:
             - SERVER_NAME=purchase.localhost
             - PHP_BACKEND=purchase_php
             - ROOT=/opt/src/Purchase/public
         labels:
-            - "traefik.enable=true"
             - "traefik.backend=purchase_web"
             - "traefik.frontend.rule=Host:purchase.localhost"
-            - "traefik.port=80"
-            - "traefik.docker.network=traefik"
 
     purchase_php:
-        image: matthiasnoback/php_workshop_tools_php_fpm
+        extends:
+            file: docker/defaults.yml
+            service: php-fpm
         volumes:
-            - ./:/opt
-        restart: on-failure
-        networks:
-            - traefik
-            - default
-        env_file: .env
-        environment:
-            XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_IP}"
-        user: ${HOST_UID}:${HOST_GID}
+            - ./:/opt:cached
 
     consumer:
-        image: matthiasnoback/php_workshop_tools_base
+        extends:
+            file: docker/defaults.yml
+            service: php-cli
         command: php src/Common/consumer.php
         volumes:
             - ./:/opt:cached
-        env_file: .env
-        environment:
-            XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_IP}"
-        user: ${HOST_UID}:${HOST_GID}
 
 networks:
     traefik: ~

@@ -1,0 +1,35 @@
+version: '2'
+
+services:
+    web:
+        image: matthiasnoback/building_autonomous_services_nginx
+        restart: on-failure
+        networks:
+            - traefik
+            - default
+        labels:
+            - "traefik.enable=true"
+            - "traefik.docker.network=traefik"
+            - "traefik.port=80"
+
+    php-fpm:
+        image: matthiasnoback/building_autonomous_services_php_fpm
+        restart: on-failure
+        env_file: .env
+        user: ${HOST_UID}:${HOST_GID}
+        networks:
+            - traefik
+            - default
+        environment:
+            XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_NAME_OR_IP}"
+
+    php-cli:
+        image: matthiasnoback/building_autonomous_services_php_cli
+        restart: on-failure
+        env_file: .env
+        user: ${HOST_UID}:${HOST_GID}
+        networks:
+            - traefik
+            - default
+        environment:
+            XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_NAME_OR_IP}"
