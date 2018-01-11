@@ -13,7 +13,7 @@ final class DashboardApplication
 
         ?><h1>Dashboard</h1><?php
 
-        $allProducts = HttpApi::fetchDecodedJsonResponse('http://catalog_web:8080/listProducts');
+        $allProducts = HttpApi::fetchDecodedJsonResponse('http://catalog_web/listProducts');
 
         $stockLevels = $this->calculateStockLevels();
 
@@ -49,14 +49,14 @@ final class DashboardApplication
     {
         $stockLevels = [];
 
-        $receipts = HttpApi::fetchDecodedJsonResponse('http://purchase_web:8080/listReceipts');
+        $receipts = HttpApi::fetchDecodedJsonResponse('http://purchase_web/listReceipts');
         foreach ($receipts as $receipt) {
             foreach ($receipt->lines as $line) {
                 $stockLevels[$line->productId] = ($stockLevels[$line->productId] ?? 0) + $line->quantity;
             }
         }
 
-        $salesOrders = HttpApi::fetchDecodedJsonResponse('http://sales_web:8080/listSalesOrders');
+        $salesOrders = HttpApi::fetchDecodedJsonResponse('http://sales_web/listSalesOrders');
         foreach ($salesOrders as $salesOrder) {
             foreach ($salesOrder->lines as $line) {
                 $stockLevels[$line->productId] = ($stockLevels[$line->productId] ?? 0) - $line->quantity;

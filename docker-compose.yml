@@ -15,119 +15,151 @@ services:
             - traefik
             - default
 
-    dnsmasq:
-        container_name: dnsmasq
-        image: andyshinn/dnsmasq:latest
-        ports:
-            - "53535:53/tcp"
-            - "53535:53/udp"
-        cap_add:
-            - NET_ADMIN
-        command: "--address=/.${DOCKER_DNS_DOMAIN}/${DOCKER_MACHINE_IP}"
-        networks:
-            - traefik
-            - default
-
     devtools:
         image: matthiasnoback/php_workshop_tools_base
         volumes:
             - ./:/opt:cached
             - ${COMPOSER_HOME}:/home/.composer:cached
+        env_file: .env
         environment:
             COMPOSER_HOME: /home/.composer
             XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_IP}"
         user: ${HOST_UID}:${HOST_GID}
 
     dashboard_web:
-        image: matthiasnoback/php_workshop_tools_simple_webserver
-        container_name: dashboard_web
-        command: src/Dashboard/public/
+        image: matthiasnoback/php_workshop_tools_templated_nginx
         volumes:
-            - .:/opt
-        tty: true
-        env_file: .env
-        restart: always
-        environment:
-            PHP_IDE_CONFIG: "serverName=dashboard_web"
-            XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_IP}"
+            - ./:/opt
+        depends_on:
+            - dashboard_php
+        restart: on-failure
         networks:
-            default:
-            traefik:
+            - traefik
+            - default
+        environment:
+            - SERVER_NAME=dashboard.localhost
+            - PHP_BACKEND=dashboard_php
+            - ROOT=/opt/src/Dashboard/public
         labels:
             - "traefik.enable=true"
             - "traefik.backend=dashboard_web"
             - "traefik.frontend.rule=Host:dashboard.localhost"
-            - "traefik.port=8080"
+            - "traefik.port=80"
             - "traefik.docker.network=traefik"
+
+    dashboard_php:
+        image: matthiasnoback/php_workshop_tools_php_fpm
+        volumes:
+            - ./:/opt
+        restart: on-failure
+        networks:
+            - traefik
+            - default
+        env_file: .env
+        environment:
+            XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_IP}"
         user: ${HOST_UID}:${HOST_GID}
 
     catalog_web:
-        image: matthiasnoback/php_workshop_tools_simple_webserver
-        container_name: catalog_web
-        command: src/Catalog/public/
+        image: matthiasnoback/php_workshop_tools_templated_nginx
         volumes:
-            - .:/opt
-        tty: true
-        env_file: .env
-        restart: always
-        environment:
-            PHP_IDE_CONFIG: "serverName=catalog_web"
-            XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_IP}"
+            - ./:/opt
+        depends_on:
+            - catalog_php
+        restart: on-failure
         networks:
-            default:
-            traefik:
+            - traefik
+            - default
+        environment:
+            - SERVER_NAME=catalog.localhost
+            - PHP_BACKEND=catalog_php
+            - ROOT=/opt/src/Catalog/public
         labels:
             - "traefik.enable=true"
             - "traefik.backend=catalog_web"
             - "traefik.frontend.rule=Host:catalog.localhost"
-            - "traefik.port=8080"
+            - "traefik.port=80"
             - "traefik.docker.network=traefik"
+
+    catalog_php:
+        image: matthiasnoback/php_workshop_tools_php_fpm
+        volumes:
+            - ./:/opt
+        restart: on-failure
+        networks:
+            - traefik
+            - default
+        env_file: .env
+        environment:
+            XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_IP}"
         user: ${HOST_UID}:${HOST_GID}
 
     sales_web:
-        image: matthiasnoback/php_workshop_tools_simple_webserver
-        container_name: sales_web
-        command: src/Sales/public/
+        image: matthiasnoback/php_workshop_tools_templated_nginx
         volumes:
-            - .:/opt
-        tty: true
-        env_file: .env
-        restart: always
-        environment:
-            PHP_IDE_CONFIG: "serverName=sales_web"
-            XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_IP}"
+            - ./:/opt
+        depends_on:
+            - sales_php
+        restart: on-failure
         networks:
-            default:
-            traefik:
+            - traefik
+            - default
+        environment:
+            - SERVER_NAME=sales.localhost
+            - PHP_BACKEND=sales_php
+            - ROOT=/opt/src/Sales/public
         labels:
             - "traefik.enable=true"
             - "traefik.backend=sales_web"
             - "traefik.frontend.rule=Host:sales.localhost"
-            - "traefik.port=8080"
+            - "traefik.port=80"
             - "traefik.docker.network=traefik"
+
+    sales_php:
+        image: matthiasnoback/php_workshop_tools_php_fpm
+        volumes:
+            - ./:/opt
+        restart: on-failure
+        networks:
+            - traefik
+            - default
+        env_file: .env
+        environment:
+            XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_IP}"
         user: ${HOST_UID}:${HOST_GID}
 
     purchase_web:
-        image: matthiasnoback/php_workshop_tools_simple_webserver
-        container_name: purchase_web
-        command: src/Purchase/public/
+        image: matthiasnoback/php_workshop_tools_templated_nginx
         volumes:
-            - .:/opt
-        tty: true
-        env_file: .env
-        restart: always
-        environment:
-            PHP_IDE_CONFIG: "serverName=purchase_web"
-            XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_IP}"
+            - ./:/opt
+        depends_on:
+            - purchase_php
+        restart: on-failure
         networks:
-            default:
-            traefik:
+            - traefik
+            - default
+        environment:
+            - SERVER_NAME=purchase.localhost
+            - PHP_BACKEND=purchase_php
+            - ROOT=/opt/src/Purchase/public
         labels:
             - "traefik.enable=true"
             - "traefik.backend=purchase_web"
             - "traefik.frontend.rule=Host:purchase.localhost"
-            - "traefik.port=8080"
+            - "traefik.port=80"
             - "traefik.docker.network=traefik"
+
+    purchase_php:
+        image: matthiasnoback/php_workshop_tools_php_fpm
+        volumes:
+            - ./:/opt
+        restart: on-failure
+        networks:
+            - traefik
+            - default
+        env_file: .env
+        environment:
+            XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_IP}"
         user: ${HOST_UID}:${HOST_GID}
 
     consumer:
@@ -137,9 +169,9 @@ services:
             - ./:/opt:cached
         env_file: .env
         environment:
-            PHP_IDE_CONFIG: "serverName=consumer"
             XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_IP}"
         user: ${HOST_UID}:${HOST_GID}
 
 networks:
     traefik: ~
+    default: ~

@@ -34,7 +34,7 @@ final class SalesApplication
             exit;
         }
 
-        $products = HttpApi::fetchDecodedJsonResponse('http://catalog_web:8080/listProducts');
+        $products = HttpApi::fetchDecodedJsonResponse('http://catalog_web/listProducts');
 
         include __DIR__ . '/../Common/header.html';
 
