@@ -73,4 +73,11 @@ push: docker/nginx/.built docker/php-fpm/.built docker/php-cli/.built
 
 .PHONY: clean
 clean:
-	find . -name .built -type f | xargs rm
+	find . -name .built -type f | xargs rm -v
+
+## destroy: remove everything to be able to start all over
+.PHONY: destroy
+destroy:
+	rm -rv vendor
+	rm -v var/*.*
+	docker-compose down -v --remove-orphans --rmi all
