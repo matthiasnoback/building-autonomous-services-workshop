@@ -15,12 +15,8 @@ ifeq ($(COMPOSER_HOME),)
 export COMPOSER_HOME=~/.composer
 endif
 
-ifeq ($(HOST_UID),)
-  $(error HOST_UID is undefined, first run: export HOST_UID=$$(id -u))
-endif
-ifeq ($(HOST_GID),)
-  $(error HOST_GID is undefined, first run: export HOST_GID=$$(id -g))
-endif
+export HOST_UID := $(shell id -u)
+export HOST_GID := $(shell id -g)
 
 ## hosts-entry: Set up an entry for this project's host names in /etc/hosts
 .PHONY: hosts-entry
