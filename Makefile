@@ -31,7 +31,7 @@ hosts-entry:
 vendor: ~/.composer composer.json composer.lock
 	 ${COMPOSER_RUN} install
 
-## composer: entrypoint for running Composer (use bin/composer.sh)
+## composer: entrypoint for running Composer (use bin/composer)
 .PHONY: composer
 composer:
 	@${COMPOSER_RUN} $(ARGS) --ansi
@@ -39,7 +39,7 @@ composer:
 ## up: Start all services for this project
 .PHONY: up
 up: hosts-entry vendor
-	docker-compose up -d --no-build --remove-orphans
+	docker-compose up -d --no-build --remove-orphans --force-recreate
 	@echo "#########################################################"
 	@echo ""
 	@echo "Done, now open http://dashboard.localhost in your browser"
@@ -50,6 +50,16 @@ up: hosts-entry vendor
 .PHONY: down
 down:
 	docker-compose down --remove-orphans -v
+
+## ps: Show the status of the containers
+.PHONY: ps
+ps:
+	docker-compose ps
+
+## logs: Show and follow the container logs
+.PHONY: logs
+logs:
+	docker-compose logs -f
 
 docker/nginx/.built: docker/nginx/Dockerfile docker/nginx/template.conf
 	docker build -t matthiasnoback/building_autonomous_services_nginx:latest -f docker/nginx/Dockerfile docker/nginx/
