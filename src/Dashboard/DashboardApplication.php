@@ -40,7 +40,7 @@ final class DashboardApplication
             ?>
             </tbody>
         </table>
-        <?
+        <?php
 
         include __DIR__ . '/../Common/footer.html';
     }
