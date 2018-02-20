@@ -14,7 +14,7 @@ services:
 
     dashboard_web:
         extends:
-            file: docker/defaults.yml
+            file: docker/templates.yml
             service: web
         volumes:
             - ./:/opt:cached
@@ -30,7 +30,7 @@ services:
 
     dashboard_php:
         extends:
-            file: docker/defaults.yml
+            file: docker/templates.yml
             service: php-fpm
         volumes:
             - ./:/opt:cached
@@ -41,7 +41,7 @@ services:
 
     catalog_web:
         extends:
-            file: docker/defaults.yml
+            file: docker/templates.yml
             service: web
         volumes:
             - ./:/opt:cached
@@ -57,14 +57,14 @@ services:
 
     catalog_php:
         extends:
-            file: docker/defaults.yml
+            file: docker/templates.yml
             service: php-fpm
         volumes:
             - ./:/opt:cached
 
     sales_web:
         extends:
-            file: docker/defaults.yml
+            file: docker/templates.yml
             service: web
         volumes:
             - ./:/opt:cached
@@ -80,14 +80,14 @@ services:
 
     sales_php:
         extends:
-            file: docker/defaults.yml
+            file: docker/templates.yml
             service: php-fpm
         volumes:
             - ./:/opt:cached
 
     purchase_web:
         extends:
-            file: docker/defaults.yml
+            file: docker/templates.yml
             service: web
         volumes:
             - ./:/opt:cached
@@ -103,14 +103,14 @@ services:
 
     purchase_php:
         extends:
-            file: docker/defaults.yml
+            file: docker/templates.yml
             service: php-fpm
         volumes:
             - ./:/opt:cached
 
     consumer:
         extends:
-            file: docker/defaults.yml
+            file: docker/templates.yml
             service: php-cli
         command: php src/Common/consumer.php
         volumes:
