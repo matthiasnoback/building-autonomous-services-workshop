@@ -11,6 +11,8 @@ services:
             - "traefik.enable=true"
             - "traefik.docker.network=traefik"
             - "traefik.port=80"
+        volumes:
+            - ${PWD}:/opt:cached
 
     php-fpm:
         image: matthiasnoback/building_autonomous_services_php_fpm
@@ -22,6 +24,8 @@ services:
             - default
         environment:
             XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_NAME_OR_IP}"
+        volumes:
+            - ${PWD}:/opt:cached
 
     php-cli:
         image: matthiasnoback/building_autonomous_services_php_cli
@@ -33,3 +37,5 @@ services:
             - default
         environment:
             XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_NAME_OR_IP}"
+        volumes:
+            - ${PWD}:/opt:cached

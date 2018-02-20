@@ -16,8 +16,6 @@ services:
         extends:
             file: docker/templates.yml
             service: web
-        volumes:
-            - ./:/opt:cached
         depends_on:
             - dashboard_php
         environment:
@@ -32,8 +30,6 @@ services:
         extends:
             file: docker/templates.yml
             service: php-fpm
-        volumes:
-            - ./:/opt:cached
         depends_on:
             - catalog_web
             - purchase_web
@@ -43,8 +39,6 @@ services:
         extends:
             file: docker/templates.yml
             service: web
-        volumes:
-            - ./:/opt:cached
         depends_on:
             - catalog_php
         environment:
@@ -66,8 +60,6 @@ services:
         extends:
             file: docker/templates.yml
             service: web
-        volumes:
-            - ./:/opt:cached
         depends_on:
             - sales_php
         environment:
@@ -82,15 +74,11 @@ services:
         extends:
             file: docker/templates.yml
             service: php-fpm
-        volumes:
-            - ./:/opt:cached
 
     purchase_web:
         extends:
             file: docker/templates.yml
             service: web
-        volumes:
-            - ./:/opt:cached
         depends_on:
             - purchase_php
         environment:
@@ -105,16 +93,12 @@ services:
         extends:
             file: docker/templates.yml
             service: php-fpm
-        volumes:
-            - ./:/opt:cached
 
     consumer:
         extends:
             file: docker/templates.yml
             service: php-cli
         command: php src/Common/consumer.php
-        volumes:
-            - ./:/opt:cached
 
 networks:
     traefik: ~
