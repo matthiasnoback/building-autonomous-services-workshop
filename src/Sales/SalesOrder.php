@@ -8,22 +8,22 @@ final class SalesOrder
     /**
      * @var int
      */
-    private $purchaseOrderId;
+    private $salesOrderId;
 
     /**
      * @var SalesOrderLine[]
      */
     private $lines;
 
-    public function __construct(int $purchaseOrderId, array $lines)
+    public function __construct(int $salesOrderId, array $lines)
     {
-        $this->purchaseOrderId = $purchaseOrderId;
+        $this->salesOrderId = $salesOrderId;
         $this->lines = $lines;
     }
 
     public function id(): int
     {
-        return $this->purchaseOrderId;
+        return $this->salesOrderId;
     }
 
     /**
