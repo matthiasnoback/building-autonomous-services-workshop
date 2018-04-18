@@ -23,7 +23,7 @@ final class SalesApplication
                     continue;
                 }
 
-                $lines[(int)$line['productId']] = new SalesOrderLine((int)$line['productId'], (int)$line['quantity']);
+                $lines[] = new SalesOrderLine((int)$line['productId'], (int)$line['quantity']);
             }
 
             $salesOrder = new SalesOrder($salesOrderId, $lines);
@@ -34,7 +34,7 @@ final class SalesApplication
             exit;
         }
 
-        $products = HttpApi::fetchDecodedJsonResponse('http://catalog_web/listProducts');
+        $products = array_values((array)HttpApi::fetchDecodedJsonResponse('http://catalog_web/listProducts'));
 
         include __DIR__ . '/../Common/header.html';
 
@@ -51,16 +51,13 @@ final class SalesApplication
                 </thead>
                 <tbody>
                 <?php
-                for ($i = 0; $i < 5; $i++) {
+                foreach ($products as $i => $product) {
                     ?>
                     <tr>
                         <td><?php echo $i + 1; ?></td>
                         <td>
-                            <select name="lines[<?php echo $i; ?>][productId]" class="form-control" title="Select a product">
-                                <?php foreach ($products as $product) { ?>
-                                    <option value="<?php echo $product->productId; ?>"><?php echo $product->productId . ': ' . $product->name; ?></option>
-                                <?php } ?>
-                            </select>
+                            <input type="hidden" name="lines[<?php echo $i; ?>][productId]" value="<?php echo $product->productId; ?>" />
+                            <?php echo $product->name; ?>
                         </td>
                         <td>
                             <input type="text" name="lines[<?php echo $i; ?>][quantity]" value="" class="form-control" title="Provide a quantity"/>
@@ -72,7 +69,7 @@ final class SalesApplication
                 </tbody>
             </table>
             <p>
-                <button type="submit" class="btn btn-primary">Create</button>
+                <button type="submit" class="btn btn-primary">Order</button>
             </p>
         </form>
         <?php
