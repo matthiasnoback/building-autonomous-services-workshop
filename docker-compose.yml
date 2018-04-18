@@ -94,6 +94,25 @@ services:
             file: docker/templates.yml
             service: php-fpm
 
+    stock_web:
+        extends:
+            file: docker/templates.yml
+            service: web
+        depends_on:
+            - stock_php
+        environment:
+            - SERVER_NAME=stock.localhost
+            - PHP_BACKEND=stock_php
+            - ROOT=/opt/src/Stock/public
+        labels:
+            - "traefik.backend=stock_web"
+            - "traefik.frontend.rule=Host:stock.localhost"
+
+    stock_php:
+        extends:
+            file: docker/templates.yml
+            service: php-fpm
+
     consumer:
         extends:
             file: docker/templates.yml

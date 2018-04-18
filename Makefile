@@ -1,6 +1,6 @@
 SHELL=/bin/bash
 
-HOSTS_ENTRY:=127.0.0.1 dashboard.localhost sales.localhost purchase.localhost catalog.localhost
+HOSTS_ENTRY:=127.0.0.1 dashboard.localhost sales.localhost purchase.localhost catalog.localhost stock.localhost
 
 PLATFORM := $(shell uname -s)
 ifeq ($(PLATFORM),Darwin)

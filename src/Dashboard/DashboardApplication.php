@@ -15,7 +15,7 @@ final class DashboardApplication
 
         $allProducts = HttpApi::fetchDecodedJsonResponse('http://catalog_web/listProducts');
 
-        $stockLevels = $this->calculateStockLevels();
+        $stockLevels = HttpApi::fetchDecodedJsonResponse('http://stock_web/stockLevels');
 
         ?><h2>List of all products</h2>
         <table class="table">
@@ -33,7 +33,7 @@ final class DashboardApplication
                 <tr>
                     <td><?php echo htmlspecialchars((string)$productData->productId); ?></td>
                     <td><?php echo htmlspecialchars($productData->name); ?></td>
-                    <td><?php echo $stockLevels[$productData->productId] ?? 0; ?></td>
+                    <td><?php echo $stockLevels->{$productData->productId} ?? 0; ?></td>
                 </tr>
                 <?php
             }
@@ -43,26 +43,5 @@ final class DashboardApplication
         <?php
 
         include __DIR__ . '/../Common/footer.html';
-    }
-
-    private function calculateStockLevels(): array
-    {
-        $stockLevels = [];
-
-        $receipts = HttpApi::fetchDecodedJsonResponse('http://purchase_web/listReceipts');
-        foreach ($receipts as $receipt) {
-            foreach ($receipt->lines as $line) {
-                $stockLevels[$line->productId] = ($stockLevels[$line->productId] ?? 0) + $line->quantity;
-            }
-        }
-
-        $salesOrders = HttpApi::fetchDecodedJsonResponse('http://sales_web/listSalesOrders');
-        foreach ($salesOrders as $salesOrder) {
-            foreach ($salesOrder->lines as $line) {
-                $stockLevels[$line->productId] = ($stockLevels[$line->productId] ?? 0) - $line->quantity;
-            }
-        }
-
-        return $stockLevels;
     }
 }
