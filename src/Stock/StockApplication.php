@@ -28,6 +28,10 @@ final class StockApplication
 
         $salesOrders = HttpApi::fetchDecodedJsonResponse('http://sales_web/listSalesOrders');
         foreach ($salesOrders as $salesOrder) {
+            if (!$salesOrder->wasDelivered) {
+                continue;
+            }
+
             foreach ($salesOrder->lines as $line) {
                 $stockLevels[$line->productId] = ($stockLevels[$line->productId] ?? 0) - $line->quantity;
             }

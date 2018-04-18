@@ -91,7 +91,7 @@ final class PurchaseApplication
         $purchaseOrders = Database::retrieveAll(PurchaseOrder::class);
         $openPurchaseOrders = array_filter($purchaseOrders, function (PurchaseOrder $purchaseOrder) { return $purchaseOrder->isOpen(); });
 
-        if (count($openPurchaseOrders) > 0) {
+        if (\count($openPurchaseOrders) > 0) {
             ?>
             <form method="get" action="/receiveGoods">
                 <p>

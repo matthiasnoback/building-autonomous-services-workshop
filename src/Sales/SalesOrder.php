@@ -15,10 +15,16 @@ final class SalesOrder
      */
     private $lines;
 
+    /**
+     * @var bool
+     */
+    private $wasDelivered;
+
     public function __construct(int $salesOrderId, array $lines)
     {
         $this->salesOrderId = $salesOrderId;
         $this->lines = $lines;
+        $this->wasDelivered = false;
     }
 
     public function id(): int
@@ -32,5 +38,15 @@ final class SalesOrder
     public function lines(): array
     {
         return $this->lines;
+    }
+
+    public function wasDelivered(): bool
+    {
+        return $this->wasDelivered;
+    }
+
+    public function deliver(): void
+    {
+        $this->wasDelivered = true;
     }
 }
