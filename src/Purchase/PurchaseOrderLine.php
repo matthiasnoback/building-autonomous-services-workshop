@@ -13,16 +13,22 @@ final class PurchaseOrderLine
     /**
      * @var int
      */
-    private $quantity;
+    private $quantityOrdered;
+
+    /**
+     * @var int
+     */
+    private $quantityReceived;
 
     /**
      * @param int $productId
-     * @param int $quantity
+     * @param int $quantityOrdered
      */
-    public function __construct(int $productId, int $quantity)
+    public function __construct(int $productId, int $quantityOrdered)
     {
         $this->productId = $productId;
-        $this->quantity = $quantity;
+        $this->quantityOrdered = $quantityOrdered;
+        $this->quantityReceived = 0;
     }
 
     public function productId(): int
@@ -30,8 +36,28 @@ final class PurchaseOrderLine
         return $this->productId;
     }
 
-    public function quantity(): int
+    public function quantityOrdered(): int
     {
-        return $this->quantity;
+        return $this->quantityOrdered;
+    }
+
+    public function quantityOpen(): int
+    {
+        $quantityOpen = $this->quantityOrdered - $this->quantityReceived;
+        if ($quantityOpen < 0) {
+            $quantityOpen = 0;
+        }
+
+        return $quantityOpen;
+    }
+
+    public function processReceipt(int $receiptQuantity): void
+    {
+        $this->quantityReceived += $receiptQuantity;
+    }
+
+    public function isOpen(): bool
+    {
+        return $this->quantityOpen() > 0;
     }
 }

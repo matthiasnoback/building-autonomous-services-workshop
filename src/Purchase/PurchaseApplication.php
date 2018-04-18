@@ -51,7 +51,8 @@ final class PurchaseApplication
                 </thead>
                 <tbody>
                 <?php
-                for ($i = 0; $i < 5; $i++) {
+                $numberOfLines = min(count($products), 5);
+                for ($i = 0; $i < $numberOfLines; $i++) {
                     ?>
                     <tr>
                         <td><?php echo $i + 1; ?></td>
@@ -87,10 +88,51 @@ final class PurchaseApplication
         Render::jsonOrHtml($allPurchaseOrders);
     }
 
-    public function receiveGoodsController(): void
+    public function selectPurchaseOrderController(): void
     {
+        include __DIR__ . '/../Common/header.html';
+
+        $purchaseOrders = Database::retrieveAll(PurchaseOrder::class);
+        $openPurchaseOrders = array_filter($purchaseOrders, function (PurchaseOrder $purchaseOrder) { return $purchaseOrder->isOpen(); });
+
+        if (count($openPurchaseOrders) > 0) {
+            ?>
+            <form method="get" action="/receiveGoods">
+                <p>
+                <label for="purchaseOrderId">Receive goods for purchase order: </label>
+                <select name="purchaseOrderId" id="purchaseOrderId" class="form-control">
+                    <?php
+
+                    foreach ($openPurchaseOrders as $purchaseOrder) {
+                        /** @var PurchaseOrder $purchaseOrder */
+                        ?>
+                        <option value="<?php echo $purchaseOrder->id(); ?>"><?php echo $purchaseOrder->id(); ?></option>
+                        <?php
+                    }
+                    ?>
+                </select>
+                </p>
+                <p><button type="submit" class="btn btn-primary">Next &raquo;</button></p>
+            </form>
+            <?php
+        }
+        else {
+            ?>
+            <p>There's no open purchase order, so you can't receive goods at this moment.</p>
+            <p>You could of course <a href="/createPurchaseOrder">Create a Purchase order</a>.</p>
+            <?php
+        }
+
+        include __DIR__ . '/../Common/footer.html';
+    }
+
+    public function receiveGoodsController($purchaseOrderId): void
+    {
+        /** @var PurchaseOrder $purchaseOrder */
+        $purchaseOrder = Database::retrieve(PurchaseOrder::class, $purchaseOrderId);
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $allReceipts = Database::retrieveAll(GoodsReceipt::class);
+            $allReceipts = Database::retrieveAll(Receipt::class);
             $nextReceiptId = \count($allReceipts) + 1;
 
             $lines = [];
@@ -104,9 +146,14 @@ final class PurchaseApplication
                 $lines[(int)$line['productId']] = new ReceiptItem((int)$line['productId'], (int)$line['quantity']);
             }
 
-            $receipt = new GoodsReceipt($nextReceiptId, $lines);
+            $receipt = new Receipt($nextReceiptId, (int)$purchaseOrderId, $lines);
 
             Database::persist($receipt);
+
+            foreach ($receipt->lines() as $line) {
+                $purchaseOrder->processReceipt($line->productId(), $line->quantity());
+            }
+            Database::persist($purchaseOrder);
 
             header('Location: /listReceipts');
             exit;
@@ -118,25 +165,27 @@ final class PurchaseApplication
 
         ?>
         <h1>Receive goods</h1>
-        <form action="/receiveGoods" method="post">
+        <form action="#" method="post">
+            <input type="hidden" name="purchaseOrderId" value="<?php echo $purchaseOrder->id(); ?>" />
             <table class="table">
                 <thead>
                 <tr>
                     <th>Product</th>
+                    <th>Quantity open</th>
                     <th>Quantity received</th>
                 </tr>
                 </thead>
                 <tbody>
                 <?php
-                for ($i = 0; $i < 5; $i++) {
+                foreach ($purchaseOrder->lines() as $i => $line) {
                     ?>
                     <tr>
                         <td>
-                            <select name="lines[<?php echo $i; ?>][productId]" class="form-control" title="Select a product">
-                                <?php foreach ($products as $product) { ?>
-                                    <option value="<?php echo $product->productId; ?>"><?php echo $product->productId . ': ' . $product->name; ?></option>
-                                <?php } ?>
-                            </select>
+                            <input type="hidden" name="lines[<?php echo $i; ?>][productId]" value="<?php echo $line->productId(); ?>" />
+                            <?php echo $products->{$line->productId()}->name; ?>
+                        </td>
+                        <td>
+                            <?php echo $line->quantityOpen(); ?>
                         </td>
                         <td>
                             <input type="text" name="lines[<?php echo $i; ?>][quantity]" value="" class="form-control" title="Provide a quantity"/>
@@ -158,7 +207,7 @@ final class PurchaseApplication
 
     public function listReceiptsController(): void
     {
-        $allReceipts = Database::retrieveAll(GoodsReceipt::class);
+        $allReceipts = Database::retrieveAll(Receipt::class);
 
         Render::jsonOrHtml($allReceipts);
     }

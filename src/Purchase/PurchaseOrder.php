@@ -26,6 +26,26 @@ final class PurchaseOrder
         return $this->purchaseOrderId;
     }
 
+    public function processReceipt(int $productId, int $receiptQuantity): void
+    {
+        foreach ($this->lines as $line) {
+            if ($line->productId() === $productId) {
+                $line->processReceipt($receiptQuantity);
+            }
+        }
+    }
+
+    public function isOpen(): bool
+    {
+        foreach ($this->lines as $line) {
+            if ($line->isOpen()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /**
      * @return PurchaseOrderLine[]
      */

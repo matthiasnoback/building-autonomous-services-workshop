@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Purchase;
 
-final class GoodsReceipt
+final class Receipt
 {
     /**
      * @var int
@@ -11,19 +11,33 @@ final class GoodsReceipt
     private $receiptId;
 
     /**
+     * @var int
+     */
+    private $purchaseOrderId;
+
+    /**
      * @var ReceiptItem[]
      */
     private $lines;
 
-    public function __construct(int $receiptId, array $lines)
+    public function __construct(int $receiptId, int $purchaseOrderId, array $lines)
     {
         $this->receiptId = $receiptId;
+        $this->purchaseOrderId = $purchaseOrderId;
         $this->lines = $lines;
     }
 
     public function id(): int
     {
         return $this->receiptId;
+    }
+
+    /**
+     * @return int
+     */
+    public function purchaseOrderId()
+    {
+        return $this->purchaseOrderId;
     }
 
     /**
