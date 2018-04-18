@@ -80,9 +80,8 @@ final class PurchaseApplication
 
     public function listReceiptsController(): void
     {
-        $allPurchaseOrders = Database::retrieveAll(GoodsReceipt::class);
+        $allReceipts = Database::retrieveAll(GoodsReceipt::class);
 
-        header('Content-Type: application/json');
-        echo Serializer::serialize($allPurchaseOrders);
+        Render::jsonOrHtml($allReceipts);
     }
 }

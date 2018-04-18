@@ -3,7 +3,7 @@
 namespace Catalog;
 
 use Common\Persistence\Database;
-use NaiveSerializer\Serializer;
+use Common\Render;
 
 final class CatalogApplication
 {
@@ -49,7 +49,6 @@ final class CatalogApplication
     {
         $allProducts = Database::retrieveAll(Product::class);
 
-        header('Content-Type: application/json');
-        echo Serializer::serialize($allProducts);
+        Render::jsonOrHtml($allProducts);
     }
 }

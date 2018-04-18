@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace Sales;
 
 use Common\Persistence\Database;
+use Common\Render;
 use Common\Web\HttpApi;
-use NaiveSerializer\Serializer;
 
 final class SalesApplication
 {
@@ -82,9 +82,8 @@ final class SalesApplication
 
     public function listSalesOrdersController(): void
     {
-        $allPurchaseOrders = Database::retrieveAll(SalesOrder::class);
+        $allSalesOrders = Database::retrieveAll(SalesOrder::class);
 
-        header('Content-Type: application/json');
-        echo Serializer::serialize($allPurchaseOrders);
+        Render::jsonOrHtml($allSalesOrders);
     }
 }
