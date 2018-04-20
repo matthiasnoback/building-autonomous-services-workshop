@@ -1,0 +1,14 @@
+sudo: required
+
+cache:
+  directories:
+    - $HOME/.composer
+
+services:
+  - docker
+
+before_script:
+  - make up
+
+script:
+  - make test
