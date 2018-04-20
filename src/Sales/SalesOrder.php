@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Sales;
 
+use Assert\Assertion;
+
 final class SalesOrder
 {
     /**
@@ -22,6 +24,8 @@ final class SalesOrder
 
     public function __construct(int $salesOrderId, array $lines)
     {
+        Assertion::allIsInstanceOf($lines, SalesOrderLine::class);
+
         $this->salesOrderId = $salesOrderId;
         $this->lines = $lines;
         $this->wasDelivered = false;

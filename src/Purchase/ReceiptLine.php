@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Purchase;
 
-final class ReceiptItem
+final class ReceiptLine
 {
     /**
      * @var int

@@ -139,7 +139,7 @@ final class PurchaseApplication
                     continue;
                 }
 
-                $lines[(int)$line['productId']] = new ReceiptItem((int)$line['productId'], (int)$line['quantity']);
+                $lines[(int)$line['productId']] = new ReceiptLine((int)$line['productId'], (int)$line['quantity']);
             }
 
             $receipt = new Receipt($nextReceiptId, (int)$purchaseOrderId, $lines);

@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Purchase;
 
+use Assert\Assertion;
+
 final class Receipt
 {
     /**
@@ -16,12 +18,14 @@ final class Receipt
     private $purchaseOrderId;
 
     /**
-     * @var ReceiptItem[]
+     * @var ReceiptLine[]
      */
     private $lines;
 
     public function __construct(int $receiptId, int $purchaseOrderId, array $lines)
     {
+        Assertion::allIsInstanceOf($lines, ReceiptLine::class);
+
         $this->receiptId = $receiptId;
         $this->purchaseOrderId = $purchaseOrderId;
         $this->lines = $lines;
@@ -35,13 +39,13 @@ final class Receipt
     /**
      * @return int
      */
-    public function purchaseOrderId()
+    public function purchaseOrderId(): int
     {
         return $this->purchaseOrderId;
     }
 
     /**
-     * @return ReceiptItem[]
+     * @return ReceiptLine[]
      */
     public function lines(): array
     {
