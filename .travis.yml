@@ -7,8 +7,5 @@ cache:
 services:
   - docker
 
-before_script:
-  - make up
-
 script:
   - make test

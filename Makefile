@@ -51,6 +51,11 @@ up: hosts-entry vendor
 down:
 	docker-compose down --remove-orphans -v
 
+## test: Start all services and run the tests
+.PHONY: test
+test: up
+	docker-compose run --rm test sh ./run_tests.sh
+
 ## ps: Show the status of the containers
 .PHONY: ps
 ps:
