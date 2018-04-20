@@ -16,14 +16,14 @@ final class Product
     private $name;
 
     /**
-     * @var int
+     * @var int|null
      */
     private $minimumStockLevel;
 
     /**
      * @param int $productId
      * @param string $name
-     * @param int $minimumStockLevel
+     * @param int|null $minimumStockLevel
      */
     public function __construct(int $productId, string $name, ?int $minimumStockLevel)
     {

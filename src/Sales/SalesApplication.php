@@ -55,12 +55,12 @@ final class SalesApplication
                     ?>
                     <tr>
                         <td><?php echo $i + 1; ?></td>
-                        <td>
+                        <td class="product-name">
                             <input type="hidden" name="lines[<?php echo $i; ?>][productId]" value="<?php echo $product->productId; ?>"/>
                             <?php echo htmlspecialchars($product->name); ?>
                         </td>
                         <td>
-                            <input type="text" name="lines[<?php echo $i; ?>][quantity]" value="" class="form-control" title="Provide a quantity"/>
+                            <input type="text" name="lines[<?php echo $i; ?>][quantity]" value="" class="form-control quantity" title="Provide a quantity"/>
                         </td>
                     </tr>
                     <?php

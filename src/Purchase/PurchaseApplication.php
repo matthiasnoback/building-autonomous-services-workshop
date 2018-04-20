@@ -55,12 +55,12 @@ final class PurchaseApplication
                     ?>
                     <tr>
                         <td><?php echo $i + 1; ?></td>
-                        <td>
+                        <td class="product-name">
                             <input type="hidden" name="lines[<?php echo $i; ?>][productId]" value="<?php echo $product->productId; ?>" />
                             <?php echo htmlspecialchars($product->name); ?>
                         </td>
                         <td>
-                            <input type="text" name="lines[<?php echo $i; ?>][quantity]" value="" class="form-control" title="Provide a quantity"/>
+                            <input type="text" name="lines[<?php echo $i; ?>][quantity]" value="" class="form-control quantity" title="Provide a quantity"/>
                         </td>
                     </tr>
                     <?php
@@ -176,7 +176,7 @@ final class PurchaseApplication
                 foreach ($purchaseOrder->lines() as $i => $line) {
                     ?>
                     <tr>
-                        <td>
+                        <td class="product-name">
                             <input type="hidden" name="lines[<?php echo $i; ?>][productId]" value="<?php echo $line->productId(); ?>" />
                             <?php echo $products->{$line->productId()}->name; ?>
                         </td>
@@ -184,7 +184,7 @@ final class PurchaseApplication
                             <?php echo $line->quantityOpen(); ?>
                         </td>
                         <td>
-                            <input type="text" name="lines[<?php echo $i; ?>][quantity]" value="" class="form-control" title="Provide a quantity"/>
+                            <input type="text" name="lines[<?php echo $i; ?>][quantity]" value="" class="form-control quantity" title="Provide a quantity"/>
                         </td>
                     </tr>
                     <?php

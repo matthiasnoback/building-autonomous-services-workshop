@@ -32,8 +32,8 @@ final class DashboardApplication
                 ?>
                 <tr>
                     <td><?php echo htmlspecialchars((string)$productData->productId); ?></td>
-                    <td><?php echo htmlspecialchars($productData->name); ?></td>
-                    <td><?php echo $stockLevels->{$productData->productId} ?? 0; ?></td>
+                    <td class="product-name"><?php echo htmlspecialchars($productData->name); ?></td>
+                    <td class="stock-level"><?php echo $stockLevels->{$productData->productId} ?? 0; ?></td>
                 </tr>
                 <?php
             }

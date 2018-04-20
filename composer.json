@@ -5,7 +5,13 @@
     "matthiasnoback/php-workshop-tools": "^0.22"
   },
   "require-dev": {
-    "symfony/debug": "^4.0"
+    "symfony/debug": "^4.0",
+    "behat/behat": "^3.4",
+    "behat/mink-extension": "^2.3",
+    "behat/mink-goutte-driver": "^1.2",
+    "symfony/finder": "^4.0",
+    "phpunit/phpunit": "^7.1",
+    "phpstan/phpstan": "^0.9.2"
   },
   "autoload": {
     "psr-4": {
@@ -14,7 +20,11 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "": "test/"
-    }
+      "Test\\System\\": "test/System/",
+      "": "test/Unit/"
+    },
+    "files": [
+      "vendor/phpunit/phpunit/src/Framework/Assert/Functions.php"
+    ]
   }
 }
