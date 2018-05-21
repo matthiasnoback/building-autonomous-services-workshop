@@ -10,7 +10,10 @@ Debug::enable();
 
 /*
  * This is a demo consumer which consumes every message from the stream.
- * It prints the message to stdout. Hence, if you want to visually keep
+ * This effectively makes the consumer consume every existing message again
+ * after a restart.
+ *
+ * The consumer prints the message to stdout. Hence, if you want to visually keep
  * track of the stream, run:
  *
  *   docker-compose logs -f consumer
