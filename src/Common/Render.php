@@ -15,14 +15,14 @@ final class Render
             header('Content-Type: application/json');
             echo $jsonSerialized;
         } else {
-            include(__DIR__ . '/header.html');
+            include __DIR__ . '/header.php';
 
             ?>
             <pre><code><?php echo $jsonSerialized; ?>
 </code></pre>
             <?php
 
-            include(__DIR__ . '/footer.html');
+            include __DIR__ . '/footer.php';
         }
     }
 }

@@ -1,3 +1,6 @@
+<?php
+use Common\Web\FlashMessage;
+?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -70,3 +73,20 @@
             </ul>
         </div>
     </nav>
+
+    <?php
+
+
+
+    foreach (FlashMessage::types() as $type) {
+        foreach (FlashMessage::get($type) as $message) {
+            ?>
+            <div class="alert alert-<?php echo $type; ?>" role="alert">
+                <?php
+                echo htmlspecialchars($message);
+                ?>
+            </div>
+            <?php
+        }
+    }
+    ?>

@@ -7,9 +7,14 @@ use Common\Web\HttpApi;
 
 final class DashboardApplication
 {
+    public function bootstrap(): void
+    {
+        session_start();
+    }
+
     public function indexController(): void
     {
-        include __DIR__ . '/../Common/header.html';
+        include __DIR__ . '/../Common/header.php';
 
         ?><h1>Dashboard</h1><?php
 
@@ -42,6 +47,6 @@ final class DashboardApplication
         </table>
         <?php
 
-        include __DIR__ . '/../Common/footer.html';
+        include __DIR__ . '/../Common/footer.php';
     }
 }

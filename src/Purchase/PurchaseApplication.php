@@ -5,10 +5,16 @@ namespace Purchase;
 
 use Common\Persistence\Database;
 use Common\Render;
+use Common\Web\FlashMessage;
 use Common\Web\HttpApi;
 
 final class PurchaseApplication
 {
+    public function bootstrap(): void
+    {
+        session_start();
+    }
+
     public function createPurchaseOrderController(): void
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -30,13 +36,15 @@ final class PurchaseApplication
 
             Database::persist($purchaseOrder);
 
+            FlashMessage::add(FlashMessage::SUCCESS, 'Created purchase order ' . $purchaseOrderId);
+
             header('Location: /listPurchaseOrders');
             exit;
         }
 
         $products = array_values((array)HttpApi::fetchDecodedJsonResponse('http://catalog_web/listProducts'));
 
-        include __DIR__ . '/../Common/header.html';
+        include __DIR__ . '/../Common/header.php';
 
         ?>
         <h1>Create a purchase order</h1>
@@ -74,7 +82,7 @@ final class PurchaseApplication
         </form>
         <?php
 
-        include __DIR__ . '/../Common/footer.html';
+        include __DIR__ . '/../Common/footer.php';
     }
 
     public function listPurchaseOrdersController(): void
@@ -86,7 +94,7 @@ final class PurchaseApplication
 
     public function selectPurchaseOrderController(): void
     {
-        include __DIR__ . '/../Common/header.html';
+        include __DIR__ . '/../Common/header.php';
 
         $purchaseOrders = Database::retrieveAll(PurchaseOrder::class);
         $openPurchaseOrders = array_filter($purchaseOrders, function (PurchaseOrder $purchaseOrder) { return $purchaseOrder->isOpen(); });
@@ -119,7 +127,7 @@ final class PurchaseApplication
             <?php
         }
 
-        include __DIR__ . '/../Common/footer.html';
+        include __DIR__ . '/../Common/footer.php';
     }
 
     public function receiveGoodsController($purchaseOrderId): void
@@ -151,13 +159,15 @@ final class PurchaseApplication
             }
             Database::persist($purchaseOrder);
 
+            FlashMessage::add(FlashMessage::SUCCESS, 'Received goods for purchase order ' . $purchaseOrderId);
+
             header('Location: /listReceipts');
             exit;
         }
 
         $products = HttpApi::fetchDecodedJsonResponse('http://catalog_web/listProducts');
 
-        include __DIR__ . '/../Common/header.html';
+        include __DIR__ . '/../Common/header.php';
 
         ?>
         <h1>Receive goods</h1>
@@ -198,7 +208,7 @@ final class PurchaseApplication
         </form>
         <?php
 
-        include __DIR__ . '/../Common/footer.html';
+        include __DIR__ . '/../Common/footer.php';
     }
 
     public function listReceiptsController(): void

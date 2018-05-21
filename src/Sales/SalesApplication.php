@@ -5,10 +5,16 @@ namespace Sales;
 
 use Common\Persistence\Database;
 use Common\Render;
+use Common\Web\FlashMessage;
 use Common\Web\HttpApi;
 
 final class SalesApplication
 {
+    public function __construct()
+    {
+        session_start();
+    }
+
     public function createSalesOrderController(): void
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -30,13 +36,15 @@ final class SalesApplication
 
             Database::persist($salesOrder);
 
+            FlashMessage::add(FlashMessage::SUCCESS, 'Created sales order ' . $salesOrderId);
+
             header('Location: /listSalesOrders');
             exit;
         }
 
         $products = array_values((array)HttpApi::fetchDecodedJsonResponse('http://catalog_web/listProducts'));
 
-        include __DIR__ . '/../Common/header.html';
+        include __DIR__ . '/../Common/header.php';
 
         ?>
         <h1>Create a sales order</h1>
@@ -74,7 +82,7 @@ final class SalesApplication
         </form>
         <?php
 
-        include __DIR__ . '/../Common/footer.html';
+        include __DIR__ . '/../Common/footer.php';
     }
 
     public function listSalesOrdersController(): void
@@ -92,13 +100,15 @@ final class SalesApplication
 
             $salesOrder->deliver();
 
+            FlashMessage::add(FlashMessage::SUCCESS, 'Delivered sales order ' . $_POST['salesOrderId']);
+
             Database::persist($salesOrder);
 
             header('Location: /listSalesOrders');
             exit;
         }
 
-        include __DIR__ . '/../Common/header.html';
+        include __DIR__ . '/../Common/header.php';
 
         $salesOrders = Database::retrieveAll(SalesOrder::class);
         $openSalesOrders = array_filter($salesOrders, function (SalesOrder $purchaseOrder) {
@@ -134,6 +144,6 @@ final class SalesApplication
             <?php
         }
 
-        include __DIR__ . '/../Common/footer.html';
+        include __DIR__ . '/../Common/footer.php';
     }
 }

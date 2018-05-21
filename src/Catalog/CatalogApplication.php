@@ -7,6 +7,11 @@ use Common\Render;
 
 final class CatalogApplication
 {
+    public function bootstrap(): void
+    {
+        session_start();
+    }
+
     public function createProductController(): void
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -23,7 +28,7 @@ final class CatalogApplication
             exit;
         }
 
-        include __DIR__ . '/../Common/header.html';
+        include __DIR__ . '/../Common/header.php';
 
         ?>
         <h1>Create a product</h1>
@@ -42,7 +47,7 @@ final class CatalogApplication
         </form>
         <?php
 
-        include __DIR__ . '/../Common/footer.html';
+        include __DIR__ . '/../Common/footer.php';
     }
 
     public function listProductsController(): void
