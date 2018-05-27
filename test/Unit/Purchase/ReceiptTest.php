@@ -12,13 +12,14 @@ final class ReceiptTest extends TestCase
      */
     public function it_has_an_id_a_purchase_order_id_and_lines(): void
     {
-        $receipt = new Receipt(1, 2, [
-            new ReceiptLine(100, 10)
+        $receiptId = ReceiptId::create();
+        $receipt = new Receipt($receiptId, 2, [
+            new ReceiptLine('100', 10)
         ]);
 
-        self::assertEquals(1, $receipt->id());
+        self::assertEquals($receiptId, $receipt->id());
         self::assertEquals(2, $receipt->purchaseOrderId());
-        self::assertEquals(100, $receipt->lines()[0]->productId());
+        self::assertEquals('100', $receipt->lines()[0]->productId());
         self::assertEquals(10, $receipt->lines()[0]->quantity());
     }
 }

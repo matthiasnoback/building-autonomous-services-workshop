@@ -18,8 +18,7 @@ final class SalesApplication
     public function createSalesOrderController(): void
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $allSalesOrders = Database::retrieveAll(SalesOrder::class);
-            $salesOrderId = \count($allSalesOrders) + 1;
+            $salesOrderId = SalesOrderId::create();
 
             $lines = [];
 
@@ -29,7 +28,7 @@ final class SalesApplication
                     continue;
                 }
 
-                $lines[] = new SalesOrderLine((int)$line['productId'], (int)$line['quantity']);
+                $lines[] = new SalesOrderLine($line['productId'], (int)$line['quantity']);
             }
 
             $salesOrder = new SalesOrder($salesOrderId, $lines);
@@ -68,7 +67,8 @@ final class SalesApplication
                             <?php echo htmlspecialchars($product->name); ?>
                         </td>
                         <td>
-                            <input type="text" name="lines[<?php echo $i; ?>][quantity]" value="" class="form-control quantity" title="Provide a quantity"/>
+                            <input type="text" name="lines[<?php echo $i; ?>][quantity]" value="" class="form-control quantity"
+                                   title="Provide a quantity"/>
                         </td>
                     </tr>
                     <?php

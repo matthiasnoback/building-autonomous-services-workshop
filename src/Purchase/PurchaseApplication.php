@@ -18,8 +18,9 @@ final class PurchaseApplication
     public function createPurchaseOrderController(): void
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $allPurchaseOrders = Database::retrieveAll(PurchaseOrder::class);
-            $purchaseOrderId = \count($allPurchaseOrders) + 1;
+            $purchaseOrderId = isset($_POST['purchaseOrderId'])
+                ? PurchaseOrderId::fromString($_POST['purchaseOrderId'])
+                : PurchaseOrderId::create();
 
             $lines = [];
 
@@ -29,7 +30,7 @@ final class PurchaseApplication
                     continue;
                 }
 
-                $lines[] = new PurchaseOrderLine((int)$line['productId'], (int)$line['quantity']);
+                $lines[] = new PurchaseOrderLine($line['productId'], (int)$line['quantity']);
             }
 
             $purchaseOrder = new PurchaseOrder($purchaseOrderId, $lines);
@@ -136,8 +137,7 @@ final class PurchaseApplication
         $purchaseOrder = Database::retrieve(PurchaseOrder::class, $purchaseOrderId);
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $allReceipts = Database::retrieveAll(Receipt::class);
-            $nextReceiptId = \count($allReceipts) + 1;
+            $receiptId = ReceiptId::create();
 
             $lines = [];
 
@@ -147,10 +147,10 @@ final class PurchaseApplication
                     continue;
                 }
 
-                $lines[(int)$line['productId']] = new ReceiptLine((int)$line['productId'], (int)$line['quantity']);
+                $lines[(int)$line['productId']] = new ReceiptLine($line['productId'], (int)$line['quantity']);
             }
 
-            $receipt = new Receipt($nextReceiptId, (int)$purchaseOrderId, $lines);
+            $receipt = new Receipt($receiptId, (int)$purchaseOrderId, $lines);
 
             Database::persist($receipt);
 

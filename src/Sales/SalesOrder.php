@@ -8,7 +8,7 @@ use Assert\Assertion;
 final class SalesOrder
 {
     /**
-     * @var int
+     * @var string
      */
     private $salesOrderId;
 
@@ -22,16 +22,16 @@ final class SalesOrder
      */
     private $wasDelivered;
 
-    public function __construct(int $salesOrderId, array $lines)
+    public function __construct(SalesOrderId $salesOrderId, array $lines)
     {
         Assertion::allIsInstanceOf($lines, SalesOrderLine::class);
 
-        $this->salesOrderId = $salesOrderId;
+        $this->salesOrderId = (string)$salesOrderId;
         $this->lines = $lines;
         $this->wasDelivered = false;
     }
 
-    public function id(): int
+    public function id(): string
     {
         return $this->salesOrderId;
     }

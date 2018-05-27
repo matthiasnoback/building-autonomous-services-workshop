@@ -6,7 +6,7 @@ namespace Purchase;
 final class PurchaseOrderLine
 {
     /**
-     * @var int
+     * @var string
      */
     private $productId;
 
@@ -20,18 +20,14 @@ final class PurchaseOrderLine
      */
     private $quantityReceived;
 
-    /**
-     * @param int $productId
-     * @param int $quantityOrdered
-     */
-    public function __construct(int $productId, int $quantityOrdered)
+    public function __construct(string $productId, int $quantityOrdered)
     {
         $this->productId = $productId;
         $this->quantityOrdered = $quantityOrdered;
         $this->quantityReceived = 0;
     }
 
-    public function productId(): int
+    public function productId(): string
     {
         return $this->productId;
     }

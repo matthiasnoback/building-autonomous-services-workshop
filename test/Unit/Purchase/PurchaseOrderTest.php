@@ -12,12 +12,13 @@ final class PurchaseOrderTest extends TestCase
      */
     public function it_has_an_id_and_lines(): void
     {
-        $purchaseOrder = new PurchaseOrder(1, [
-            new PurchaseOrderLine(100, 10)
+        $purchaseOrderId = PurchaseOrderId::create();
+        $purchaseOrder = new PurchaseOrder($purchaseOrderId, [
+            new PurchaseOrderLine('100', 10)
         ]);
 
-        self::assertEquals(1, $purchaseOrder->id());
-        self::assertEquals(100, $purchaseOrder->lines()[0]->productId());
+        self::assertEquals((string)$purchaseOrderId, $purchaseOrder->id());
+        self::assertEquals('100', $purchaseOrder->lines()[0]->productId());
         self::assertEquals(10, $purchaseOrder->lines()[0]->quantityOrdered());
     }
 
@@ -26,8 +27,8 @@ final class PurchaseOrderTest extends TestCase
      */
     public function initially_its_status_is_open(): void
     {
-        $purchaseOrder = new PurchaseOrder(1, [
-            new PurchaseOrderLine(100, 10)
+        $purchaseOrder = new PurchaseOrder(PurchaseOrderId::create(), [
+            new PurchaseOrderLine('100', 10)
         ]);
 
         self::assertTrue($purchaseOrder->isOpen());
@@ -38,11 +39,11 @@ final class PurchaseOrderTest extends TestCase
      */
     public function after_receiving_the_ordered_quantity_it_will_be_completed(): void
     {
-        $purchaseOrder = new PurchaseOrder(1, [
-            new PurchaseOrderLine(100, 10)
+        $purchaseOrder = new PurchaseOrder(PurchaseOrderId::create(), [
+            new PurchaseOrderLine('100', 10)
         ]);
 
-        $purchaseOrder->processReceipt(100, $exactlyWhatWasOrdered = 10);
+        $purchaseOrder->processReceipt('100', $exactlyWhatWasOrdered = 10);
 
         self::assertFalse($purchaseOrder->isOpen());
     }
@@ -52,11 +53,11 @@ final class PurchaseOrderTest extends TestCase
      */
     public function after_receiving_less_than_the_ordered_quantity_it_will_still_be_open(): void
     {
-        $purchaseOrder = new PurchaseOrder(1, [
-            new PurchaseOrderLine(100, 10)
+        $purchaseOrder = new PurchaseOrder(PurchaseOrderId::create(), [
+            new PurchaseOrderLine('100', 10)
         ]);
 
-        $purchaseOrder->processReceipt(100, $lessThanWasOrdered = 5);
+        $purchaseOrder->processReceipt('100', $lessThanWasOrdered = 5);
 
         self::assertTrue($purchaseOrder->isOpen());
     }
@@ -66,11 +67,11 @@ final class PurchaseOrderTest extends TestCase
      */
     public function it_is_possible_to_receive_more_than_was_ordered(): void
     {
-        $purchaseOrder = new PurchaseOrder(1, [
-            new PurchaseOrderLine(100, 10)
+        $purchaseOrder = new PurchaseOrder(PurchaseOrderId::create(), [
+            new PurchaseOrderLine('100', 10)
         ]);
 
-        $purchaseOrder->processReceipt(100, $moreThanWasOrdered = 15);
+        $purchaseOrder->processReceipt('100', $moreThanWasOrdered = 15);
 
         self::assertFalse($purchaseOrder->isOpen());
     }
