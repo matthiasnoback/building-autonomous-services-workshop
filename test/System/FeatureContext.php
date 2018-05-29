@@ -69,10 +69,8 @@ final class FeatureContext extends MinkContext
         $this->fillField($this->findQuantityFieldNameFor($this->product), $quantity);
         $this->pressButton('Order');
 
-        $this->visit('http://purchase.localhost/selectPurchaseOrder');
-        $this->pressButton('Next');
-        $this->fillField($this->findQuantityFieldNameFor($this->product), $quantity);
-        $this->pressButton('Save');
+        $this->visit('http://purchase.localhost/receiveGoods');
+        $this->pressButton('Receive');
     }
 
     /**

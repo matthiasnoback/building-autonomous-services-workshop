@@ -111,8 +111,8 @@ final class SalesApplication
         include __DIR__ . '/../Common/header.php';
 
         $salesOrders = Database::retrieveAll(SalesOrder::class);
-        $openSalesOrders = array_filter($salesOrders, function (SalesOrder $purchaseOrder) {
-            return !$purchaseOrder->wasDelivered();
+        $openSalesOrders = array_filter($salesOrders, function (SalesOrder $salesOrder) {
+            return !$salesOrder->wasDelivered();
         });
 
         if (\count($openSalesOrders) > 0) {

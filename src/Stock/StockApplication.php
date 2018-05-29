@@ -19,9 +19,13 @@ final class StockApplication
     {
         $stockLevels = [];
 
-        $receipts = HttpApi::fetchDecodedJsonResponse('http://purchase_web/listReceipts');
-        foreach ($receipts as $receipt) {
-            foreach ($receipt->lines as $line) {
+        $purchaseOrders = HttpApi::fetchDecodedJsonResponse('http://purchase_web/listPurchaseOrders');
+        foreach ($purchaseOrders as $purchaseOrder) {
+            if (!$purchaseOrder->received) {
+                continue;
+            }
+
+            foreach ($purchaseOrder->lines as $line) {
                 $stockLevels[$line->productId] = ($stockLevels[$line->productId] ?? 0) + $line->quantity;
             }
         }

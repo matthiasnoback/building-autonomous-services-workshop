@@ -17,6 +17,11 @@ final class PurchaseOrder
      */
     private $lines;
 
+    /**
+     * @var bool
+     */
+    private $received = false;
+
     public function __construct(PurchaseOrderId $purchaseOrderId, array $lines)
     {
         Assertion::allIsInstanceOf($lines, PurchaseOrderLine::class);
@@ -30,24 +35,14 @@ final class PurchaseOrder
         return $this->purchaseOrderId;
     }
 
-    public function processReceipt(string $productId, int $receiptQuantity): void
+    public function markAsReceived(): void
     {
-        foreach ($this->lines as $line) {
-            if ($line->productId() === $productId) {
-                $line->processReceipt($receiptQuantity);
-            }
-        }
+        $this->received = true;
     }
 
     public function isOpen(): bool
     {
-        foreach ($this->lines as $line) {
-            if ($line->isOpen()) {
-                return true;
-            }
-        }
-
-        return false;
+        return !$this->received;
     }
 
     /**
