@@ -7,6 +7,12 @@ services:
             service: php-cli
         command: php src/Common/consumer.php
 
+    purchase_consumer:
+        extends:
+            file: docker/templates.yml
+            service: php-cli
+        command: php src/Purchase/consumer.php
+
     consume_once:
         extends:
             file: docker/templates.yml
