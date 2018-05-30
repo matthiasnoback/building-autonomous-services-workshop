@@ -31,6 +31,12 @@ services:
             service: php-cli
         command: php src/Stock/consume_once.php
 
+    sales_process_manager:
+        extends:
+            file: docker/templates.yml
+            service: php-cli
+        command: php src/Sales/process_manager.php
+
     consume_once:
         extends:
             file: docker/templates.yml

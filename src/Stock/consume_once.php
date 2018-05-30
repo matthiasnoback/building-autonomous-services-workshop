@@ -26,7 +26,7 @@ Stream::consume(
                 'quantity' => $data->quantity
             ]);
         }
-        elseif ($messageType === 'sales.goods_delivered') {
+        elseif ($messageType === 'stock.reservation_accepted') {
             Stream::produce('stock.stock_level_decreased', [
                 'productId' => $data->productId,
                 'quantity' => $data->quantity

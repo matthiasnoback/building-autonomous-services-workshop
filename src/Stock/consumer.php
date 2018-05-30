@@ -10,34 +10,20 @@ require __DIR__ . '/../../vendor/autoload.php';
 
 Debug::enable();
 
-/*
- * This is a demo consumer which consumes every message from the stream.
- * This effectively makes the consumer consume every existing message again
- * after a restart.
- *
- * The consumer prints the message to stdout. Hence, if you want to visually keep
- * track of the stream, run:
- *
- *   docker-compose logs -f consumer
- */
 Stream::consume(function(string $messageType, $data) {
-    if ($messageType === 'stock.stock_level_increased') {
-        try {
-            /** @var Balance $balance */
-            $balance = Database::retrieve(Balance::class, $data->productId);
-        } catch (\RuntimeException $exception) {
-            $balance = new Balance($data->productId);
-        }
+    if ($messageType === 'catalog.product_created') {
+        $balance = new Balance($data->productId);
+        Database::persist($balance);
+    }
+    elseif ($messageType === 'stock.stock_level_increased') {
+        /** @var Balance $balance */
+        $balance = Database::retrieve(Balance::class, $data->productId);
         $balance->increase($data->quantity);
         Database::persist($balance);
     }
     elseif ($messageType === 'stock.stock_level_decreased') {
-        try {
-            /** @var Balance $balance */
-            $balance = Database::retrieve(Balance::class, $data->productId);
-        } catch (\RuntimeException $exception) {
-            $balance = new Balance($data->productId);
-        }
+        /** @var Balance $balance */
+        $balance = Database::retrieve(Balance::class, $data->productId);
         $balance->decrease($data->quantity);
         Database::persist($balance);
     }
