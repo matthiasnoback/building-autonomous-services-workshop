@@ -123,19 +123,3 @@ services:
             - ${PWD}:/opt:cached
         network_mode: host
         command: "true" # do nothing when started by `docker-compose up`
-
-    consumer:
-        extends:
-            file: docker/templates.yml
-            service: php-cli
-        command: php src/Common/consumer.php
-
-    consume_once:
-        extends:
-            file: docker/templates.yml
-            service: php-cli
-        command: php src/Common/consume_once.php
-
-networks:
-    traefik: ~
-    default: ~
