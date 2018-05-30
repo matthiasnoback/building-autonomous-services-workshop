@@ -1,0 +1,14 @@
+version: '2'
+
+services:
+    consumer:
+        extends:
+            file: docker/templates.yml
+            service: php-cli
+        command: php src/Common/consumer.php
+
+    consume_once:
+        extends:
+            file: docker/templates.yml
+            service: php-cli
+        command: php src/Common/consume_once.php

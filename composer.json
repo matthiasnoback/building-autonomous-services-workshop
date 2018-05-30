@@ -2,7 +2,7 @@
   "require": {
     "roave/security-advisories": "dev-master",
     "php": "^7.1",
-    "matthiasnoback/php-workshop-tools": "^v0.25"
+    "matthiasnoback/php-workshop-tools": "^v0.26.0"
   },
   "require-dev": {
     "symfony/debug": "^4.0",

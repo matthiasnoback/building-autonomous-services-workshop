@@ -20,6 +20,11 @@ export HOST_GID := $(shell id -g)
 
 COMPOSER_RUN := docker run --rm --interactive --tty --volume ${PWD}:/app:cached --volume ${COMPOSER_HOME}:/tmp:cached --user ${HOST_UID}:${HOST_GID} composer:latest
 
+DOCKER_COMPOSE_ALL := docker-compose -f docker-compose.web.yml -f docker-compose.consumers.yml
+DOCKER_COMPOSE_CONSUMERS := docker-compose -f docker-compose.consumers.yml
+DOCKER_COMPOSE_WEB := docker-compose -f docker-compose.web.yml
+DOCKER_COMPOSE_TEST := docker-compose -f docker-compose.test.yml
+
 ## hosts-entry: Set up an entry for this project's host names in /etc/hosts
 .PHONY: hosts-entry
 hosts-entry:
@@ -39,32 +44,37 @@ composer:
 ## up: Start all services for this project
 .PHONY: up
 up: hosts-entry vendor
-	docker-compose up -d --no-build --remove-orphans --force-recreate
+	${DOCKER_COMPOSE_ALL} up -d --no-build --remove-orphans
 	@echo "#########################################################"
 	@echo ""
 	@echo "Done, now open http://dashboard.localhost in your browser"
 	@echo ""
 	@echo "#########################################################"
 
+## restart: Restart the consumers
+restart:
+	${DOCKER_COMPOSE_CONSUMERS} stop
+	${DOCKER_COMPOSE_ALL} up -d
+
 ## down: Stop and remove all containers and volumes for this project
 .PHONY: down
 down:
-	docker-compose down --remove-orphans -v
+	${DOCKER_COMPOSE_ALL} down --remove-orphans -v
 
 ## test: Start all services and run the tests
 .PHONY: test
 test: up
-	docker-compose run --rm test sh ./run_tests.sh
+	${DOCKER_COMPOSE_TEST} run --rm test sh ./run_tests.sh
 
 ## ps: Show the status of the containers
 .PHONY: ps
 ps:
-	docker-compose ps
+	${DOCKER_COMPOSE_ALL} ps
 
 ## logs: Show and follow the container logs
 .PHONY: logs
 logs:
-	docker-compose logs -f
+	${DOCKER_COMPOSE_ALL} logs -f
 
 docker/nginx/.built: docker/nginx/Dockerfile docker/nginx/template.conf
 	docker build -t matthiasnoback/building_autonomous_services_nginx:latest -f docker/nginx/Dockerfile docker/nginx/
@@ -98,4 +108,4 @@ clean:
 destroy:
 	rm -rv vendor
 	rm -v var/*.*
-	docker-compose down -v --remove-orphans --rmi all
+	${DOCKER_COMPOSE_ALL} down -v --remove-orphans --rmi all

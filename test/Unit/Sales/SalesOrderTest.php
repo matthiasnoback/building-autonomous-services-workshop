@@ -12,13 +12,14 @@ final class SalesOrderTest extends TestCase
      */
     public function it_can_be_created_with_an_id_and_lines(): void
     {
-        $salesOrder = new SalesOrder(1, [
-            new SalesOrderLine(100, 10)
-        ]);
+        $salesOrderId = SalesOrderId::create();
+        $productId = '8513f8f0-9ed6-4096-b84c-3274dc0394d1';
+        $quantity = 10;
+        $salesOrder = new SalesOrder($salesOrderId, $productId, $quantity);
 
-        self::assertEquals(1, $salesOrder->id());
-        self::assertEquals(100, $salesOrder->lines()[0]->productId());
-        self::assertEquals(10, $salesOrder->lines()[0]->quantity());
+        self::assertEquals($salesOrderId, $salesOrder->id());
+        self::assertEquals($productId, $salesOrder->productId());
+        self::assertEquals($quantity, $salesOrder->quantity());
     }
 
     /**
@@ -26,23 +27,28 @@ final class SalesOrderTest extends TestCase
      */
     public function initially_it_has_not_been_delivered_yet(): void
     {
-        $salesOrder = new SalesOrder(1, [
-            new SalesOrderLine(100, 10)
-        ]);
+        $salesOrder = $this->someSalesOrder();
 
         self::assertFalse($salesOrder->wasDelivered());
     }
+
     /**
      * @test
      */
     public function it_will_remember_if_it_was_delivered(): void
     {
-        $salesOrder = new SalesOrder(1, [
-            new SalesOrderLine(100, 10)
-        ]);
+        $salesOrder = $this->someSalesOrder();
 
         $salesOrder->deliver();
 
         self::assertTrue($salesOrder->wasDelivered());
+    }
+
+    /**
+     * @return SalesOrder
+     */
+    private function someSalesOrder(): SalesOrder
+    {
+        return new SalesOrder(SalesOrderId::create(), '8513f8f0-9ed6-4096-b84c-3274dc0394d1', 10);
     }
 }

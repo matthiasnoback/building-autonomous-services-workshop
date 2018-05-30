@@ -8,53 +8,58 @@ use Assert\Assertion;
 final class PurchaseOrder
 {
     /**
-     * @var int
+     * @var string
      */
     private $purchaseOrderId;
 
     /**
-     * @var PurchaseOrderLine[]
+     * @var string
      */
-    private $lines;
+    private $productId;
 
-    public function __construct(int $purchaseOrderId, array $lines)
+    /**
+     * @var int
+     */
+    private $quantity;
+
+    /**
+     * @var bool
+     */
+    private $received = false;
+
+    public function __construct(PurchaseOrderId $purchaseOrderId, string $productId, int $quantity)
     {
-        Assertion::allIsInstanceOf($lines, PurchaseOrderLine::class);
+        $this->purchaseOrderId = (string)$purchaseOrderId;
 
-        $this->purchaseOrderId = $purchaseOrderId;
-        $this->lines = $lines;
+        Assertion::uuid($productId);
+        $this->productId = $productId;
+
+        Assertion::greaterThan($quantity, 0);
+        $this->quantity = $quantity;
     }
 
-    public function id(): int
+    public function id(): string
     {
         return $this->purchaseOrderId;
     }
 
-    public function processReceipt(int $productId, int $receiptQuantity): void
+    public function productId(): string
     {
-        foreach ($this->lines as $line) {
-            if ($line->productId() === $productId) {
-                $line->processReceipt($receiptQuantity);
-            }
-        }
+        return $this->productId;
+    }
+
+    public function quantity(): int
+    {
+        return $this->quantity;
+    }
+
+    public function markAsReceived(): void
+    {
+        $this->received = true;
     }
 
     public function isOpen(): bool
     {
-        foreach ($this->lines as $line) {
-            if ($line->isOpen()) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * @return PurchaseOrderLine[]
-     */
-    public function lines(): array
-    {
-        return $this->lines;
+        return !$this->received;
     }
 }

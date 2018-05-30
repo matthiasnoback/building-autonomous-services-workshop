@@ -15,10 +15,8 @@ final class CatalogApplication
     public function createProductController(): void
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $allProducts = Database::retrieveAll(Product::class);
-            $productId = \count($allProducts) + 1;
             $product = new Product(
-                $productId,
+                ProductId::create(),
                 $_POST['name'],
                 (int)$_POST['minimum_stock_level'] ?: null
             );

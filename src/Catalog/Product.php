@@ -6,7 +6,7 @@ namespace Catalog;
 final class Product
 {
     /**
-     * @var int
+     * @var string
      */
     private $productId;
 
@@ -21,20 +21,20 @@ final class Product
     private $minimumStockLevel;
 
     /**
-     * @param int $productId
+     * @param ProductId $productId
      * @param string $name
      * @param int|null $minimumStockLevel
      */
-    public function __construct(int $productId, string $name, ?int $minimumStockLevel)
+    public function __construct(ProductId $productId, string $name, ?int $minimumStockLevel)
     {
-        $this->productId = $productId;
+        $this->productId = (string)$productId;
         $this->name = $name;
         $this->minimumStockLevel = $minimumStockLevel;
     }
 
-    public function id(): int
+    public function id(): string
     {
-        return  $this->productId;
+        return $this->productId;
     }
 
     public function name(): string

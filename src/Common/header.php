@@ -63,10 +63,7 @@ use Common\Web\FlashMessage;
                             <a href="http://purchase.localhost/createPurchaseOrder">Create a Purchase order</a>
                         </li>
                         <li>
-                            <a href="http://purchase.localhost/listReceipts">List Receipts</a>
-                        </li>
-                        <li>
-                            <a href="http://purchase.localhost/selectPurchaseOrder">Receive Goods</a>
+                            <a href="http://purchase.localhost/receiveGoods">Receive Goods</a>
                         </li>
                     </ul>
                 </li>
