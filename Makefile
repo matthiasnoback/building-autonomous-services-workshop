@@ -63,7 +63,7 @@ down:
 
 ## test: Start all services and run the tests
 .PHONY: test
-test: up
+test: cleanup restart
 	${DOCKER_COMPOSE_TEST} run --rm test sh ./run_tests.sh
 
 ## ps: Show the status of the containers
@@ -105,7 +105,11 @@ clean:
 
 ## destroy: remove everything to be able to start all over
 .PHONY: destroy
-destroy:
+destroy: cleanup
 	rm -rv vendor
-	rm -v var/*.*
 	${DOCKER_COMPOSE_ALL} down -v --remove-orphans --rmi all
+
+## cleanup: remove all database files in var/
+.PHONY: cleanup
+cleanup:
+	rm -v var/*.json var/stream.txt || true
