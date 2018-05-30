@@ -24,7 +24,7 @@ Debug::enable();
  */
 
 // the key to use when storing the current message index
-$startAtIndexKey = 'consumer_start_at';
+$startAtIndexKey = $startAtIndexKey = basename(__DIR__) . '_start_at_index';;
 
 $startAtIndex = KeyValueStore::get($startAtIndexKey) ?: 0;
 stdout(line('Start consuming at index', ':', (string)$startAtIndex));
