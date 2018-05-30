@@ -20,7 +20,7 @@ Debug::enable();
  *
  * If you want to visually keep track of the stream, run:
  *
- *   docker-compose logs -f consume_once
+ *   make logs
  */
 
 // the key to use when storing the current message index

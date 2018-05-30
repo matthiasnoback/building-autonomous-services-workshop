@@ -16,7 +16,7 @@ Debug::enable();
  * The consumer prints the message to stdout. Hence, if you want to visually keep
  * track of the stream, run:
  *
- *   docker-compose logs -f consumer
+ *   make logs
  */
 Stream::consume(function(string $messageType, $data) {
     echo $messageType . ': ' . json_encode($data) . "\n";
