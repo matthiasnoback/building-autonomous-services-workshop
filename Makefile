@@ -39,7 +39,7 @@ composer:
 ## up: Start all services for this project
 .PHONY: up
 up: hosts-entry vendor
-	docker-compose up -d --no-build --remove-orphans --force-recreate
+	docker-compose up -d --no-build --remove-orphans
 	@echo "#########################################################"
 	@echo ""
 	@echo "Done, now open http://dashboard.localhost in your browser"
