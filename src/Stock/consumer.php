@@ -21,7 +21,7 @@ Debug::enable();
  *   docker-compose logs -f consumer
  */
 Stream::consume(function(string $messageType, $data) {
-    if ($messageType === 'purchase.goods_received') {
+    if ($messageType === 'stock.stock_level_increased') {
         try {
             /** @var Balance $balance */
             $balance = Database::retrieve(Balance::class, $data->productId);
@@ -31,7 +31,7 @@ Stream::consume(function(string $messageType, $data) {
         $balance->increase($data->quantity);
         Database::persist($balance);
     }
-    elseif ($messageType === 'sales.goods_delivered') {
+    elseif ($messageType === 'stock.stock_level_decreased') {
         try {
             /** @var Balance $balance */
             $balance = Database::retrieve(Balance::class, $data->productId);

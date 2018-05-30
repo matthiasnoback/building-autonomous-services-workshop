@@ -7,6 +7,12 @@ services:
             service: php-cli
         command: php src/Common/consumer.php
 
+    dashboard_consumer:
+        extends:
+            file: docker/templates.yml
+            service: php-cli
+        command: php src/Dashboard/consumer.php
+
     purchase_consumer:
         extends:
             file: docker/templates.yml
@@ -18,6 +24,12 @@ services:
             file: docker/templates.yml
             service: php-cli
         command: php src/Stock/consumer.php
+
+    stock_consume_once:
+        extends:
+            file: docker/templates.yml
+            service: php-cli
+        command: php src/Stock/consume_once.php
 
     consume_once:
         extends:
