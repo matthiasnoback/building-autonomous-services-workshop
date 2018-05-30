@@ -20,9 +20,10 @@ export HOST_GID := $(shell id -g)
 
 COMPOSER_RUN := docker run --rm --interactive --tty --volume ${PWD}:/app:cached --volume ${COMPOSER_HOME}:/tmp:cached --user ${HOST_UID}:${HOST_GID} composer:latest
 
-DOCKER_COMPOSE_ALL := docker-compose -f docker-compose.base.yml -f docker-compose.web.yml -f docker-compose.consumers.yml
-DOCKER_COMPOSE_CONSUMERS := docker-compose -f docker-compose.base.yml -f docker-compose.consumers.yml
-DOCKER_COMPOSE_WEB := docker-compose -f docker-compose.base.yml -f docker-compose.web.yml
+DOCKER_COMPOSE_ALL := docker-compose -f docker-compose.web.yml -f docker-compose.consumers.yml
+DOCKER_COMPOSE_CONSUMERS := docker-compose -f docker-compose.consumers.yml
+DOCKER_COMPOSE_WEB := docker-compose -f docker-compose.web.yml
+DOCKER_COMPOSE_TEST := docker-compose -f docker-compose.test.yml
 
 ## hosts-entry: Set up an entry for this project's host names in /etc/hosts
 .PHONY: hosts-entry
@@ -52,7 +53,8 @@ up: hosts-entry vendor
 
 ## restart: Restart the consumers
 restart:
-	${DOCKER_COMPOSE_CONSUMERS} restart
+	${DOCKER_COMPOSE_CONSUMERS} stop
+	${DOCKER_COMPOSE_ALL} up -d
 
 ## down: Stop and remove all containers and volumes for this project
 .PHONY: down
@@ -62,7 +64,7 @@ down:
 ## test: Start all services and run the tests
 .PHONY: test
 test: up
-	${DOCKER_COMPOSE_ALL} run --rm test sh ./run_tests.sh
+	${DOCKER_COMPOSE_TEST} run --rm test sh ./run_tests.sh
 
 ## ps: Show the status of the containers
 .PHONY: ps

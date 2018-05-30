@@ -113,13 +113,5 @@ services:
             file: docker/templates.yml
             service: php-fpm
 
-    test:
-        image: matthiasnoback/building_autonomous_services_php_cli
-        env_file: docker/.env
-        user: ${HOST_UID}:${HOST_GID}
-        environment:
-            XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_NAME_OR_IP}"
-        volumes:
-            - ${PWD}:/opt:cached
-        network_mode: host
-        command: "true" # do nothing when started by `docker-compose up`
+networks:
+    traefik: ~
