@@ -37,6 +37,8 @@ final class FeatureContext extends MinkContext
         $this->assertUrlRegExp('#/listProducts#');
 
         $this->product = $productName;
+
+        $this->waitForTheConsumersToCatchUp();
     }
 
     /**
@@ -72,6 +74,8 @@ final class FeatureContext extends MinkContext
 
         $this->visit('http://purchase.localhost/receiveGoods');
         $this->pressButton('Receive');
+
+        $this->waitForTheConsumersToCatchUp();
     }
 
     /**
@@ -86,6 +90,8 @@ final class FeatureContext extends MinkContext
 
         $this->visit('http://sales.localhost/deliverSalesOrder');
         $this->pressButton('Deliver');
+
+        $this->waitForTheConsumersToCatchUp();
     }
 
     /**
@@ -100,5 +106,10 @@ final class FeatureContext extends MinkContext
         }
 
         return $element;
+    }
+
+    private function waitForTheConsumersToCatchUp(): void
+    {
+        sleep(2);
     }
 }
