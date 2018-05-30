@@ -22,18 +22,7 @@ final class PurchaseApplication
                 ? PurchaseOrderId::fromString($_POST['purchaseOrderId'])
                 : PurchaseOrderId::create();
 
-            $lines = [];
-
-            foreach ($_POST['lines'] as $line) {
-
-                if ((int)$line['quantity'] <= 0) {
-                    continue;
-                }
-
-                $lines[] = new PurchaseOrderLine($line['productId'], (int)$line['quantity']);
-            }
-
-            $purchaseOrder = new PurchaseOrder($purchaseOrderId, $lines);
+            $purchaseOrder = new PurchaseOrder($purchaseOrderId, $_POST['productId'], (int)$_POST['quantity']);
 
             Database::persist($purchaseOrder);
 
@@ -50,36 +39,29 @@ final class PurchaseApplication
         ?>
         <h1>Create a purchase order</h1>
         <form action="/createPurchaseOrder" method="post">
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>Line</th>
-                    <th>Product</th>
-                    <th>Quantity</th>
-                </tr>
-                </thead>
-                <tbody>
-                <?php
-                foreach ($products as $i => $product) {
-                    ?>
-                    <tr>
-                        <td><?php echo $i + 1; ?></td>
-                        <td class="product-name">
-                            <input type="hidden" name="lines[<?php echo $i; ?>][productId]" value="<?php echo $product->productId; ?>" />
-                            <?php echo htmlspecialchars($product->name); ?>
-                        </td>
-                        <td>
-                            <input type="text" name="lines[<?php echo $i; ?>][quantity]" value="" class="form-control quantity" title="Provide a quantity"/>
-                        </td>
-                    </tr>
+            <div class="form-group">
+                <label for="productId">
+                    Product
+                </label>
+                <select name="productId" id="productId" class="form-control productId">
                     <?php
-                }
-                ?>
-                </tbody>
-            </table>
-            <p>
+                    foreach ($products as $product) {
+                        ?>
+                        <option value="<?php echo $product->productId; ?>"><?php echo htmlspecialchars($product->name); ?></option>
+                        <?php
+                    }
+                    ?>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="quantity">
+                    Quantity
+                </label>
+                <input type="text" name="quantity" id="quantity" value="" class="form-control quantity" title="Provide a quantity"/>
+            </div>
+            <div class="btn-group">
                 <button type="submit" class="btn btn-primary">Order</button>
-            </p>
+            </div>
         </form>
         <?php
 

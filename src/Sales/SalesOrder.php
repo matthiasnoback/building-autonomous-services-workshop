@@ -13,21 +13,30 @@ final class SalesOrder
     private $salesOrderId;
 
     /**
-     * @var SalesOrderLine[]
+     * @var string
      */
-    private $lines;
+    private $productId;
+
+    /**
+     * @var int
+     */
+    private $quantity;
 
     /**
      * @var bool
      */
     private $wasDelivered;
 
-    public function __construct(SalesOrderId $salesOrderId, array $lines)
+    public function __construct(SalesOrderId $salesOrderId, string $productId, int $quantity)
     {
-        Assertion::allIsInstanceOf($lines, SalesOrderLine::class);
-
         $this->salesOrderId = (string)$salesOrderId;
-        $this->lines = $lines;
+
+        Assertion::uuid($productId);
+        $this->productId = $productId;
+
+        Assertion::greaterThan($quantity, 0);
+        $this->quantity = $quantity;
+
         $this->wasDelivered = false;
     }
 
@@ -36,12 +45,14 @@ final class SalesOrder
         return $this->salesOrderId;
     }
 
-    /**
-     * @return SalesOrderLine[]
-     */
-    public function lines(): array
+    public function productId(): string
     {
-        return $this->lines;
+        return $this->productId;
+    }
+
+    public function quantity(): int
+    {
+        return $this->quantity;
     }
 
     public function wasDelivered(): bool

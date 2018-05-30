@@ -13,26 +13,44 @@ final class PurchaseOrder
     private $purchaseOrderId;
 
     /**
-     * @var PurchaseOrderLine[]
+     * @var string
      */
-    private $lines;
+    private $productId;
+
+    /**
+     * @var int
+     */
+    private $quantity;
 
     /**
      * @var bool
      */
     private $received = false;
 
-    public function __construct(PurchaseOrderId $purchaseOrderId, array $lines)
+    public function __construct(PurchaseOrderId $purchaseOrderId, string $productId, int $quantity)
     {
-        Assertion::allIsInstanceOf($lines, PurchaseOrderLine::class);
-
         $this->purchaseOrderId = (string)$purchaseOrderId;
-        $this->lines = $lines;
+
+        Assertion::uuid($productId);
+        $this->productId = $productId;
+
+        Assertion::greaterThan($quantity, 0);
+        $this->quantity = $quantity;
     }
 
     public function id(): string
     {
         return $this->purchaseOrderId;
+    }
+
+    public function productId(): string
+    {
+        return $this->productId;
+    }
+
+    public function quantity(): int
+    {
+        return $this->quantity;
     }
 
     public function markAsReceived(): void
@@ -43,13 +61,5 @@ final class PurchaseOrder
     public function isOpen(): bool
     {
         return !$this->received;
-    }
-
-    /**
-     * @return PurchaseOrderLine[]
-     */
-    public function lines(): array
-    {
-        return $this->lines;
     }
 }

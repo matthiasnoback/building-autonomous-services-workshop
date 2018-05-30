@@ -66,7 +66,8 @@ final class FeatureContext extends MinkContext
     {
         $this->visit('http://purchase.localhost/createPurchaseOrder');
 
-        $this->fillField($this->findQuantityFieldNameFor($this->product), $quantity);
+        $this->selectOption('Product', $this->product);
+        $this->fillField('Quantity', $quantity);
         $this->pressButton('Order');
 
         $this->visit('http://purchase.localhost/receiveGoods');
@@ -79,24 +80,12 @@ final class FeatureContext extends MinkContext
     public function weHaveSoldAndDeliveredItemsOfThisProduct(string $quantity): void
     {
         $this->visit('http://sales.localhost/createSalesOrder');
-        $this->fillField($this->findQuantityFieldNameFor($this->product), $quantity);
+        $this->selectOption('Product', $this->product);
+        $this->fillField('Quantity', $quantity);
         $this->pressButton('Order');
 
         $this->visit('http://sales.localhost/deliverSalesOrder');
         $this->pressButton('Deliver');
-    }
-
-    private function findQuantityFieldNameFor(string $productName): ?string
-    {
-        $nameElement = $this->findElementContainingProductName($productName);
-        $quantityFieldName = $this->findOrFail('css', 'input.quantity', $nameElement->getParent())->getAttribute('name');
-
-        return $quantityFieldName;
-    }
-
-    private function findElementContainingProductName(string $productName): NodeElement
-    {
-        return $this->findOrFail('css', '.product-name:contains("' . addslashes($productName) . '")');
     }
 
     /**

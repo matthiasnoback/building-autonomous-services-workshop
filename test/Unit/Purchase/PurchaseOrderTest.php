@@ -10,16 +10,16 @@ final class PurchaseOrderTest extends TestCase
     /**
      * @test
      */
-    public function it_has_an_id_and_lines(): void
+    public function it_has_an_id_a_product_and_a_quantity(): void
     {
         $purchaseOrderId = PurchaseOrderId::create();
-        $purchaseOrder = new PurchaseOrder($purchaseOrderId, [
-            new PurchaseOrderLine('100', 10)
-        ]);
+        $productId = 'f57ad8e5-e713-45dd-a623-4ff7fd3d9297';
+        $quantity = 10;
+        $purchaseOrder = new PurchaseOrder($purchaseOrderId, $productId, $quantity);
 
         self::assertEquals((string)$purchaseOrderId, $purchaseOrder->id());
-        self::assertEquals('100', $purchaseOrder->lines()[0]->productId());
-        self::assertEquals(10, $purchaseOrder->lines()[0]->quantity());
+        self::assertEquals($productId, $purchaseOrder->productId());
+        self::assertEquals($quantity, $purchaseOrder->quantity());
     }
 
     /**
@@ -27,9 +27,7 @@ final class PurchaseOrderTest extends TestCase
      */
     public function initially_its_status_is_open(): void
     {
-        $purchaseOrder = new PurchaseOrder(PurchaseOrderId::create(), [
-            new PurchaseOrderLine('100', 10)
-        ]);
+        $purchaseOrder = $this->somePurchaseOrder();
 
         self::assertTrue($purchaseOrder->isOpen());
     }
@@ -37,13 +35,24 @@ final class PurchaseOrderTest extends TestCase
     /**
      * @test
      */
-    public function after_receiving_its_status_is_no_longer_open(): void
+    public function after_marking_it_as_received_its_status_is_no_longer_open(): void
     {
-        $purchaseOrder = new PurchaseOrder(PurchaseOrderId::create(), [
-            new PurchaseOrderLine('100', 10)
-        ]);
+        $purchaseOrder = $this->somePurchaseOrder();
+
         $purchaseOrder->markAsReceived();
 
         self::assertFalse($purchaseOrder->isOpen());
+    }
+
+    /**
+     * @return PurchaseOrder
+     */
+    private function somePurchaseOrder(): PurchaseOrder
+    {
+        return new PurchaseOrder(
+            PurchaseOrderId::create(),
+            'f57ad8e5-e713-45dd-a623-4ff7fd3d9297',
+            10
+        );
     }
 }

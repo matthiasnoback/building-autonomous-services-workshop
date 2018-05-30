@@ -25,9 +25,7 @@ final class StockApplication
                 continue;
             }
 
-            foreach ($purchaseOrder->lines as $line) {
-                $stockLevels[$line->productId] = ($stockLevels[$line->productId] ?? 0) + $line->quantity;
-            }
+            $stockLevels[$purchaseOrder->productId] = ($stockLevels[$purchaseOrder->productId] ?? 0) + $purchaseOrder->quantity;
         }
 
         $salesOrders = HttpApi::fetchDecodedJsonResponse('http://sales_web/listSalesOrders');
@@ -36,9 +34,7 @@ final class StockApplication
                 continue;
             }
 
-            foreach ($salesOrder->lines as $line) {
-                $stockLevels[$line->productId] = ($stockLevels[$line->productId] ?? 0) - $line->quantity;
-            }
+            $stockLevels[$salesOrder->productId] = ($stockLevels[$salesOrder->productId] ?? 0) - $salesOrder->quantity;
         }
 
         return $stockLevels;
