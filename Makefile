@@ -63,7 +63,7 @@ down:
 
 ## test: Start all services and run the tests
 .PHONY: test
-test: cleanup restart
+test: vendor cleanup restart
 	${DOCKER_COMPOSE_TEST} run --rm test sh ./run_tests.sh
 
 ## ps: Show the status of the containers
