@@ -13,6 +13,12 @@ services:
             service: php-cli
         command: php src/Purchase/consumer.php
 
+    stock_consumer:
+        extends:
+            file: docker/templates.yml
+            service: php-cli
+        command: php src/Stock/consumer.php
+
     consume_once:
         extends:
             file: docker/templates.yml
