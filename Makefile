@@ -52,7 +52,7 @@ up: hosts-entry vendor
 	@echo "#########################################################"
 
 ## restart: Restart the consumers
-restart:
+restart: hosts-entry vendor
 	${DOCKER_COMPOSE_CONSUMERS} stop
 	${DOCKER_COMPOSE_ALL} up -d
 
@@ -63,7 +63,7 @@ down:
 
 ## test: Start all services and run the tests
 .PHONY: test
-test: vendor cleanup restart
+test: cleanup restart
 	${DOCKER_COMPOSE_TEST} run --rm test sh ./run_tests.sh
 
 ## ps: Show the status of the containers
