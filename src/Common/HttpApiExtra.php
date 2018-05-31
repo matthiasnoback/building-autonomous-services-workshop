@@ -21,15 +21,11 @@ final class HttpApiExtra
                     'Content-type: application/x-www-form-urlencoded',
                     'Accept: application/json'
                 ],
-                'content' => \http_build_query($data)
+                'content' => \http_build_query($data),
+                'ignore_errors' => true
             ]
         ]);
-        $response = \file_get_contents($url, false, $context);
 
-        if ($response === false) {
-            throw new \RuntimeException('Failed to make a POST request to: ' . $url);
-        }
-
-        return $response;
+        return \file_get_contents($url, false, $context);
     }
 }
