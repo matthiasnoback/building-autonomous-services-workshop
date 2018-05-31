@@ -21,13 +21,18 @@ final class StockApplication
         /** @var Balance $balance */
         $balance = Database::retrieve(Balance::class, $_POST['productId']);
 
-        if ($balance->stockLevel() >= (int)$_POST['quantity']) {
-            $reservation = new Reservation($_POST['reservationId'], $_POST['productId'], (int)$_POST['quantity']);
-            Database::persist($reservation);
+        $successful = $balance->makeReservation($_POST['reservationId'], (int)$_POST['quantity']);
+
+        if ($successful) {
+            Database::persist($balance);
             Stream::produce('stock.reservation_accepted', [
-                'reservationId' => $reservation->id(),
-                'productId' => $reservation->productId(),
-                'quantity' => $reservation->quantity()
+                'reservationId' => $_POST['reservationId'],
+                'productId' => $_POST['productId'],
+                'quantity' => (int)$_POST['quantity']
+            ]);
+            Stream::produce('stock.stock_level_decreased', [
+                'productId' => $_POST['productId'],
+                'quantity' => (int)$_POST['quantity']
             ]);
         } else {
             Stream::produce('stock.reservation_rejected', [

@@ -7,7 +7,6 @@ use Common\Persistence\Database;
 use Common\Render;
 use Common\Stream\Stream;
 use Common\Web\FlashMessage;
-use Common\Web\HttpApi;
 
 final class PurchaseApplication
 {
@@ -90,6 +89,7 @@ final class PurchaseApplication
             Database::persist($purchaseOrder);
 
             Stream::produce('purchase.goods_received', [
+                'purchaseOrderId' => $purchaseOrder->id(),
                 'productId' => $purchaseOrder->productId(),
                 'quantity' => $purchaseOrder->quantity()
             ]);

@@ -43,4 +43,53 @@ final class BalanceTest extends TestCase
 
         self::assertEquals(3, $balance->stockLevel());
     }
+
+    /**
+     * @test
+     */
+    public function you_can_make_a_stock_reservation_for_a_given_quantity(): void
+    {
+        $balance = new Balance('3257474b-09cb-4339-8e55-8b2476f493c1');
+        $balance->increase(4);
+
+        $reservationId = '23bb342d-5ac1-433a-b0ae-8beb6a2490ae';
+        $reservationSucceeded = $balance->makeReservation($reservationId, 3);
+
+        self::assertTrue($reservationSucceeded);
+        self::assertEquals(1, $balance->stockLevel());
+        self::assertTrue($balance->hasReservation($reservationId));
+    }
+
+    /**
+     * @test
+     */
+    public function you_cannot_make_a_stock_reservation_if_the_stock_level_is_insufficient(): void
+    {
+        $balance = new Balance('3257474b-09cb-4339-8e55-8b2476f493c1');
+        $balance->increase(3);
+
+        $reservationId = '23bb342d-5ac1-433a-b0ae-8beb6a2490ae';
+        $reservationSucceeded = $balance->makeReservation($reservationId, 4);
+
+        self::assertFalse($reservationSucceeded);
+        self::assertEquals(3, $balance->stockLevel());
+        self::assertFalse($balance->hasReservation($reservationId));
+    }
+
+    /**
+     * @test
+     */
+    public function you_can_commit_a_reservation(): void
+    {
+        $balance = new Balance('3257474b-09cb-4339-8e55-8b2476f493c1');
+        $balance->increase(4);
+        $reservationId = '23bb342d-5ac1-433a-b0ae-8beb6a2490ae';
+        $balance->makeReservation($reservationId, 3);
+
+        $balance->commitReservation($reservationId);
+
+        // nothing has changed about the balance
+        self::assertEquals(1, $balance->stockLevel());
+        self::assertFalse($balance->hasReservation($reservationId));
+    }
 }

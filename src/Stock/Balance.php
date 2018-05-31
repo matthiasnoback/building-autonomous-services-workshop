@@ -15,6 +15,11 @@ final class Balance
      */
     private $stockLevel;
 
+    /**
+     * @var Reservation[]
+     */
+    private $reservations = [];
+
     public function __construct(string $productId)
     {
         $this->productId = $productId;
@@ -39,5 +44,36 @@ final class Balance
     public function decrease(int $deliveredQuantity): void
     {
         $this->stockLevel -= $deliveredQuantity;
+    }
+
+    public function makeReservation(string $reservationId, int $quantity): bool
+    {
+        if ($this->stockLevel >= $quantity) {
+            $this->reservations[] = new Reservation($reservationId, $quantity);
+            $this->decrease($quantity);
+            return true;
+        }
+
+        return false;
+    }
+
+    public function commitReservation(string $reservationId): void
+    {
+        foreach ($this->reservations as $key => $reservation) {
+            if ($reservation->reservationId() === $reservationId) {
+                unset($this->reservations[$key]);
+            }
+        }
+    }
+
+    public function hasReservation(string $reservationId): bool
+    {
+        foreach ($this->reservations as $reservation) {
+            if ($reservation->reservationId() === $reservationId) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

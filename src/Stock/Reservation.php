@@ -11,30 +11,19 @@ final class Reservation
     private $reservationId;
 
     /**
-     * @var string
-     */
-    private $productId;
-
-    /**
      * @var int
      */
     private $quantity;
 
-    public function __construct(string $reservationId, string $productId, int $quantity)
+    public function __construct(string $reservationId, int $quantity)
     {
         $this->reservationId = $reservationId;
-        $this->productId = $productId;
         $this->quantity = $quantity;
     }
 
-    public function id(): string
+    public function reservationId(): string
     {
         return $this->reservationId;
-    }
-
-    public function productId(): string
-    {
-        return $this->productId;
     }
 
     public function quantity(): int
