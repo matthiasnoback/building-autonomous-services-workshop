@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Purchase;
 
 use Assert\Assertion;
-use Common\Persistence\Entity;
+use Common\Persistence\IdentifiableObject;
 
 /**
  * A simplified version of the real-world "Purchase Order". It represents an
@@ -16,7 +16,7 @@ use Common\Persistence\Entity;
  * quantity of the ordered product, the stock level of this product will be
  * increased by the same quantity that you ordered.
  */
-final class PurchaseOrder implements Entity
+final class PurchaseOrder implements IdentifiableObject
 {
     /**
      * @var string

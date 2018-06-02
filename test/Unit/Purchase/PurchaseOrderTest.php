@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Purchase;
 
-use Common\Persistence\Entity;
+use Common\Persistence\IdentifiableObject;
 use Test\Integration\EntityTest;
 
 final class PurchaseOrderTest extends EntityTest
@@ -57,7 +57,7 @@ final class PurchaseOrderTest extends EntityTest
         );
     }
 
-    protected function getObject(): Entity
+    protected function getObject(): IdentifiableObject
     {
         return $this->somePurchaseOrder();
     }

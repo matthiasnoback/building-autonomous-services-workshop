@@ -4,15 +4,15 @@ declare(strict_types=1);
 namespace Test\Integration;
 
 use Common\Persistence\Database;
-use Common\Persistence\Entity;
+use Common\Persistence\IdentifiableObject;
 use PHPUnit\Framework\TestCase;
 
 abstract class EntityTest extends TestCase
 {
     /**
-     * @return Entity The object that needs persisting
+     * @return IdentifiableObject The object that needs persisting
      */
-    abstract protected function getObject(): Entity;
+    abstract protected function getObject(): IdentifiableObject;
 
     /**
      * This is an integration test to verify that an entity can be persisted using `Common\Database`.

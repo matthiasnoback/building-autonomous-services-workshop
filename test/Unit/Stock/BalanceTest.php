@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Stock;
 
-use Common\Persistence\Entity;
+use Common\Persistence\IdentifiableObject;
 use Test\Integration\EntityTest;
 
 final class BalanceTest extends EntityTest
@@ -94,7 +94,7 @@ final class BalanceTest extends EntityTest
         self::assertFalse($balance->hasReservation($reservationId));
     }
 
-    protected function getObject(): Entity
+    protected function getObject(): IdentifiableObject
     {
         $balance = new Balance('3257474b-09cb-4339-8e55-8b2476f493c1');
         $balance->increase(4);

@@ -2,7 +2,7 @@
   "require": {
     "roave/security-advisories": "dev-master",
     "php": "^7.1",
-    "matthiasnoback/php-workshop-tools": "^0.28"
+    "matthiasnoback/php-workshop-tools": "^0.29"
   },
   "require-dev": {
     "behat/behat": "^3.4",

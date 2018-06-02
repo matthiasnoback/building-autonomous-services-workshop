@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Sales;
 
 use Assert\Assertion;
-use Common\Persistence\Entity;
+use Common\Persistence\IdentifiableObject;
 
 
 /**
@@ -17,7 +17,7 @@ use Common\Persistence\Entity;
  * the corresponding sales order as "delivered". From that moment on, the stock
  * level will be decreased by the quantity of the product you delivered.
  */
-final class SalesOrder implements Entity
+final class SalesOrder implements IdentifiableObject
 {
     /**
      * @var string

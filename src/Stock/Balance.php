@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace Stock;
 
-use Common\Persistence\Entity;
+use Common\Persistence\IdentifiableObject;
 
-final class Balance implements Entity
+final class Balance implements IdentifiableObject
 {
     /**
      * @var string

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Sales;
 
-use Common\Persistence\Entity;
+use Common\Persistence\IdentifiableObject;
 use Test\Integration\EntityTest;
 
 final class SalesOrderTest extends EntityTest
@@ -53,7 +53,7 @@ final class SalesOrderTest extends EntityTest
         return new SalesOrder(SalesOrderId::create(), '8513f8f0-9ed6-4096-b84c-3274dc0394d1', 10);
     }
 
-    protected function getObject(): Entity
+    protected function getObject(): IdentifiableObject
     {
         return $this->someSalesOrder();
     }
