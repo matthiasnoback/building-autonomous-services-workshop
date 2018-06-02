@@ -3,11 +3,13 @@ declare(strict_types=1);
 
 namespace Catalog;
 
+use Common\Persistence\Entity;
+
 /**
  * Before you can purchase or sell any product, you first need to register add
  * it to the catalog. It needs an ID and a name.
  */
-final class Product
+final class Product implements Entity
 {
     /**
      * @var string

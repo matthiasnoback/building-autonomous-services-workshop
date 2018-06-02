@@ -3,9 +3,10 @@ declare(strict_types=1);
 
 namespace Catalog;
 
-use PHPUnit\Framework\TestCase;
+use Common\Persistence\Entity;
+use Test\Integration\EntityTest;
 
-final class ProductTest extends TestCase
+final class ProductTest extends EntityTest
 {
     /**
      * @test
@@ -19,5 +20,10 @@ final class ProductTest extends TestCase
 
         self::assertEquals((string)$productId, $product->id());
         self::assertEquals($name, $product->name());
+    }
+
+    protected function getObject(): Entity
+    {
+        return new Product(ProductId::create(), 'Name');
     }
 }

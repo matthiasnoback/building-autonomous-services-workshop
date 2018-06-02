@@ -3,9 +3,10 @@ declare(strict_types=1);
 
 namespace Sales;
 
-use PHPUnit\Framework\TestCase;
+use Common\Persistence\Entity;
+use Test\Integration\EntityTest;
 
-final class SalesOrderTest extends TestCase
+final class SalesOrderTest extends EntityTest
 {
     /**
      * @test
@@ -50,5 +51,10 @@ final class SalesOrderTest extends TestCase
     private function someSalesOrder(): SalesOrder
     {
         return new SalesOrder(SalesOrderId::create(), '8513f8f0-9ed6-4096-b84c-3274dc0394d1', 10);
+    }
+
+    protected function getObject(): Entity
+    {
+        return $this->someSalesOrder();
     }
 }

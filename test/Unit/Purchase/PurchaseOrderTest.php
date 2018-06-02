@@ -3,9 +3,10 @@ declare(strict_types=1);
 
 namespace Purchase;
 
-use PHPUnit\Framework\TestCase;
+use Common\Persistence\Entity;
+use Test\Integration\EntityTest;
 
-final class PurchaseOrderTest extends TestCase
+final class PurchaseOrderTest extends EntityTest
 {
     /**
      * @test
@@ -54,5 +55,10 @@ final class PurchaseOrderTest extends TestCase
             'f57ad8e5-e713-45dd-a623-4ff7fd3d9297',
             10
         );
+    }
+
+    protected function getObject(): Entity
+    {
+        return $this->somePurchaseOrder();
     }
 }

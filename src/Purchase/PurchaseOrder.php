@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Purchase;
 
 use Assert\Assertion;
+use Common\Persistence\Entity;
 
 /**
  * A simplified version of the real-world "Purchase Order". It represents an
@@ -15,7 +16,7 @@ use Assert\Assertion;
  * quantity of the ordered product, the stock level of this product will be
  * increased by the same quantity that you ordered.
  */
-final class PurchaseOrder
+final class PurchaseOrder implements Entity
 {
     /**
      * @var string

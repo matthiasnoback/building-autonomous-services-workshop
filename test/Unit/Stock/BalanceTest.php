@@ -3,9 +3,10 @@ declare(strict_types=1);
 
 namespace Stock;
 
-use PHPUnit\Framework\TestCase;
+use Common\Persistence\Entity;
+use Test\Integration\EntityTest;
 
-final class BalanceTest extends TestCase
+final class BalanceTest extends EntityTest
 {
     /**
      * @test
@@ -91,5 +92,14 @@ final class BalanceTest extends TestCase
         // nothing has changed about the balance
         self::assertEquals(1, $balance->stockLevel());
         self::assertFalse($balance->hasReservation($reservationId));
+    }
+
+    protected function getObject(): Entity
+    {
+        $balance = new Balance('3257474b-09cb-4339-8e55-8b2476f493c1');
+        $balance->increase(4);
+        $balance->makeReservation('23bb342d-5ac1-433a-b0ae-8beb6a2490ae', 3);
+
+        return $balance;
     }
 }

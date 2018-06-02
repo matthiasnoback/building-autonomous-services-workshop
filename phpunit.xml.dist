@@ -16,4 +16,7 @@
             <directory>src/</directory>
         </whitelist>
     </filter>
+    <php>
+        <env name="DB_PATH" value="var/" />
+    </php>
 </phpunit>

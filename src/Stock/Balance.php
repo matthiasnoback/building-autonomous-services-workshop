@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace Stock;
 
-final class Balance
+use Common\Persistence\Entity;
+
+final class Balance implements Entity
 {
     /**
      * @var string
