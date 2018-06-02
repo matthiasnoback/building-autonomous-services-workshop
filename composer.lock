@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4c12ae26ae17b5116007730ed283865f",
+    "content-hash": "8cacc6edf7d352a1c4e1583e6535c570",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -220,16 +220,16 @@
         },
         {
             "name": "matthiasnoback/php-workshop-tools",
-            "version": "v0.27.0",
+            "version": "v0.28.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/matthiasnoback/php-workshop-tools.git",
-                "reference": "b610988172580a8e18dfd7239013ce793b3ae387"
+                "reference": "28796c2f08321ecbfda538100a7afd412c3d4012"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matthiasnoback/php-workshop-tools/zipball/b610988172580a8e18dfd7239013ce793b3ae387",
-                "reference": "b610988172580a8e18dfd7239013ce793b3ae387",
+                "url": "https://api.github.com/repos/matthiasnoback/php-workshop-tools/zipball/28796c2f08321ecbfda538100a7afd412c3d4012",
+                "reference": "28796c2f08321ecbfda538100a7afd412c3d4012",
                 "shasum": ""
             },
             "require": {
@@ -266,7 +266,7 @@
                     "email": "matthiasnoback@gmail.com"
                 }
             ],
-            "time": "2018-06-02T19:06:30+00:00"
+            "time": "2018-06-02T19:16:23+00:00"
         },
         {
             "name": "nyholm/psr7",
