@@ -14,15 +14,14 @@ final class DashboardApplication
 
     public function indexController(): void
     {
-        include __DIR__ . '/../Common/header.php';
-
-        ?><h1>Dashboard</h1><?php
-
         $allProducts = HttpApi::fetchDecodedJsonResponse('http://catalog_web/listProducts');
 
         $stockLevels = HttpApi::fetchDecodedJsonResponse('http://stock_web/stockLevels');
 
-        ?><h2>List of all products</h2>
+        include __DIR__ . '/../Common/header.php';
+        ?>
+        <h1>Dashboard</h1>
+        <h2>List of all products</h2>
         <table class="table">
             <thead>
             <tr>

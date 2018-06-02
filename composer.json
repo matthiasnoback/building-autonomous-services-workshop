@@ -2,10 +2,9 @@
   "require": {
     "roave/security-advisories": "dev-master",
     "php": "^7.1",
-    "matthiasnoback/php-workshop-tools": "^v0.26.0"
+    "matthiasnoback/php-workshop-tools": "^0.27"
   },
   "require-dev": {
-    "symfony/debug": "^4.0",
     "behat/behat": "^3.4",
     "behat/mink-extension": "^2.3",
     "behat/mink-goutte-driver": "^1.2",
