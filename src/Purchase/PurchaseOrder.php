@@ -5,6 +5,16 @@ namespace Purchase;
 
 use Assert\Assertion;
 
+/**
+ * A simplified version of the real-world "Purchase Order". It represents an
+ * order for an external supplier. When creating a purchase order, you specify
+ * a product by its ID and a desired quantity.
+ *
+ * When the warehouse physically receives a package with the product you ordered,
+ * you can mark the purchase order as "received". Once you have received the given
+ * quantity of the ordered product, the stock level of this product will be
+ * increased by the same quantity that you ordered.
+ */
 final class PurchaseOrder
 {
     /**

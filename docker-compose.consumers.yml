@@ -1,14 +1,14 @@
 version: '2'
 
 services:
-    consumer:
+    projector:
         extends:
             file: docker/templates.yml
             service: php-cli
-        command: php src/Common/consumer.php
+        command: php src/Common/projector.php
 
-    consume_once:
+    process_manager:
         extends:
             file: docker/templates.yml
             service: php-cli
-        command: php src/Common/consume_once.php
+        command: php src/Common/process_manager.php

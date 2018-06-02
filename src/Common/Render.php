@@ -7,7 +7,7 @@ use NaiveSerializer\Serializer;
 
 final class Render
 {
-    public static function jsonOrHtml($data)
+    public static function jsonOrHtml($data): void
     {
         $jsonSerialized = Serializer::serialize($data);
 

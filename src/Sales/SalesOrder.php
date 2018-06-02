@@ -5,6 +5,17 @@ namespace Sales;
 
 use Assert\Assertion;
 
+
+/**
+ * A simplified version of a real-world "Sales Order". It represents an order
+ * which you can create when a customer wants to order a certain quantity of
+ * one of the products you sell.
+ *
+ * When the warehouse has physically prepared the order by putting the ordered
+ * quantity of the product in a package that's ready for transport, you can mark
+ * the corresponding sales order as "delivered". From that moment on, the stock
+ * level will be decreased by the quantity of the product you delivered.
+ */
 final class SalesOrder
 {
     /**

@@ -17,8 +17,7 @@ final class CatalogApplication
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $product = new Product(
                 ProductId::create(),
-                $_POST['name'],
-                (int)$_POST['minimum_stock_level'] ?: null
+                $_POST['name']
             );
             Database::persist($product);
 
@@ -34,10 +33,6 @@ final class CatalogApplication
             <div class="form-group">
                 <label for="name" class="control-label">Name:</label>
                 <input type="text" name="name" id="name" class="form-control"/>
-            </div>
-            <div class="form-group">
-                <label for="minimum_stock_level" class="control-label">Minimum stock level:</label>
-                <input type="text" name="minimum_stock_level" id="minimum_stock_level" class="form-control"/>
             </div>
             <div class="form-group">
                 <button type="submit" class="btn btn-primary">Create</button>

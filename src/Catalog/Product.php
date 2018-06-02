@@ -3,6 +3,10 @@ declare(strict_types=1);
 
 namespace Catalog;
 
+/**
+ * Before you can purchase or sell any product, you first need to register add
+ * it to the catalog. It needs an ID and a name.
+ */
 final class Product
 {
     /**
@@ -16,20 +20,13 @@ final class Product
     private $name;
 
     /**
-     * @var int|null
-     */
-    private $minimumStockLevel;
-
-    /**
      * @param ProductId $productId
      * @param string $name
-     * @param int|null $minimumStockLevel
      */
-    public function __construct(ProductId $productId, string $name, ?int $minimumStockLevel)
+    public function __construct(ProductId $productId, string $name)
     {
         $this->productId = (string)$productId;
         $this->name = $name;
-        $this->minimumStockLevel = $minimumStockLevel;
     }
 
     public function id(): string
@@ -40,10 +37,5 @@ final class Product
     public function name(): string
     {
         return $this->name;
-    }
-
-    public function minimumStockLevel(): ?int
-    {
-        return $this->minimumStockLevel;
     }
 }
