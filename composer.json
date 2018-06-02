@@ -11,7 +11,7 @@
     "behat/mink-goutte-driver": "^1.2",
     "symfony/finder": "^4.0",
     "phpunit/phpunit": "^7.1",
-    "phpstan/phpstan": "^0.10"
+    "phpstan/phpstan": "^0.9.2"
   },
   "autoload": {
     "psr-4": {
