@@ -5,6 +5,7 @@ namespace Sales;
 
 use Common\Persistence\Database;
 use Common\Render;
+use Common\Stream\Stream;
 use Common\Web\FlashMessage;
 
 final class SalesApplication
@@ -88,6 +89,12 @@ final class SalesApplication
             FlashMessage::add(FlashMessage::SUCCESS, 'Delivered sales order ' . $_POST['salesOrderId']);
 
             Database::persist($salesOrder);
+
+            Stream::produce('sales.goods_delivered', [
+                'salesOrderId' => $salesOrder->id(),
+                'productId' => $salesOrder->productId(),
+                'quantity' => $salesOrder->quantity()
+            ]);
 
             header('Location: /listSalesOrders');
             exit;
