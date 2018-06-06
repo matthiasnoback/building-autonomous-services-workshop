@@ -43,6 +43,9 @@ use Common\Web\FlashMessage;
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Sales <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li>
+                            <a href="http://sales.localhost/salesOrderStatuses">Show Sales order statuses</a>
+                        </li>
+                        <li>
                             <a href="http://sales.localhost/listSalesOrders">List Sales orders</a>
                         </li>
                         <li>
