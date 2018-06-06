@@ -89,19 +89,19 @@ final class FeatureContext extends MinkContext
     }
 
     /**
-     * @Given we have sold and delivered :quantity items of this product
+     * @Given we have sold :quantity items of this product
      * @param string $quantity
      */
-    public function weHaveSoldAndDeliveredItemsOfThisProduct(string $quantity): void
+    public function weHaveSoldItemsOfThisProduct(string $quantity): void
     {
+        // Stock needs to process the goods received event
+        $this->waitForConsumersToFinish();
+
         self::assertEventually(function () use ($quantity) {
             $this->visit('http://sales.localhost/createSalesOrder');
             $this->selectOption('Product', $this->product);
             $this->fillField('Quantity', $quantity);
             $this->pressButton('Order');
-
-            $this->visit('http://sales.localhost/deliverSalesOrder');
-            $this->pressButton('Deliver');
         });
     }
 

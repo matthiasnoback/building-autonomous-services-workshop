@@ -36,3 +36,9 @@ services:
             file: docker/templates.yml
             service: php-cli
         command: php src/Stock/process_manager.php
+
+    sales_process_manager:
+        extends:
+            file: docker/templates.yml
+            service: php-cli
+        command: php src/Sales/process_manager.php

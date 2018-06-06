@@ -10,8 +10,8 @@ Feature:
     And we have purchased and received 10 items of this product
     Then I should see that "Mars rover" has a stock level of 10
 
-  Scenario: A product that has been purchased and sold
+  Scenario: Auto-deliver a product that has been purchased and sold
     Given the catalog has a product "Mars rover"
     And we have purchased and received 10 items of this product
-    And we have sold and delivered 5 items of this product
+    And we have sold 5 items of this product
     Then I should see that "Mars rover" has a stock level of 5
