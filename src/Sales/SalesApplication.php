@@ -30,25 +30,11 @@ final class SalesApplication
 
             FlashMessage::add(FlashMessage::SUCCESS, 'Created sales order ' . $salesOrderId);
 
-            // automatically create a purchase order for now
-            $stockLevels = HttpApi::fetchDecodedJsonResponse('http://stock_web/stockLevels');
-            $stockLevelForProduct = $stockLevels->{$salesOrder->productId()}->stockLevel;
-            if ($stockLevelForProduct < $salesOrder->quantity()) {
-                $purchaseOrderId = (string)PurchaseOrderId::create();
-                $formData = [
-                    'purchaseOrderId' => $purchaseOrderId,
-                    'productId' => $salesOrder->productId(),
-                    // we order only what we don't have in stock
-                    'quantity' => $salesOrder->quantity() - $stockLevelForProduct
-                ];
-
-                HttpApi::postFormData(
-                    'http://purchase_web/createPurchaseOrder',
-                    $formData
-                );
-
-                FlashMessage::add(FlashMessage::SUCCESS, 'Also created purchase order ' . $purchaseOrderId);
-            }
+            Stream::produce('sales.sales_order_created', [
+                'salesOrderId' => $salesOrder->id(),
+                'productId' => $salesOrder->productId(),
+                'quantity' => $salesOrder->quantity()
+            ]);
 
             header('Location: /listSalesOrders');
             exit;
