@@ -28,3 +28,11 @@ services:
         command: php src/Common/process_manager.php
         networks:
             - default
+
+    stock_process_manager:
+        extends:
+            file: docker-compose.templates.yml
+            service: php-cli
+        command: php src/Stock/process_manager.php
+        networks:
+            - default
