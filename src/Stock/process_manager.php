@@ -30,12 +30,22 @@ Stream::consume(
             $balance = Database::retrieve(Balance::class, $data->productId);
             $balance->increase($data->quantity);
             Database::persist($balance);
+
+            Stream::produce('stock.stock_level_increased', [
+                'productId' => $data->productId,
+                'quantity' => $data->quantity
+            ]);
         }
         elseif ($messageType === 'sales.goods_delivered') {
             /** @var Balance $balance */
             $balance = Database::retrieve(Balance::class, $data->productId);
             $balance->decrease($data->quantity);
             Database::persist($balance);
+
+            Stream::produce('stock.stock_level_decreased', [
+                'productId' => $data->productId,
+                'quantity' => $data->quantity
+            ]);
         }
 
         KeyValueStore::incr($startAtIndexKey);
