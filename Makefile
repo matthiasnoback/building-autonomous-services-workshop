@@ -106,7 +106,7 @@ clean:
 ## destroy: remove everything to be able to start all over
 .PHONY: destroy
 destroy: cleanup
-	rm -rv vendor
+	rm -rvf vendor/*
 	${DOCKER_COMPOSE_ALL} down -v --remove-orphans --rmi all
 
 ## cleanup: remove all database files in var/
