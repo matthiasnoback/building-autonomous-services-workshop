@@ -14,15 +14,23 @@ services:
             - default
 
     purchase_projector:
-        extends:
-            file: docker-compose.templates.yml
-            service: php-cli
+        build: docker/php-cli
+        image: matthiasnoback/building_autonomous_services_php_cli
+        restart: on-failure
+        env_file: docker/.env
+        user: ${HOST_UID}:${HOST_GID}
+        volumes:
+            - ./:/opt:cached
         command: php src/Purchase/projector.php
 
     sales_projector:
-        extends:
-            file: docker-compose.templates.yml
-            service: php-cli
+        build: docker/php-cli
+        image: matthiasnoback/building_autonomous_services_php_cli
+        restart: on-failure
+        env_file: docker/.env
+        user: ${HOST_UID}:${HOST_GID}
+        volumes:
+            - ./:/opt:cached
         command: php src/Sales/projector.php
 
     process_manager:
@@ -34,5 +42,17 @@ services:
         volumes:
             - ./:/opt:cached
         command: php src/Common/process_manager.php
+        networks:
+            - default
+
+    stock_process_manager:
+        build: docker/php-cli
+        image: matthiasnoback/building_autonomous_services_php_cli
+        restart: on-failure
+        env_file: docker/.env
+        user: ${HOST_UID}:${HOST_GID}
+        volumes:
+            - ./:/opt:cached
+        command: php src/Stock/process_manager.php
         networks:
             - default
