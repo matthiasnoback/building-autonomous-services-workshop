@@ -3,10 +3,12 @@ declare(strict_types=1);
 
 namespace Sales;
 
+use Common\Persistence\IdentifiableObject;
+
 /**
  * Note: this class will become relevant in assignment 06
  */
-final class OrderStatus
+final class OrderStatus implements IdentifiableObject
 {
     /**
      * @var string
