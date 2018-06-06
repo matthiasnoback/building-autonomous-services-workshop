@@ -34,6 +34,9 @@ Stream::consume(
                     'quantity' => $data->quantity
                 ]
             );
+
+            $orderStatus->awaitingStockReservation();
+            Database::persist($orderStatus);
         } elseif ($messageType === 'stock.reservation_accepted') {
             echo HttpApi::postFormData(
                 'http://sales_web/deliverSalesOrder',
@@ -45,7 +48,7 @@ Stream::consume(
             /** @var OrderStatus $orderStatus */
             $orderStatus = Database::retrieve(OrderStatus::class, $data->reservationId);
             $purchaseOrderId = Uuid::uuid4()->toString();
-            $orderStatus->setPurchaseOrderId($purchaseOrderId);
+            $orderStatus->awaitingGoodsReceived($purchaseOrderId);
             Database::persist($orderStatus);
 
             echo HttpApi::postFormData(
@@ -71,8 +74,15 @@ Stream::consume(
                         'quantity' => $data->quantity // the quantity that was just received
                     ]
                 );
+                $orderStatus->awaitingStockReservation();
+                Database::persist($orderStatus);
             }
         } elseif ($messageType === 'sales.goods_delivered') {
+            /** @var OrderStatus $orderStatus */
+            $orderStatus = Database::retrieve(OrderStatus::class, $data->salesOrderId);
+            $orderStatus->salesOrderDelivered();
+            Database::persist($orderStatus);
+
             echo HttpApi::postFormData(
                 'http://stock_web/commitStockReservation',
                 [
