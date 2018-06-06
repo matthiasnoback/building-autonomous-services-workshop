@@ -6,6 +6,8 @@ use Asynchronicity\PHPUnit\Asynchronicity;
 use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Mink\Element\NodeElement;
 use Behat\MinkExtension\Context\MinkContext;
+use Common\Persistence\Database;
+use Sales\SalesOrder;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 
@@ -98,6 +100,32 @@ final class FeatureContext extends MinkContext
             $this->selectOption('Product', $this->product);
             $this->fillField('Quantity', $quantity);
             $this->pressButton('Order');
+        });
+    }
+
+    /**
+     * @Then the automatically created sales order for this should be delivered
+     */
+    public function theAutomaticallyCreatedSalesOrderForThisShouldBeDelivered(): void
+    {
+        self::assertEventually(function () {
+            $salesOrders = Database::retrieveAll(SalesOrder::class);
+            assertCount(1, $salesOrders);
+            /** @var SalesOrder $automaticallyCreatedSalesOrder */
+            $automaticallyCreatedSalesOrder = reset($salesOrders);
+
+            assertTrue($automaticallyCreatedSalesOrder->wasDelivered());
+        });
+    }
+
+    /**
+     * @When we receive goods for the automatically created purchase order
+     */
+    public function weReceiveGoodsForTheAutomaticallyCreatedPurchaseOrder(): void
+    {
+        self::assertEventually(function () {
+            $this->visit('http://purchase.localhost/receiveGoods');
+            $this->pressButton('Receive');
         });
     }
 

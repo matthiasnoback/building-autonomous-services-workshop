@@ -15,3 +15,10 @@ Feature:
     And we have purchased and received 10 items of this product
     And we have sold 5 items of this product
     Then I should see that "Mars rover" has a stock level of 5
+
+  Scenario: Auto-create a purchase order in case the current stock level is insufficient
+    Given the catalog has a product "Mars rover"
+    And we have sold 5 items of this product
+    When we receive goods for the automatically created purchase order
+    Then the automatically created sales order for this should be delivered
+    And I should see that "Mars rover" has a stock level of 0
