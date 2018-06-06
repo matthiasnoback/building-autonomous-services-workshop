@@ -31,32 +31,31 @@ final class OrderStatus implements IdentifiableObject
      */
     private $status;
 
+    /**
+     * @var int
+     */
+    private $lastUpdated;
+
     public function __construct(string $salesOrderId)
     {
         $this->salesOrderId = $salesOrderId;
-        $this->status = self::SALES_ORDER_CREATED;
+        $this->setStatus(self::SALES_ORDER_CREATED, []);
     }
 
     public function awaitingStockReservation(): void
     {
-        $this->assertStatusIn([self::SALES_ORDER_CREATED, self::AWAITING_GOODS_RECEIVED]);
-
-        $this->status = self::AWAITING_STOCK_RESERVATION;
+        $this->setStatus(self::AWAITING_STOCK_RESERVATION, [self::SALES_ORDER_CREATED, self::AWAITING_GOODS_RECEIVED]);
     }
 
     public function awaitingGoodsReceived(string $purchaseOrderId): void
     {
-        $this->assertStatusIn([self::AWAITING_STOCK_RESERVATION]);
-
         $this->purchaseOrderId = $purchaseOrderId;
-        $this->status = self::AWAITING_GOODS_RECEIVED;
+        $this->setStatus(self::AWAITING_GOODS_RECEIVED, [self::AWAITING_STOCK_RESERVATION]);
     }
 
     public function salesOrderDelivered(): void
     {
-        $this->assertStatusIn([self::AWAITING_STOCK_RESERVATION]);
-
-        $this->status = self::SALES_ORDER_DELIVERED;
+        $this->setStatus(self::SALES_ORDER_DELIVERED, [self::AWAITING_STOCK_RESERVATION]);
     }
 
     public function id(): string
@@ -69,8 +68,23 @@ final class OrderStatus implements IdentifiableObject
         return $this->purchaseOrderId;
     }
 
-    private function assertStatusIn(array $possibleStatuses): void
+    private function setStatus($status, array $allowFromPreviousStatuses): void
     {
-        Assertion::inArray($this->status, $possibleStatuses);
+        if (\count($allowFromPreviousStatuses) > 0) {
+            Assertion::inArray($this->status, $allowFromPreviousStatuses);
+        }
+
+        $this->status = $status;
+        $this->lastUpdated = time();
+    }
+
+    public function lastUpdated(): string
+    {
+        return date('Y-m-d H:i:s', $this->lastUpdated);
+    }
+
+    public function status(): string
+    {
+        return $this->status;
     }
 }
