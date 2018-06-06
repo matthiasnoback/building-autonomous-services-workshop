@@ -5,41 +5,19 @@ namespace Stock;
 
 use Common\Persistence\Database;
 use Common\Render;
-use Common\Stream\Stream;
-use Common\Web\HttpApi;
 
 final class StockApplication
 {
     public function stockLevelsController(): void
     {
-        $stockLevels = $this->calculateStockLevels();
+        $balances = Database::retrieveAll(Balance::class);
+
+        $stockLevels = [];
+        foreach ($balances as $balance) {
+            $stockLevels[$balance->id()] = $balance->stockLevel();
+        }
 
         Render::jsonOrHtml($stockLevels);
-    }
-
-    private function calculateStockLevels(): array
-    {
-        $stockLevels = [];
-
-        $purchaseOrders = HttpApi::fetchDecodedJsonResponse('http://purchase_web/listPurchaseOrders');
-        foreach ($purchaseOrders as $purchaseOrder) {
-            if (!$purchaseOrder->received) {
-                continue;
-            }
-
-            $stockLevels[$purchaseOrder->productId] = ($stockLevels[$purchaseOrder->productId] ?? 0) + $purchaseOrder->quantity;
-        }
-
-        $salesOrders = HttpApi::fetchDecodedJsonResponse('http://sales_web/listSalesOrders');
-        foreach ($salesOrders as $salesOrder) {
-            if (!$salesOrder->wasDelivered) {
-                continue;
-            }
-
-            $stockLevels[$salesOrder->productId] = ($stockLevels[$salesOrder->productId] ?? 0) - $salesOrder->quantity;
-        }
-
-        return $stockLevels;
     }
 
     /**
