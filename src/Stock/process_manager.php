@@ -30,12 +30,14 @@ Stream::consume(
             Database::persist($balance);
 
             Stream::produce('stock.stock_level_increased', [
+                'correlationId' => $data['purchaseOrderId'],
                 'productId' => $data['productId'],
                 'quantity' => $data['quantity']
             ]);
         }
         elseif ($messageType === 'stock.reservation_accepted') {
             Stream::produce('stock.stock_level_decreased', [
+                'correlationId' => $data['reservationId'],
                 'productId' => $data['productId'],
                 'quantity' => $data['quantity']
             ]);
