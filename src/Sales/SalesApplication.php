@@ -144,4 +144,44 @@ final class SalesApplication
 
         include __DIR__ . '/../Common/footer.php';
     }
+
+    public function salesOrderStatusesController(): void
+    {
+        /** @var OrderStatus[] $allStatuses */
+        $allStatuses = Database::retrieveAll(OrderStatus::class);
+
+        include __DIR__ . '/../Common/header.php';
+
+        if (\count($allStatuses) === 0) {
+            ?>
+            <p>There are no sales orders yet.</p>
+            <p>You could of course <a href="/createSalesOrder">Create a Sales order</a>.</p>
+            <?php
+        } else {
+            ?>
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Sales order ID</th>
+                    <th>Status</th>
+                    <th>Last updated</th>
+                </tr>
+                </thead>
+                <?php
+                foreach ($allStatuses as $status) {
+                    ?>
+                    <tr>
+                        <td><?php echo $status->id(); ?></td>
+                        <td><?php echo $status->status(); ?></td>
+                        <td><?php echo $status->lastUpdated(); ?></td>
+                    </tr>
+                    <?php
+                }
+                ?>
+            </table>
+            <?php
+        }
+
+        include __DIR__ . '/../Common/footer.php';
+    }
 }
