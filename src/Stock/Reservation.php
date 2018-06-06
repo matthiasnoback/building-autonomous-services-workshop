@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace Stock;
 
+/**
+ * Note: this class will become relevant in assignment 05
+ */
 final class Reservation
 {
     /**

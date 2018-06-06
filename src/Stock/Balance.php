@@ -5,6 +5,9 @@ namespace Stock;
 
 use Common\Persistence\IdentifiableObject;
 
+/**
+ * Note: this class will become relevant in assignment 02
+ */
 final class Balance implements IdentifiableObject
 {
     /**
