@@ -36,12 +36,7 @@ Stream::consume(
                 'quantity' => $data->quantity
             ]);
         }
-        elseif ($messageType === 'sales.goods_delivered') {
-            /** @var Balance $balance */
-            $balance = Database::retrieve(Balance::class, $data->productId);
-            $balance->decrease($data->quantity);
-            Database::persist($balance);
-
+        elseif ($messageType === 'stock.reservation_accepted') {
             Stream::produce('stock.stock_level_decreased', [
                 'productId' => $data->productId,
                 'quantity' => $data->quantity
