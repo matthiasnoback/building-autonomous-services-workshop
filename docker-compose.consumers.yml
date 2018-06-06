@@ -7,6 +7,18 @@ services:
             service: php-cli
         command: php src/Common/projector.php
 
+    purchase_projector:
+        extends:
+            file: docker/templates.yml
+            service: php-cli
+        command: php src/Purchase/projector.php
+
+    sales_projector:
+        extends:
+            file: docker/templates.yml
+            service: php-cli
+        command: php src/Sales/projector.php
+
     process_manager:
         extends:
             file: docker/templates.yml
