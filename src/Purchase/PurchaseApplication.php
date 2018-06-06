@@ -5,6 +5,7 @@ namespace Purchase;
 
 use Common\Persistence\Database;
 use Common\Render;
+use Common\Stream\Stream;
 use Common\Web\FlashMessage;
 
 final class PurchaseApplication
@@ -86,6 +87,12 @@ final class PurchaseApplication
             FlashMessage::add(FlashMessage::SUCCESS, 'Marked purchase order as received: ' . $_POST['purchaseOrderId']);
 
             Database::persist($purchaseOrder);
+
+            Stream::produce('purchase.goods_received', [
+                'purchaseOrderId' => $purchaseOrder->id(),
+                'productId' => $purchaseOrder->productId(),
+                'quantity' => $purchaseOrder->quantity()
+            ]);
 
             header('Location: /listPurchaseOrders');
             exit;
