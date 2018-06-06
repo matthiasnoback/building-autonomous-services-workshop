@@ -6,7 +6,6 @@ namespace Sales;
 use Common\Persistence\Database;
 use Common\Render;
 use Common\Web\FlashMessage;
-use Common\Web\HttpApi;
 
 final class SalesApplication
 {
@@ -32,7 +31,8 @@ final class SalesApplication
             exit;
         }
 
-        $products = array_values((array)HttpApi::fetchDecodedJsonResponse('http://catalog_web/listProducts'));
+        /** @var Product[] $products */
+        $products = Database::retrieveAll(Product::class);
 
         include __DIR__ . '/../Common/header.php';
 
@@ -47,7 +47,7 @@ final class SalesApplication
                     <?php
                     foreach ($products as $product) {
                         ?>
-                        <option value="<?php echo $product->productId; ?>"><?php echo htmlspecialchars($product->name); ?></option>
+                        <option value="<?php echo $product->id(); ?>"><?php echo htmlspecialchars($product->name()); ?></option>
                         <?php
                     }
                     ?>
