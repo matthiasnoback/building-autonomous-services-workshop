@@ -115,7 +115,7 @@ final class FeatureContext extends MinkContext
     private function assertEventually(callable $probe): void
     {
         $startTime = time();
-        $timeoutInSeconds = 5;
+        $timeoutInSeconds = 8;
         $waitBeforeRetryingInSeconds = 0.5;
         $keepTrying = true;
         $lastException = null;
