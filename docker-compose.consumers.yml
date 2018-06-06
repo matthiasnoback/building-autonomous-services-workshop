@@ -13,6 +13,30 @@ services:
         networks:
             - default
 
+    purchase_projector:
+        build: docker/php-cli
+        image: matthiasnoback/building_autonomous_services_php_cli
+        restart: on-failure
+        env_file: docker/.env
+        user: ${HOST_UID}:${HOST_GID}
+        volumes:
+            - ./:/opt:cached
+        command: php src/Purchase/projector.php
+        networks:
+            - default
+
+    sales_projector:
+        build: docker/php-cli
+        image: matthiasnoback/building_autonomous_services_php_cli
+        restart: on-failure
+        env_file: docker/.env
+        user: ${HOST_UID}:${HOST_GID}
+        volumes:
+            - ./:/opt:cached
+        command: php src/Sales/projector.php
+        networks:
+            - default
+
     process_manager:
         build: docker/php-cli
         image: matthiasnoback/building_autonomous_services_php_cli
