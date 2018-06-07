@@ -27,6 +27,15 @@ final class FeatureContext extends MinkContext
     }
 
     /**
+     * @AfterScenario
+     */
+    public function waitForConsumersToFinish(): void
+    {
+        // this is quite arbitrary, but should let consumers finish their work, before we'd start running the next scenario
+        sleep(2);
+    }
+
+    /**
      * @Given the catalog has a product :productName
      * @param string $productName
      */
