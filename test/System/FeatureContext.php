@@ -2,6 +2,7 @@
 
 namespace Test\System;
 
+use Asynchronicity\PHPUnit\Asynchronicity;
 use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Mink\Element\NodeElement;
 use Behat\MinkExtension\Context\MinkContext;
@@ -10,6 +11,8 @@ use Symfony\Component\Finder\Finder;
 
 final class FeatureContext extends MinkContext
 {
+    use Asynchronicity;
+
     /**
      * The name of the most recently discussed product
      *
@@ -56,7 +59,7 @@ final class FeatureContext extends MinkContext
      */
     public function iShouldSeeThatHasAStockLevelOf(string $productName, string $stockLevel): void
     {
-        $this->assertEventually(function () use ($productName, $stockLevel) {
+        self::assertEventually(function () use ($productName, $stockLevel) {
             $this->visit('http://dashboard.localhost/');
             $this->assertResponseStatus(200);
 
@@ -73,7 +76,7 @@ final class FeatureContext extends MinkContext
      */
     public function weHavePurchasedAndReceivedItemsOfThisProduct(string $quantity): void
     {
-        $this->assertEventually(function () use ($quantity) {
+        self::assertEventually(function () use ($quantity) {
             $this->visit('http://purchase.localhost/createPurchaseOrder');
 
             $this->selectOption('Product', $this->product);
@@ -91,7 +94,7 @@ final class FeatureContext extends MinkContext
      */
     public function weHaveSoldAndDeliveredItemsOfThisProduct(string $quantity): void
     {
-        $this->assertEventually(function () use ($quantity) {
+        self::assertEventually(function () use ($quantity) {
             $this->visit('http://sales.localhost/createSalesOrder');
             $this->selectOption('Product', $this->product);
             $this->fillField('Quantity', $quantity);
@@ -119,37 +122,5 @@ final class FeatureContext extends MinkContext
         }
 
         return $element;
-    }
-
-    private function assertEventually(callable $probe): void
-    {
-        $startTime = time();
-        $timeoutInSeconds = 8;
-        $waitBeforeRetryingInSeconds = 0.5;
-        $keepTrying = true;
-        $lastException = null;
-
-        while ($keepTrying) {
-            try {
-                $probe();
-
-                // if no exception occurs, then we assume everything is good
-                return;
-            } catch (\Exception $exception) {
-                $lastException = $exception;
-
-                // sleep for half a second
-                usleep($waitBeforeRetryingInSeconds * 1000000);
-            }
-
-            if (time() - $startTime >= $timeoutInSeconds) {
-                $keepTrying = false;
-            }
-        }
-
-        throw new \RuntimeException(sprintf(
-            'Probe failed. Last exception: %s',
-            $lastException instanceof \Exception ? (string)$lastException : 'n/a'
-        ));
     }
 }

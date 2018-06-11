@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "29088eabe44ea6a35608cee4e73027ae",
+    "content-hash": "1308ac5c49faf4e557a9658942bb6a47",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -2245,6 +2245,54 @@
                 "versions"
             ],
             "time": "2018-01-21T13:54:22+00:00"
+        },
+        {
+            "name": "matthiasnoback/phpunit-asynchronicity",
+            "version": "v2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/matthiasnoback/phpunit-asynchronicity.git",
+                "reference": "7766095fc7ee655da1604181ea4077713d1837ed"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/matthiasnoback/phpunit-asynchronicity/zipball/7766095fc7ee655da1604181ea4077713d1837ed",
+                "reference": "7766095fc7ee655da1604181ea4077713d1837ed",
+                "shasum": ""
+            },
+            "require": {
+                "beberlei/assert": "^2.9",
+                "php": "^7.1",
+                "phpunit/phpunit": "^7.1"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^0.9.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Asynchronicity\\": "src/Asynchronicity/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Matthias Noback",
+                    "email": "matthiasnoback@gmail.com",
+                    "homepage": "http://php-and-symfony.matthiasnoback.nl"
+                }
+            ],
+            "description": "Library for asserting things that happen asynchronously with PHPUnit",
+            "homepage": "http://github.com/matthiasnoback/phpunit-asynchronicity",
+            "keywords": [
+                "assertion",
+                "asynchronicity",
+                "phpunit"
+            ],
+            "time": "2018-06-11T08:32:39+00:00"
         },
         {
             "name": "myclabs/deep-copy",
