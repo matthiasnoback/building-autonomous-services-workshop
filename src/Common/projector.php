@@ -27,7 +27,7 @@ Stream::consume(function(string $messageType, $data) {
      */
 
     /*
-     * `$data` has already been decoded from JSON into a PHP object, so
+     * `$data` has already been decoded from JSON into an array, so
      * if we want to echo it, we need to encode it again:
      */
     echo $messageType . ': ' . json_encode($data) . "\n";
