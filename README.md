@@ -25,6 +25,16 @@
 
 You should finally see a message asking you to open [http://dashboard.localhost](http://dashboard.localhost) in your browser. When you do this, you should see a nice web application. Feel free to click around.
 
+## Troubleshooting
+
+### Docker says: "unknown option: cached"
+
+You need to upgrade Docker.
+
+### Docker says: "Bind for 0.0.0.0:80 failed: port is already allocated"
+
+You have some service running that's already listening on port 80 (like a local Apache or Nginx or something). Close it first, then try again.
+
 ## A note for Windows users
 
 This setup should work on Windows too, with Docker for Windows and Git Bash. 
