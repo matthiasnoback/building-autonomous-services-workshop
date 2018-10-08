@@ -5,8 +5,6 @@ services:
         image: matthiasnoback/building_autonomous_services_php_cli
         env_file: docker/.env
         user: ${HOST_UID}:${HOST_GID}
-        environment:
-            XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_NAME_OR_IP}"
         volumes:
             - ${PWD}:/opt:cached
         network_mode: host

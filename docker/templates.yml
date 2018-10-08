@@ -21,8 +21,6 @@ services:
         user: ${HOST_UID}:${HOST_GID}
         networks:
             - default
-        environment:
-            XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_NAME_OR_IP}"
         volumes:
             - ${PWD}:/opt:cached
 
@@ -33,7 +31,5 @@ services:
         user: ${HOST_UID}:${HOST_GID}
         networks:
             - default
-        environment:
-            XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_NAME_OR_IP}"
         volumes:
             - ${PWD}:/opt:cached

@@ -3,13 +3,6 @@ SHELL=/bin/bash
 HOSTS_ENTRY:=127.0.0.1 dashboard.localhost sales.localhost purchase.localhost catalog.localhost stock.localhost
 
 PLATFORM := $(shell uname -s)
-ifeq ($(PLATFORM),Darwin)
-export DOCKER_HOST_NAME_OR_IP := docker.for.mac.localhost
-else ifeq ($(PLATFORM),Linux)
-export DOCKER_HOST_NAME_OR_IP := $(shell ip -f inet addr show docker0 | grep -Po 'inet \K[\d.]+')
-else
-$(error Unable to automatically determine DOCKER_HOST_NAME_OR_IP: please provide it yourself by running: export DOCKER_HOST_NAME_OR_IP=...)
-endif
 
 ifeq ($(COMPOSER_HOME),)
 export COMPOSER_HOME=~/.composer
