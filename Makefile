@@ -21,7 +21,11 @@ DOCKER_COMPOSE_TEST := docker-compose -f docker-compose.test.yml
 ## hosts-entry: Set up an entry for this project's host names in /etc/hosts
 .PHONY: hosts-entry
 hosts-entry:
+ifeq ($(PLATFORM),$(filter $(PLATFORM),Darwin Linux))
 	(grep "$(HOSTS_ENTRY)" /etc/hosts) || echo '$(HOSTS_ENTRY)' | sudo tee -a /etc/hosts
+else
+	$(warning You have to manually add $(HOSTS_ENTRY) to your hosts file)
+endif
 
 ~/.composer:
 	mkdir -p ~/.composer

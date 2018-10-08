@@ -27,4 +27,6 @@ You should finally see a message asking you to open [http://dashboard.localhost]
 
 ## A note for Windows users
 
-If you feel like you won't be able to install all the tools listed above on your Windows machine, I advise you to install Docker for Windows and set up a VM for running containers (see [Get started with Docker Machine and a local VM](https://docs.docker.com/machine/get-started/)).
+This setup should work on Windows too, with Docker for Windows and Git Bash. 
+
+If you feel like you won't be able to install all the tools listed above on your Windows machine, you may want to take a look at [Get started with Docker Machine and a local VM](https://docs.docker.com/machine/get-started/)).
