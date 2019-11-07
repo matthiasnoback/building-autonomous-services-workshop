@@ -81,6 +81,9 @@ final class SalesApplication
             /** @var SalesOrder $salesOrder */
             $salesOrder = Database::retrieve(SalesOrder::class, $_POST['salesOrderId']);
 
+            // TODO make this judgement based on actual stock levels (assignment 5)
+            $salesOrder->markAsDeliverable();
+
             $salesOrder->deliver();
 
             FlashMessage::add(FlashMessage::SUCCESS, 'Delivered sales order ' . $_POST['salesOrderId']);

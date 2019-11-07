@@ -5,6 +5,7 @@ namespace Sales;
 
 use Assert\Assertion;
 use Common\Persistence\IdentifiableObject;
+use LogicException;
 
 
 /**
@@ -38,6 +39,11 @@ final class SalesOrder implements IdentifiableObject
      * @var bool
      */
     private $wasDelivered;
+
+    /**
+     * @var bool
+     */
+    private $isDeliverable = false;
 
     public function __construct(SalesOrderId $salesOrderId, string $productId, int $quantity)
     {
@@ -74,6 +80,19 @@ final class SalesOrder implements IdentifiableObject
 
     public function deliver(): void
     {
+        if (!$this->isDeliverable) {
+            throw new LogicException('This sales order should first be marked as deliverable before it can be delivered.');
+        }
         $this->wasDelivered = true;
+    }
+
+    public function markAsDeliverable(): void
+    {
+        $this->isDeliverable = true;
+    }
+
+    public function isDeliverable(): bool
+    {
+        return $this->isDeliverable;
     }
 }
