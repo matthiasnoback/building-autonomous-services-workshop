@@ -20,9 +20,15 @@ final class OrderStatus implements IdentifiableObject
      */
     private $purchaseOrderId;
 
+    /**
+     * @var string
+     */
+    private $status;
+
     public function __construct(string $salesOrderId)
     {
         $this->salesOrderId = $salesOrderId;
+        $this->status = 'Waiting for stock reservation';
     }
 
     public function id(): string
@@ -38,5 +44,27 @@ final class OrderStatus implements IdentifiableObject
     public function purchaseOrderId(): ?string
     {
         return $this->purchaseOrderId;
+    }
+
+    public function status(): string
+    {
+        return $this->status;
+    }
+
+    public function deliverable(): void
+    {
+        $this->status = 'Deliverable';
+    }
+
+    public function delivered(): void
+    {
+        $this->status = 'Delivered';
+    }
+
+    public function waitingForGoods(string $purchaseOrderId): void
+    {
+        $this->setPurchaseOrderId($purchaseOrderId);
+
+        $this->status = 'Waiting for goods';
     }
 }
