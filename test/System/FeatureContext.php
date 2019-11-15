@@ -82,7 +82,9 @@ final class FeatureContext extends MinkContext
             $this->selectOption('Product', $this->product);
             $this->fillField('Quantity', $quantity);
             $this->pressButton('Order');
+        });
 
+        self::assertEventually(function () {
             $this->visit('http://purchase.localhost/receiveGoods');
             $this->pressButton('Receive');
         });
@@ -94,10 +96,12 @@ final class FeatureContext extends MinkContext
      */
     public function weHaveSoldAndDeliveredItemsOfThisProduct(string $quantity): void
     {
-        $this->visit('http://sales.localhost/createSalesOrder');
-        $this->selectOption('Product', $this->product);
-        $this->fillField('Quantity', $quantity);
-        $this->pressButton('Order');
+        self::assertEventually(function () use ($quantity) {
+            $this->visit('http://sales.localhost/createSalesOrder');
+            $this->selectOption('Product', $this->product);
+            $this->fillField('Quantity', $quantity);
+            $this->pressButton('Order');
+        });
 
         self::assertEventually(function () {
             $this->visit('http://sales.localhost/deliverSalesOrder');
