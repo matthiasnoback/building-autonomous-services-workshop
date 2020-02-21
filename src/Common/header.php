@@ -51,6 +51,9 @@ use Common\Web\FlashMessage;
                         <li>
                             <a href="http://sales.localhost/deliverSalesOrder">Deliver a Sales order</a>
                         </li>
+                        <li>
+                            <a href="http://sales.localhost/orderStatus">Order status report</a>
+                        </li>
                     </ul>
                 </li>
                 <li class="dropdown">
