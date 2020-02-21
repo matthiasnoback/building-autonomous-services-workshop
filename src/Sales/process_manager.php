@@ -5,6 +5,8 @@ use Common\Persistence\Database;
 use Common\Persistence\KeyValueStore;
 use Common\Stream\Stream;
 use Common\Web\HttpApi;
+use Ramsey\Uuid\Uuid;
+use Sales\OrderStatus;
 use Sales\SalesOrder;
 use Symfony\Component\ErrorHandler\Debug;
 
@@ -20,6 +22,9 @@ echo 'Start consuming at index: ' . (string)$startAtIndex;
 Stream::consume(
     function (string $messageType, $data) use ($startAtIndexKey) {
         if ($messageType === 'sales.sales_order_created') {
+            $orderStatus = new OrderStatus($data['salesOrderId']);
+            Database::persist($orderStatus);
+
             echo HttpApi::postFormData(
                 'http://stock_web/makeStockReservation',
                 [
@@ -33,6 +38,43 @@ Stream::consume(
             $salesOrder = Database::retrieve(SalesOrder::class, $data['reservationId']);
             $salesOrder->markAsDeliverable();
             Database::persist($salesOrder);
+        } elseif ($messageType === 'stock.reservation_rejected') {
+            // We can generate purchase order ID ourselves! :)
+            $purchaseOrderId = Uuid::uuid4()->toString();
+
+            $formData = [
+                'purchaseOrderId' => $purchaseOrderId,
+                'productId' => $data['productId'],
+                'quantity' => (int)$data['quantity']
+            ];
+
+            echo HttpApi::postFormData(
+                'http://purchase_web/createPurchaseOrder',
+                $formData
+            );
+
+            /** @var OrderStatus $orderStatus */
+            $orderStatus = Database::retrieve(OrderStatus::class, $data['reservationId']);
+            $orderStatus->setPurchaseOrderId($purchaseOrderId);
+            Database::persist($orderStatus);
+        } elseif ($messageType === 'purchase.goods_received') {
+            $purchaseOrderId = $data['purchaseOrderId'];
+            $orderStatus = Database::findOne(OrderStatus::class, function (OrderStatus $orderStatus) use ($purchaseOrderId) {
+                return $orderStatus->purchaseOrderId() === $purchaseOrderId;
+            });
+            if ($orderStatus instanceof OrderStatus) {
+                sleep(3);
+                echo "Making another reservation\n";
+                echo HttpApi::postFormData(
+                    'http://stock_web/makeStockReservation',
+                    [
+                        'reservationId' => $orderStatus->id(),
+                        'productId' => $data['productId'],
+                        'quantity' => $data['quantity']
+                    ]
+                );
+            }
+            echo "No order status found\n";
         }
 
         KeyValueStore::incr($startAtIndexKey);
