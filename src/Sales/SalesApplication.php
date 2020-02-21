@@ -29,11 +29,13 @@ final class SalesApplication
 
             FlashMessage::add(FlashMessage::SUCCESS, 'Created sales order ' . $salesOrderId);
 
-            Stream::produce('sales.sales_order_created', [
-                'salesOrderId' => $salesOrder->id(),
-                'productId' => $salesOrder->productId(),
-                'quantity' => $salesOrder->quantity()
-            ]);
+            Stream::produce(
+                'sales.sales_order_created',
+                [
+                    'salesOrderId' => $salesOrder->id(),
+                    'productId' => $salesOrder->productId(),
+                    'quantity' => $salesOrder->quantity()
+                ]);
 
             header('Location: /listSalesOrders');
             exit;
@@ -55,7 +57,8 @@ final class SalesApplication
                     <?php
                     foreach ($products as $product) {
                         ?>
-                        <option value="<?php echo $product->id(); ?>"><?php echo htmlspecialchars($product->name()); ?></option>
+                        <option value="<?php echo $product->id(); ?>"><?php echo htmlspecialchars(
+                                $product->name()); ?></option>
                         <?php
                     }
                     ?>
@@ -65,7 +68,8 @@ final class SalesApplication
                 <label for="quantity">
                     Quantity
                 </label>
-                <input type="text" name="quantity" id="quantity" value="" class="form-control quantity" title="Provide a quantity"/>
+                <input type="text" name="quantity" id="quantity" value="" class="form-control quantity"
+                       title="Provide a quantity"/>
             </div>
             <div class="btn-group">
                 <button type="submit" class="btn btn-primary">Order</button>
@@ -95,11 +99,13 @@ final class SalesApplication
 
             Database::persist($salesOrder);
 
-            Stream::produce('sales.goods_delivered', [
-                'salesOrderId' => $salesOrder->id(),
-                'productId' => $salesOrder->productId(),
-                'quantity' => $salesOrder->quantity()
-            ]);
+            Stream::produce(
+                'sales.goods_delivered',
+                [
+                    'salesOrderId' => $salesOrder->id(),
+                    'productId' => $salesOrder->productId(),
+                    'quantity' => $salesOrder->quantity()
+                ]);
 
             header('Location: /listSalesOrders');
             exit;
@@ -108,9 +114,11 @@ final class SalesApplication
         include __DIR__ . '/../Common/header.php';
 
         $salesOrders = Database::retrieveAll(SalesOrder::class);
-        $openSalesOrders = array_filter($salesOrders, function (SalesOrder $salesOrder) {
-            return !$salesOrder->wasDelivered();
-        });
+        $openSalesOrders = array_filter(
+            $salesOrders,
+            function (SalesOrder $salesOrder) {
+                return !$salesOrder->wasDelivered();
+            });
 
         if (\count($openSalesOrders) > 0) {
             ?>
@@ -138,6 +146,38 @@ final class SalesApplication
             ?>
             <p>There's no open sales order, so you can't deliver anything at this moment.</p>
             <p>You could of course <a href="/createSalesOrder">Create a Sales order</a>.</p>
+            <?php
+        }
+
+        include __DIR__ . '/../Common/footer.php';
+    }
+
+    public function orderStatusController(): void
+    {
+        /** @var OrderStatus[] $orderStatuses */
+        $orderStatuses = Database::retrieveAll(OrderStatus::class);
+
+        include __DIR__ . '/../Common/header.php';
+
+        if (count($orderStatuses) > 0) {
+            ?>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <?php
+                foreach ($orderStatuses as $orderStatus) {
+                    ?>
+                    <tr>
+                        <td><?php echo $orderStatus->id(); ?></td>
+                        <td><?php echo $orderStatus->status(); ?></td>
+                    </tr>
+                    <?php
+                }
+                ?></table>
             <?php
         }
 

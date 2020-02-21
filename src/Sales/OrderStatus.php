@@ -61,4 +61,9 @@ final class OrderStatus implements IdentifiableObject
     {
         $this->status = 'Delivered';
     }
+
+    public function status(): string
+    {
+        return $this->status;
+    }
 }
