@@ -23,6 +23,7 @@ Stream::consume(
     function (string $messageType, $data) use ($startAtIndexKey) {
         if ($messageType === 'sales.sales_order_created') {
             $orderStatus = new OrderStatus($data['salesOrderId']);
+            $orderStatus->awaitingStockReservation();
             Database::persist($orderStatus);
 
             echo HttpApi::postFormData(
@@ -38,7 +39,17 @@ Stream::consume(
             $salesOrder = Database::retrieve(SalesOrder::class, $data['reservationId']);
             $salesOrder->markAsDeliverable();
             Database::persist($salesOrder);
+
+            /** @var OrderStatus $orderStatus */
+            $orderStatus = Database::retrieve(OrderStatus::class, $data['reservationId']);
+            $orderStatus->deliverable();
+            Database::persist($orderStatus);
         } elseif ($messageType === 'sales.goods_delivered') {
+            /** @var OrderStatus $orderStatus */
+            $orderStatus = Database::retrieve(OrderStatus::class, $data['salesOrderId']);
+            $orderStatus->delivered();
+            Database::persist($orderStatus);
+
             echo HttpApi::postFormData(
                 'http://stock_web/commitStockReservation',
                 [
@@ -63,7 +74,7 @@ Stream::consume(
 
             /** @var OrderStatus $orderStatus */
             $orderStatus = Database::retrieve(OrderStatus::class, $data['reservationId']);
-            $orderStatus->setPurchaseOrderId($purchaseOrderId);
+            $orderStatus->awaitingGoodsReceived($purchaseOrderId);
             Database::persist($orderStatus);
         } elseif ($messageType === 'purchase.goods_received') {
             $purchaseOrderId = $data['purchaseOrderId'];
@@ -71,6 +82,8 @@ Stream::consume(
                 return $orderStatus->purchaseOrderId() === $purchaseOrderId;
             });
             if ($orderStatus instanceof OrderStatus) {
+                $orderStatus->awaitingStockReservation();
+                Database::persist($orderStatus);
                 sleep(3);
                 echo "Making another reservation\n";
                 echo HttpApi::postFormData(
