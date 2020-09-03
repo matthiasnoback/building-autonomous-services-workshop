@@ -7,6 +7,8 @@ use Common\Persistence\Database;
 use Common\Render;
 use Common\Stream\Stream;
 use Common\Web\FlashMessage;
+use Common\Web\HttpApi;
+use Purchase\PurchaseOrderId;
 
 final class SalesApplication
 {
@@ -27,6 +29,26 @@ final class SalesApplication
             Database::persist($salesOrder);
 
             FlashMessage::add(FlashMessage::SUCCESS, 'Created sales order ' . $salesOrderId);
+
+            // automatically create a purchase order for now
+            $stockLevels = HttpApi::fetchDecodedJsonResponse('http://stock_web/stockLevels');
+            $stockLevelForProduct = $stockLevels->{$salesOrder->productId()};
+            if ($stockLevelForProduct < $salesOrder->quantity()) {
+                $purchaseOrderId = (string)PurchaseOrderId::create();
+                $formData = [
+                    'purchaseOrderId' => $purchaseOrderId,
+                    'productId' => $salesOrder->productId(),
+                    // we order only what we don't have in stock
+                    'quantity' => $salesOrder->quantity() - $stockLevelForProduct
+                ];
+
+                HttpApi::postFormData(
+                    'http://purchase_web/createPurchaseOrder',
+                    $formData
+                );
+
+                FlashMessage::add(FlashMessage::SUCCESS, 'Also created purchase order ' . $purchaseOrderId);
+            }
 
             header('Location: /listSalesOrders');
             exit;
