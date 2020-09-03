@@ -33,8 +33,7 @@ Stream::consume(
                 'productId' => $data['productId'],
                 'stockLevel' => $balance->stockLevel()
             ]);
-        }
-        elseif ($messageType === 'sales.goods_delivered') {
+        } elseif ($messageType === 'sales.goods_delivered') {
             /** @var Balance $balance */
             $balance = Database::retrieve(Balance::class, $data['productId']);
             $balance->decrease($data['quantity']);
