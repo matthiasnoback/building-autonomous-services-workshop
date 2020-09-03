@@ -70,3 +70,15 @@ services:
         command: php src/Stock/process_manager.php
         networks:
             - default
+
+    sales_process_manager:
+        build: docker/php-cli
+        image: matthiasnoback/building_autonomous_services_php_cli
+        restart: on-failure
+        env_file: docker/.env
+        user: ${HOST_UID}:${HOST_GID}
+        volumes:
+            - ./:/opt:cached
+        command: php src/Sales/process_manager.php
+        networks:
+            - default
