@@ -5,6 +5,7 @@ namespace Stock;
 
 use Common\Persistence\Database;
 use Common\Render;
+use Common\Stream\Stream;
 
 final class StockApplication
 {
@@ -27,10 +28,23 @@ final class StockApplication
         Database::persist($balance);
 
         if ($reservationWasAccepted) {
+            Database::persist($balance);
+            Stream::produce('stock.reservation_accepted', [
+                'reservationId' => $_POST['reservationId'],
+                'productId' => $_POST['productId'],
+                'quantity' => (int)$_POST['quantity']
+            ]);
 
-            // TODO dispatch "reservation accepted" event
+            Stream::produce('stock.stock_level_changed', [
+                'productId' => $_POST['productId'],
+                'stockLevel' => $balance->stockLevel()
+            ]);
         } else {
-            // TODO dispatch "reservation rejected" event
+            Stream::produce('stock.reservation_rejected', [
+                'reservationId' => $_POST['reservationId'],
+                'productId' => $_POST['productId'],
+                'quantity' => (int)$_POST['quantity']
+            ]);
         }
     }
 }
