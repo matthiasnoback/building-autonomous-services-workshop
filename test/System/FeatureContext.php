@@ -6,6 +6,8 @@ use Asynchronicity\PHPUnit\Asynchronicity;
 use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Mink\Element\NodeElement;
 use Behat\MinkExtension\Context\MinkContext;
+use PHPUnit\Framework\Assert;
+use RuntimeException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 
@@ -45,6 +47,7 @@ final class FeatureContext extends MinkContext
     public function theCatalogHasAProduct(string $productName): void
     {
         $this->visit('http://catalog.localhost/createProduct');
+        $this->assertSuccessfulResponse();
         $this->fillField('name', $productName);
         $this->pressButton('Create');
         $this->assertUrlRegExp('#/listProducts#');
@@ -61,7 +64,7 @@ final class FeatureContext extends MinkContext
     {
         self::assertEventually(function () use ($productName, $stockLevel) {
             $this->visit('http://dashboard.localhost/');
-            $this->assertResponseStatus(200);
+            $this->assertSuccessfulResponse();
 
             $nameField = $this->findOrFail('css', '.product-name:contains("' . addslashes($productName) . '")');
             $actualStockLevel = (int)$this->findOrFail('css', '.stock-level', $nameField->getParent())->getText();
@@ -78,6 +81,7 @@ final class FeatureContext extends MinkContext
     {
         self::assertEventually(function () use ($quantity) {
             $this->visit('http://purchase.localhost/createPurchaseOrder');
+            $this->assertSuccessfulResponse();
 
             $this->selectOption('Product', $this->product);
             $this->fillField('Quantity', $quantity);
@@ -86,6 +90,7 @@ final class FeatureContext extends MinkContext
 
         self::assertEventually(function () {
             $this->visit('http://purchase.localhost/receiveGoods');
+            $this->assertSuccessfulResponse();
             $this->pressButton('Receive');
         });
     }
@@ -98,6 +103,7 @@ final class FeatureContext extends MinkContext
     {
         self::assertEventually(function () use ($quantity) {
             $this->visit('http://sales.localhost/createSalesOrder');
+            $this->assertSuccessfulResponse();
             $this->selectOption('Product', $this->product);
             $this->fillField('Quantity', $quantity);
             $this->pressButton('Order');
@@ -105,6 +111,7 @@ final class FeatureContext extends MinkContext
 
         self::assertEventually(function () {
             $this->visit('http://sales.localhost/deliverSalesOrder');
+            $this->assertSuccessfulResponse();
             $this->pressButton('Deliver');
         });
     }
@@ -122,9 +129,24 @@ final class FeatureContext extends MinkContext
         $element = ($parentNode ?: $this->getSession()->getPage())->find($selector, $locator);
 
         if (!$element instanceof NodeElement) {
-            throw new \RuntimeException(sprintf('Could not find %s using %s selector', $locator, $selector));
+            throw new RuntimeException(sprintf('Could not find %s using %s selector', $locator, $selector));
         }
 
         return $element;
+    }
+
+    private function assertSuccessfulResponse(): void
+    {
+        $this->assertSession();
+
+        Assert::assertEquals(
+            200,
+            intval($this->getSession()->getStatusCode()),
+            sprintf(
+                "Expected a successful response. Actual status code: %d Response body: \n\n%s",
+                $this->getSession()->getStatusCode(),
+                $this->getSession()->getPage()->getContent()
+            )
+        );
     }
 }
