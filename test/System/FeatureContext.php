@@ -143,10 +143,20 @@ final class FeatureContext extends MinkContext
             200,
             intval($this->getSession()->getStatusCode()),
             sprintf(
-                "Expected a successful response. Actual status code: %d Response body: \n\n%s",
-                $this->getSession()->getStatusCode(),
-                $this->getSession()->getPage()->getContent()
+                "Expected a successful response. Response body: \n\n%s",
+                $this->getReadableResponseBody()
             )
         );
+    }
+
+    private function getReadableResponseBody(): string
+    {
+        $body = $this->getSession()->getPage()->find('css', 'body');
+
+        if ($body instanceof NodeElement) {
+            return $body->getText();
+        }
+
+        return $this->getSession()->getPage()->getText();
     }
 }
