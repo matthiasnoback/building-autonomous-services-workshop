@@ -92,6 +92,18 @@ final class FeatureContext extends MinkContext
     }
 
     /**
+     * @When we receive the goods for the purchase order that has been created
+     */
+    public function weReceiveGoodsForThePurchaseOrder(): void
+    {
+        self::assertEventually(function () {
+            $this->visit('http://purchase.localhost/receiveGoods');
+            $this->pressButton('Receive');
+            $this->assertResponseStatus(200);
+        });
+    }
+
+    /**
      * @Then a purchase order should have been created for :quantity item of this product
      */
     public function aPurchaseOrderShouldHaveBeenCreated(string $quantity): void
@@ -123,6 +135,7 @@ final class FeatureContext extends MinkContext
 
     /**
      * @When we sell :quantity item of this product
+     * @Given we have sold :quantity item of this product
      */
     public function weSellQuantityOfProduct(string $quantity): void
     {
@@ -131,6 +144,18 @@ final class FeatureContext extends MinkContext
             $this->selectOption('Product', $this->product);
             $this->fillField('Quantity', $quantity);
             $this->pressButton('Order');
+        });
+    }
+
+    /**
+     * @Then the sales order should be deliverable
+     */
+    public function theSalesOrderShouldBeDeliverable(): void
+    {
+        self::assertEventually(function () {
+            $this->visit('http://sales.localhost/deliverSalesOrder');
+            $this->pressButton('Deliver');
+            $this->assertResponseStatus(200);
         });
     }
 
