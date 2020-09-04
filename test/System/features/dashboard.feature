@@ -15,3 +15,8 @@ Feature:
     And we have purchased and received 10 items of this product
     And we have sold and delivered 5 items of this product
     Then I should see that "Mars rover" has a stock level of 5
+
+  Scenario: We order a product that isn't in stock
+    Given the catalog has a product "Mars rover"
+    When we sell 1 item of this product
+    Then a purchase order should have been created for 1 item of this product

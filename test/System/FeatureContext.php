@@ -6,6 +6,7 @@ use Asynchronicity\PHPUnit\Asynchronicity;
 use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Mink\Element\NodeElement;
 use Behat\MinkExtension\Context\MinkContext;
+use PHPUnit\Framework\Assert;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 
@@ -91,21 +92,45 @@ final class FeatureContext extends MinkContext
     }
 
     /**
+     * @Then a purchase order should have been created for :quantity item of this product
+     */
+    public function aPurchaseOrderShouldHaveBeenCreated(string $quantity): void
+    {
+        self::assertEventually(function () use ($quantity) {
+            $this->visit('http://purchase.localhost/listPurchaseOrders');
+            $jsonEncodedData = $this->getSession()->getPage()->getContent();
+            $jsonDecodedData = json_decode($jsonEncodedData, true);
+
+            Assert::assertCount(1, $jsonDecodedData);
+            $firstItem = reset($jsonDecodedData);
+            Assert::assertEquals((int)$quantity, $firstItem['quantity']);
+        });
+    }
+
+    /**
      * @Given we have sold and delivered :quantity items of this product
      * @param string $quantity
      */
     public function weHaveSoldAndDeliveredItemsOfThisProduct(string $quantity): void
+    {
+        $this->weSellQuantityOfProduct($quantity);
+
+        self::assertEventually(function () {
+            $this->visit('http://sales.localhost/deliverSalesOrder');
+            $this->pressButton('Deliver');
+        });
+    }
+
+    /**
+     * @When we sell :quantity item of this product
+     */
+    public function weSellQuantityOfProduct(string $quantity): void
     {
         self::assertEventually(function () use ($quantity) {
             $this->visit('http://sales.localhost/createSalesOrder');
             $this->selectOption('Product', $this->product);
             $this->fillField('Quantity', $quantity);
             $this->pressButton('Order');
-        });
-
-        self::assertEventually(function () {
-            $this->visit('http://sales.localhost/deliverSalesOrder');
-            $this->pressButton('Deliver');
         });
     }
 

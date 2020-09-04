@@ -74,7 +74,7 @@ final class BalanceTest extends EntityTest
 
         self::assertFalse($reservationSucceeded);
         self::assertEquals(3, $balance->stockLevel());
-        self::assertFalse($balance->hasReservation($reservationId));
+        self::assertTrue($balance->hasReservation($reservationId));
     }
 
     /**
@@ -99,6 +99,8 @@ final class BalanceTest extends EntityTest
         $balance = new Balance('3257474b-09cb-4339-8e55-8b2476f493c1');
         $balance->increase(4);
         $balance->makeReservation('23bb342d-5ac1-433a-b0ae-8beb6a2490ae', 3);
+
+        $balance->releaseEvents();
 
         return $balance;
     }

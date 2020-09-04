@@ -11,14 +11,14 @@ final class Render
     {
         $jsonSerialized = Serializer::serialize($data);
 
-        if (strpos($_SERVER['HTTP_ACCEPT'], 'json') !== false) {
+        if (strpos($_SERVER['HTTP_ACCEPT'] ?? 'application/json', 'json') !== false) {
             header('Content-Type: application/json');
             echo $jsonSerialized;
         } else {
             include __DIR__ . '/header.php';
 
             ?>
-            <pre><code><?php echo $jsonSerialized; ?>
+            <pre><code class="data"><?php echo $jsonSerialized; ?>
 </code></pre>
             <?php
 

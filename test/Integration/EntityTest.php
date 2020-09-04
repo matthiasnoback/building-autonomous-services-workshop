@@ -27,10 +27,11 @@ abstract class EntityTest extends TestCase
         Database::persist($originalObject);
 
         if (!method_exists($originalObject, 'id')) {
-            throw new \LogicException(sprintf(
-                'Entity of class "%s" should have a method "public function id(): string"',
-                \get_class($originalObject)
-            ));
+            throw new \LogicException(
+                sprintf(
+                    'Entity of class "%s" should have a method "public function id(): string"',
+                    \get_class($originalObject)
+                ));
         }
 
         $retrieved = Database::retrieve(\get_class($originalObject), $originalObject->id());
