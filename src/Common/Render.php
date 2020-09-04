@@ -7,11 +7,14 @@ use NaiveSerializer\Serializer;
 
 final class Render
 {
+    /**
+     * @param mixed $data
+     */
     public static function jsonOrHtml($data): void
     {
         $jsonSerialized = Serializer::serialize($data);
 
-        if (strpos($_SERVER['HTTP_ACCEPT'], 'json') !== false) {
+        if (strpos($_SERVER['HTTP_ACCEPT'] ?? 'application/json', 'json') !== false) {
             header('Content-Type: application/json');
             echo $jsonSerialized;
         } else {

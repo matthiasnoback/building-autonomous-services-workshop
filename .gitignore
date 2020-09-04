@@ -1,8 +1,6 @@
+/.idea/
 /var/*
 /vendor/
 .built
-<<<<<<< HEAD
 *.patch
-=======
-.patch
->>>>>>> 9355ab1367072dcf6d0fe106803140b3aa1923b0
+.phpunit.result.cache

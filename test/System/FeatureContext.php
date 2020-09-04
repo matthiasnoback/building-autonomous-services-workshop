@@ -69,7 +69,7 @@ final class FeatureContext extends MinkContext
             $nameField = $this->findOrFail('css', '.product-name:contains("' . addslashes($productName) . '")');
             $actualStockLevel = (int)$this->findOrFail('css', '.stock-level', $nameField->getParent())->getText();
 
-            assertEquals($stockLevel, $actualStockLevel);
+            Assert::assertEquals($stockLevel, $actualStockLevel);
         });
     }
 

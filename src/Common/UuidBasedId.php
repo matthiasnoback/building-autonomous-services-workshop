@@ -13,7 +13,7 @@ trait UuidBasedId
      */
     private $id;
 
-    private function __construct($id)
+    private function __construct(string $id)
     {
         Assertion::uuid($id);
         $this->id = $id;
