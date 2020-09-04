@@ -27,28 +27,17 @@ Stream::consume(
             $balance = Database::retrieve(Balance::class, $data['productId']);
             $balance->increase($data['quantity']);
 
-            $acceptedReservation = $balance->tryRejectedReservations();
+            $balance->tryRejectedReservations();
+
+            $events = $balance->releaseEvents();
 
             Database::persist($balance);
 
-            if ($acceptedReservation) {
-                Stream::produce(
-                    'stock.reservation_accepted',
-                    [
-                        'reservationId' => $acceptedReservation->reservationId(),
-                        'productId' => $balance->id(),
-                        'quantity' => $acceptedReservation->quantity()
-                    ]
-                );
-            }
+            foreach ($events as $event) {
+                list($messageType, $messageData) = $event;
 
-            Stream::produce(
-                'stock.stock_level_changed',
-                [
-                    'productId' => $data['productId'],
-                    'stockLevel' => $balance->stockLevel()
-                ]
-            );
+                Stream::produce($messageType, $messageData);
+            }
         }
 
         KeyValueStore::incr($startAtIndexKey);

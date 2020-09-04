@@ -11,6 +11,11 @@ use Common\Persistence\IdentifiableObject;
 final class Balance implements IdentifiableObject
 {
     /**
+     * @var array
+     */
+    private $events = [];
+
+    /**
      * @var string
      */
     private $productId;
@@ -24,6 +29,15 @@ final class Balance implements IdentifiableObject
      * @var Reservation[]
      */
     private $reservations = [];
+
+    public function releaseEvents(): array
+    {
+        $events = $this->events;
+
+        $this->events = [];
+
+        return $events;
+    }
 
     public function __construct(string $productId)
     {
@@ -43,12 +57,25 @@ final class Balance implements IdentifiableObject
 
     public function increase(int $receivedQuantity): void
     {
-        $this->stockLevel += $receivedQuantity;
+        $this->setStockLevel($this->stockLevel += $receivedQuantity);
     }
 
     public function decrease(int $deliveredQuantity): void
     {
-        $this->stockLevel -= $deliveredQuantity;
+        $this->setStockLevel($this->stockLevel -= $deliveredQuantity);
+    }
+
+    private function setStockLevel(int $level): void
+    {
+        $this->stockLevel = $level;
+
+        $this->events[] = [
+            'stock.stock_level_changed',
+            [
+                'productId' => $this->productId,
+                'stockLevel' => $level
+            ]
+        ];
     }
 
     public function makeReservation(string $reservationId, int $quantity): bool
@@ -58,11 +85,29 @@ final class Balance implements IdentifiableObject
 
         if ($this->stockLevel >= $quantity) {
             $reservation->accept();
+            $this->events[] = [
+                'stock.reservation_accepted',
+                [
+                    'reservationId' => $reservationId,
+                    'productId' => $this->productId,
+                    'quantity' => $quantity
+                ]
+            ];
+
             $this->decrease($quantity);
             return true;
         }
 
         $reservation->reject();
+        $this->events[] = [
+            'stock.reservation_rejected',
+            [
+                'reservationId' => $reservationId,
+                'productId' => $this->productId,
+                'quantity' => $quantity
+            ]
+        ];
+
         return false;
     }
 
@@ -93,6 +138,16 @@ final class Balance implements IdentifiableObject
                 if ($this->stockLevel >= $reservation->quantity()) {
                     $this->decrease($reservation->quantity());
                     $reservation->accept();
+
+                    $this->events[] = [
+                        'stock.reservation_accepted',
+                        [
+                            'reservationId' => $reservation->reservationId(),
+                            'productId' => $this->productId,
+                            'quantity' => $reservation->quantity()
+                        ]
+                    ];
+
                     return $reservation;
                 }
             }
