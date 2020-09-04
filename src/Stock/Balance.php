@@ -53,12 +53,16 @@ final class Balance implements IdentifiableObject
 
     public function makeReservation(string $reservationId, int $quantity): bool
     {
+        $reservation = new Reservation($reservationId, $quantity);
+        $this->reservations[] = $reservation;
+
         if ($this->stockLevel >= $quantity) {
-            $this->reservations[] = new Reservation($reservationId, $quantity);
+            $reservation->accept();
             $this->decrease($quantity);
             return true;
         }
 
+        $reservation->reject();
         return false;
     }
 
@@ -80,5 +84,20 @@ final class Balance implements IdentifiableObject
         }
 
         return false;
+    }
+
+    public function tryRejectedReservations()
+    {
+        foreach ($this->reservations as $reservation) {
+            if ($reservation->status() === 'rejected') {
+                if ($this->stockLevel >= $reservation->quantity()) {
+                    $this->decrease($reservation->quantity());
+                    $reservation->accept();
+                    return $reservation;
+                }
+            }
+        }
+
+        return null;
     }
 }

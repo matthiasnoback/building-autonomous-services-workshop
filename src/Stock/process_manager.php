@@ -22,17 +22,33 @@ Stream::consume(
             /** @var Balance $balance */
             $balance = new Balance($data['productId']);
             Database::persist($balance);
-        }
-        elseif ($messageType === 'purchase.goods_received') {
+        } elseif ($messageType === 'purchase.goods_received') {
             /** @var Balance $balance */
             $balance = Database::retrieve(Balance::class, $data['productId']);
             $balance->increase($data['quantity']);
+
+            $acceptedReservation = $balance->tryRejectedReservations();
+
             Database::persist($balance);
 
-            Stream::produce('stock.stock_level_changed', [
-                'productId' => $data['productId'],
-                'stockLevel' => $balance->stockLevel()
-            ]);
+            if ($acceptedReservation) {
+                Stream::produce(
+                    'stock.reservation_accepted',
+                    [
+                        'reservationId' => $acceptedReservation->reservationId(),
+                        'productId' => $balance->id(),
+                        'quantity' => $acceptedReservation->quantity()
+                    ]
+                );
+            }
+
+            Stream::produce(
+                'stock.stock_level_changed',
+                [
+                    'productId' => $data['productId'],
+                    'stockLevel' => $balance->stockLevel()
+                ]
+            );
         }
 
         KeyValueStore::incr($startAtIndexKey);
