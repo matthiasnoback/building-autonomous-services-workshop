@@ -11,7 +11,7 @@ endif
 export HOST_UID := $(shell id -u)
 export HOST_GID := $(shell id -g)
 
-COMPOSER_RUN := docker run --rm --interactive --tty --volume `pwd`:/app:cached --volume ${COMPOSER_HOME}:/tmp:cached --user ${HOST_UID}:${HOST_GID} composer:latest
+COMPOSER_RUN := docker run --rm --interactive --tty --volume `pwd`:/app:cached --user ${HOST_UID}:${HOST_GID} composer:latest
 
 DOCKER_COMPOSE_ALL := docker-compose -f docker-compose.web.yml -f docker-compose.consumers.yml
 DOCKER_COMPOSE_CONSUMERS := docker-compose -f docker-compose.consumers.yml
