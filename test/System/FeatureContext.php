@@ -6,6 +6,7 @@ use Asynchronicity\PHPUnit\Asynchronicity;
 use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Mink\Element\NodeElement;
 use Behat\MinkExtension\Context\MinkContext;
+use Common\String\Json;
 use PHPUnit\Framework\Assert;
 use RuntimeException;
 use Symfony\Component\Filesystem\Filesystem;
@@ -158,5 +159,19 @@ final class FeatureContext extends MinkContext
         }
 
         return $this->getSession()->getPage()->getText();
+    }
+
+    /**
+     * @return mixed
+     */
+    private function getResponseAsDecodedJsonData(string $url)
+    {
+        $this->getSession()->setRequestHeader('Accept', 'application/json');
+
+        $this->visit($url);
+
+        $jsonData = (string)$this->getSession()->getPage()->getContent();
+
+        return Json::decode($jsonData, true);
     }
 }

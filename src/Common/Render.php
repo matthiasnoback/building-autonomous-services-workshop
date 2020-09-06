@@ -14,7 +14,7 @@ final class Render
     {
         $jsonSerialized = Serializer::serialize($data);
 
-        if (strpos($_SERVER['HTTP_ACCEPT'], 'json') !== false) {
+        if (strpos($_SERVER['HTTP_ACCEPT'] ?? 'text/html', 'json') !== false) {
             header('Content-Type: application/json');
             echo $jsonSerialized;
         } else {
