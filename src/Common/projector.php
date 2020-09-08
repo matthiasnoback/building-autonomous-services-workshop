@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 use Common\Stream\Stream;
-use Symfony\Component\Debug\Debug;
+use Symfony\Component\ErrorHandler\Debug;
 
 require __DIR__ . '/../../vendor/autoload.php';
 
