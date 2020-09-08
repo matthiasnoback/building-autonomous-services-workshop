@@ -3,7 +3,7 @@
     "roave/security-advisories": "dev-master",
     "php": "^7.4",
     "ext-json": "^7.4",
-    "matthiasnoback/php-workshop-tools": "^0.32.0"
+    "matthiasnoback/php-workshop-tools": "^0.34"
   },
   "require-dev": {
     "behat/behat": "^3.7",
