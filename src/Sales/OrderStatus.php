@@ -6,7 +6,7 @@ namespace Sales;
 use Common\Persistence\IdentifiableObject;
 
 /**
- * Note: this class will become relevant in assignment 06
+ * Note: this class will become relevant in assignment 07
  */
 final class OrderStatus implements IdentifiableObject
 {
@@ -16,9 +16,9 @@ final class OrderStatus implements IdentifiableObject
     private string $salesOrderId;
 
     /**
-     * @var string
+     * @var string|null
      */
-    private string $purchaseOrderId;
+    private ?string $purchaseOrderId = null;
 
     public function __construct(string $salesOrderId)
     {
