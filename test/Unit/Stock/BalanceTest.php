@@ -77,6 +77,55 @@ final class BalanceTest extends EntityTest
         self::assertFalse($balance->hasReservation($reservationId));
     }
 
+    /**
+     * @test
+     */
+    public function it_retries_previously_rejected_reservations_when_processing_goods_received(): void
+    {
+        $balance = new Balance('3257474b-09cb-4339-8e55-8b2476f493c1');
+        // stock level is 0
+
+        $rejectedReservationId = '23bb342d-5ac1-433a-b0ae-8beb6a2490ae';
+        $reservationSucceeded = $balance->makeReservation($rejectedReservationId, 4);
+        self::assertFalse($reservationSucceeded);
+
+        $result = $balance->processReceivedGoodsAndRetryRejectedReservations(5);
+
+        self::assertEquals($rejectedReservationId, $result);
+        self::assertEquals(1, $balance->stockLevel());
+    }
+
+    /**
+     * @test
+     */
+    public function if_the_received_quantity_is_insufficient_it_returns_null(): void
+    {
+        $balance = new Balance('3257474b-09cb-4339-8e55-8b2476f493c1');
+        // stock level is 0
+
+        $reservationSucceeded = $balance->makeReservation('23bb342d-5ac1-433a-b0ae-8beb6a2490ae', 4);
+        self::assertFalse($reservationSucceeded);
+
+        $result = $balance->processReceivedGoodsAndRetryRejectedReservations(3);
+
+        self::assertNull($result);
+        self::assertEquals(3, $balance->stockLevel());
+    }
+
+    /**
+     * @test
+     */
+    public function if_there_are_no_rejected_reservations_it_returns_null(): void
+    {
+        $balance = new Balance('3257474b-09cb-4339-8e55-8b2476f493c1');
+        // stock level is 0
+
+        $result = $balance->processReceivedGoodsAndRetryRejectedReservations(3);
+
+        self::assertNull($result);
+        self::assertEquals(3, $balance->stockLevel());
+    }
+
     protected function getObject(): IdentifiableObject
     {
         $balance = new Balance('3257474b-09cb-4339-8e55-8b2476f493c1');

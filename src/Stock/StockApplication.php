@@ -50,8 +50,10 @@ final class StockApplication
         /** @var Balance $balance */
         $balance = Database::retrieve(Balance::class, $_POST['productId']);
 
-        if ($balance->makeReservation($_POST['reservationId'], (int)$_POST['quantity'])) {
-            Database::persist($balance);
+        $reservationWasAccepted = $balance->makeReservation($_POST['reservationId'], (int)$_POST['quantity']);
+        Database::persist($balance);
+
+        if ($reservationWasAccepted) {
 
             // TODO dispatch "reservation accepted" event
         } else {

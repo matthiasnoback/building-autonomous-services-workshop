@@ -25,6 +25,11 @@ final class Balance implements IdentifiableObject
      */
     private array $reservations = [];
 
+    /**
+     * @var Reservation[]
+     */
+    private array $rejectedReservations = [];
+
     public function __construct(string $productId)
     {
         $this->productId = $productId;
@@ -60,9 +65,10 @@ final class Balance implements IdentifiableObject
             $this->reservations[] = new Reservation($reservationId, $quantity);
             $this->decrease($quantity);
             return true;
+        } else {
+            $this->rejectedReservations[] = new Reservation($reservationId, $quantity);
+            return false;
         }
-
-        return false;
     }
 
     public function hasReservation(string $reservationId): bool
@@ -74,5 +80,24 @@ final class Balance implements IdentifiableObject
         }
 
         return false;
+    }
+
+    /**
+     * This will be useful in assignment 10
+     */
+    public function processReceivedGoodsAndRetryRejectedReservations(int $quantity): ?string
+    {
+        foreach ($this->rejectedReservations as $key => $rejectedReservation) {
+            if ($rejectedReservation->quantity() <= $quantity) {
+                unset($this->reservations[$key]);
+                $this->increase($quantity - $rejectedReservation->quantity());
+
+                return $rejectedReservation->reservationId();
+            }
+        }
+
+        $this->increase($quantity);
+
+        return null;
     }
 }

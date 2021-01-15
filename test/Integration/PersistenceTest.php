@@ -57,5 +57,14 @@ final class PersistenceTest extends TestCase
         $balance->increase(10);
         $balance->decrease(5);
         yield [$balance];
+
+        $balance = new Balance(ProductId::create()->asString());
+        $balance->makeReservation(SalesOrderId::create()->asString(), 4);
+        yield [$balance];
+
+        $balance = new Balance(ProductId::create()->asString());
+        $balance->increase(5);
+        $balance->makeReservation(SalesOrderId::create()->asString(), 4);
+        yield [$balance];
     }
 }
