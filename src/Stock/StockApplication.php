@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace Stock;
 
+use Common\Persistence\Database;
 use Common\Render;
+use Common\Stream\Stream;
 use Common\Web\HttpApi;
 
 final class StockApplication
@@ -38,5 +40,22 @@ final class StockApplication
         }
 
         return $stockLevels;
+    }
+
+    /**
+     * Note: this controller will become useful in Assignment 5
+     */
+    public function makeStockReservationController(): void
+    {
+        /** @var Balance $balance */
+        $balance = Database::retrieve(Balance::class, $_POST['productId']);
+
+        if ($balance->makeReservation($_POST['reservationId'], (int)$_POST['quantity'])) {
+            Database::persist($balance);
+
+            // TODO dispatch "reservation accepted" event
+        } else {
+            // TODO dispatch "reservation rejected" event
+        }
     }
 }

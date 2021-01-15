@@ -77,23 +77,6 @@ final class BalanceTest extends EntityTest
         self::assertFalse($balance->hasReservation($reservationId));
     }
 
-    /**
-     * @test
-     */
-    public function you_can_commit_a_reservation(): void
-    {
-        $balance = new Balance('3257474b-09cb-4339-8e55-8b2476f493c1');
-        $balance->increase(4);
-        $reservationId = '23bb342d-5ac1-433a-b0ae-8beb6a2490ae';
-        $balance->makeReservation($reservationId, 3);
-
-        $balance->commitReservation($reservationId);
-
-        // nothing has changed about the balance
-        self::assertEquals(1, $balance->stockLevel());
-        self::assertFalse($balance->hasReservation($reservationId));
-    }
-
     protected function getObject(): IdentifiableObject
     {
         $balance = new Balance('3257474b-09cb-4339-8e55-8b2476f493c1');

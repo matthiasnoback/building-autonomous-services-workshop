@@ -51,6 +51,9 @@ final class Balance implements IdentifiableObject
         $this->stockLevel -= $deliveredQuantity;
     }
 
+    /**
+     * Note this method will become relevant in assignment 05
+     */
     public function makeReservation(string $reservationId, int $quantity): bool
     {
         if ($this->stockLevel >= $quantity) {
@@ -60,15 +63,6 @@ final class Balance implements IdentifiableObject
         }
 
         return false;
-    }
-
-    public function commitReservation(string $reservationId): void
-    {
-        foreach ($this->reservations as $key => $reservation) {
-            if ($reservation->reservationId() === $reservationId) {
-                unset($this->reservations[$key]);
-            }
-        }
     }
 
     public function hasReservation(string $reservationId): bool
