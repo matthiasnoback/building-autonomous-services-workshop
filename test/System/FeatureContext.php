@@ -11,6 +11,7 @@ use PHPUnit\Framework\Assert;
 use RuntimeException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
+use function Safe\json_decode;
 
 final class FeatureContext extends MinkContext
 {
@@ -172,6 +173,6 @@ final class FeatureContext extends MinkContext
 
         $jsonData = (string)$this->getSession()->getPage()->getContent();
 
-        return Json::decode($jsonData, true);
+        return json_decode($jsonData, true);
     }
 }

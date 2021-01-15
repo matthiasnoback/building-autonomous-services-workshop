@@ -6,6 +6,7 @@ namespace Test\Integration;
 use Common\Persistence\Database;
 use Common\Persistence\IdentifiableObject;
 use PHPUnit\Framework\TestCase;
+use function get_class;
 
 abstract class EntityTest extends TestCase
 {
@@ -29,11 +30,11 @@ abstract class EntityTest extends TestCase
         if (!method_exists($originalObject, 'id')) {
             throw new \LogicException(sprintf(
                 'Entity of class "%s" should have a method "public function id(): string"',
-                \get_class($originalObject)
+                get_class($originalObject)
             ));
         }
 
-        $retrieved = Database::retrieve(\get_class($originalObject), $originalObject->id());
+        $retrieved = Database::retrieve(get_class($originalObject), (string)$originalObject->id());
 
         self::assertEquals($retrieved, $originalObject);
     }

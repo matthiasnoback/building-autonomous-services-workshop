@@ -3,7 +3,14 @@
     "roave/security-advisories": "dev-master",
     "php": "^7.4",
     "ext-json": "^7.4",
-    "matthiasnoback/php-workshop-tools": "^0.34"
+    "kriswallsmith/buzz": "^1.2",
+    "symfony/process": "^4.0",
+    "beberlei/assert": "^3.2",
+    "matthiasnoback/naive-serializer": "^0.10.1",
+    "symfony/error-handler": "^5.2",
+    "nyholm/psr7": "^1.3",
+    "ramsey/uuid": "^4.1",
+    "thecodingmachine/safe": "^1.3"
   },
   "require-dev": {
     "behat/behat": "^3.7",
@@ -19,7 +26,10 @@
   "autoload": {
     "psr-4": {
       "": "src/"
-    }
+    },
+    "files": [
+      "src/Common/CommandLine/functions.php"
+    ]
   },
   "autoload-dev": {
     "psr-4": {
