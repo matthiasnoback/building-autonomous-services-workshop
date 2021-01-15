@@ -6,6 +6,7 @@ namespace Test\Integration\Common\Persistence;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
 use Common\Persistence\Database;
+use RuntimeException;
 
 class DBTest extends TestCase
 {
@@ -42,7 +43,7 @@ class DBTest extends TestCase
      */
     public function it_throws_an_exception_for_non_persisted_objects(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
 
         Database::retrieve(PersistableDummy::class, (string)Uuid::uuid4());
     }

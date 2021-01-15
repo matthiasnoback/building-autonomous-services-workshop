@@ -13,17 +13,17 @@ final class Balance implements IdentifiableObject
     /**
      * @var string
      */
-    private $productId;
+    private string $productId;
 
     /**
      * @var int
      */
-    private $stockLevel;
+    private int $stockLevel;
 
     /**
      * @var Reservation[]
      */
-    private $reservations = [];
+    private array $reservations = [];
 
     public function __construct(string $productId)
     {

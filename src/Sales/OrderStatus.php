@@ -13,12 +13,12 @@ final class OrderStatus implements IdentifiableObject
     /**
      * @var string
      */
-    private $salesOrderId;
+    private string $salesOrderId;
 
     /**
      * @var string
      */
-    private $purchaseOrderId;
+    private string $purchaseOrderId;
 
     public function __construct(string $salesOrderId)
     {

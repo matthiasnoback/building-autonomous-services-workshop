@@ -5,7 +5,7 @@ namespace Common\Persistence;
 
 use Assert\Assertion;
 
-class Database
+final class Database
 {
     private const ENV_DATABASE_DIRECTORY = 'DB_PATH';
 

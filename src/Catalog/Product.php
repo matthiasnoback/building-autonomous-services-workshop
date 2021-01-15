@@ -14,12 +14,12 @@ final class Product implements IdentifiableObject
     /**
      * @var string
      */
-    private $productId;
+    private string $productId;
 
     /**
      * @var string
      */
-    private $name;
+    private string $name;
 
     /**
      * @param ProductId $productId
@@ -27,7 +27,7 @@ final class Product implements IdentifiableObject
      */
     public function __construct(ProductId $productId, string $name)
     {
-        $this->productId = (string)$productId;
+        $this->productId = $productId->asString();
         $this->name = $name;
     }
 

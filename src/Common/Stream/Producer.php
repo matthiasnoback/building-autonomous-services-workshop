@@ -8,10 +8,7 @@ use function Safe\json_encode;
 
 final class Producer
 {
-    /**
-     * @var string
-     */
-    private $streamFilePath;
+    private string $streamFilePath;
 
     public function __construct(string $streamFilePath)
     {

@@ -56,11 +56,11 @@ final class KeyValueStore
      * @param string $key
      * @return int The new value
      */
-    public static function incr(string $key)
+    public static function incr(string $key): int
     {
         $currentValue = self::get($key);
 
-        return self::set($key, (int)$currentValue + 1);
+        return (int)self::set($key, (int)$currentValue + 1);
     }
 
     public static function del(string $key): void

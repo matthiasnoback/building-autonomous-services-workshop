@@ -4,21 +4,26 @@ declare(strict_types = 1);
 namespace Test\Integration\Common\Persistence;
 
 use Common\Persistence\IdentifiableObject;
-use Common\Persistence\Id;
 
 final class PersistableDummy implements IdentifiableObject
 {
-    private DummyId $id;
+    /**
+     * @var string
+     */
+    private string $id;
 
+    /**
+     * @var string
+     */
     private string $secretValue;
 
     public function __construct(DummyId $id)
     {
-        $this->id = $id;
+        $this->id = (string)$id;
         $this->secretValue = uniqid('', true);
     }
 
-    public function id() : Id
+    public function id() : string
     {
         return $this->id;
     }

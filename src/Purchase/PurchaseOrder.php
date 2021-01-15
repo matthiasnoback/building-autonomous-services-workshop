@@ -21,26 +21,26 @@ final class PurchaseOrder implements IdentifiableObject
     /**
      * @var string
      */
-    private $purchaseOrderId;
+    private string $purchaseOrderId;
 
     /**
      * @var string
      */
-    private $productId;
+    private string $productId;
 
     /**
      * @var int
      */
-    private $quantity;
+    private int $quantity;
 
     /**
      * @var bool
      */
-    private $received = false;
+    private bool $received = false;
 
     public function __construct(PurchaseOrderId $purchaseOrderId, string $productId, int $quantity)
     {
-        $this->purchaseOrderId = (string)$purchaseOrderId;
+        $this->purchaseOrderId = $purchaseOrderId->asString();
 
         Assertion::uuid($productId);
         $this->productId = $productId;

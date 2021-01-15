@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Common\Persistence;
 
 use Assert\Assertion;
+use RuntimeException;
 use function Common\CommandLine\line;
 use function Common\CommandLine\make_cyan;
 use function Common\CommandLine\stdout;
@@ -12,15 +13,9 @@ use function Safe\file_get_contents;
 
 final class Repository
 {
-    /**
-     * @var string
-     */
-    private $className;
+    private string $className;
 
-    /**
-     * @var string
-     */
-    private $databaseFilePath;
+    private string $databaseFilePath;
 
     public function __construct(string $className, string $databaseFilePath)
     {
@@ -54,12 +49,12 @@ final class Repository
      * @param string $id
      * @return object An object of type $this->className
      */
-    public function retrieve(string $id)
+    public function retrieve(string $id): object
     {
         $data = $this->retrieveAll();
 
         if (!array_key_exists($id, $data)) {
-            throw new \RuntimeException(sprintf('Unable to load object of type "%s" with ID "%s"', $this->className, $id));
+            throw new RuntimeException(sprintf('Unable to load object of type "%s" with ID "%s"', $this->className, $id));
         }
 
         $object = $data[$id];
@@ -116,14 +111,14 @@ final class Repository
      *
      * @param array $allData
      * @return void
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     private function saveAllObjects(array $allData): void
     {
         $fileSaved = @file_put_contents($this->databaseFilePath, Serializer::serialize($allData));
 
         if ($fileSaved === false) {
-            throw new \RuntimeException(sprintf('Failed to save file "%s"', $this->databaseFilePath));
+            throw new RuntimeException(sprintf('Failed to save file "%s"', $this->databaseFilePath));
         }
     }
 
@@ -138,9 +133,8 @@ final class Repository
 
     /**
      * @param callable $filter
-     * @return object|null
      */
-    public function findOne(callable $filter)
+    public function findOne(callable $filter): ?object
     {
         foreach ($this->loadAllObjects() as $object) {
             if ($filter($object)) {

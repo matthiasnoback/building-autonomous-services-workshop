@@ -6,7 +6,7 @@ namespace Common\Persistence;
 interface IdentifiableObject
 {
     /**
-     * @return string|object with __toString() method
+     * @return string
      */
-    public function id();
+    public function id(): string;
 }

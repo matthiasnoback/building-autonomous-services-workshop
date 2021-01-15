@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Common\Stream;
 
 use Common\Persistence\Filesystem;
+use RuntimeException;
 use function Safe\realpath;
 
 /**
@@ -41,7 +42,9 @@ final class Stream
     {
         $streamFilePath = getenv(self::ENV_STREAM_FILE_PATH);
         if ($streamFilePath === false) {
-            throw new \RuntimeException(sprintf('Environment variable "%s" should be set', self::ENV_STREAM_FILE_PATH));
+            throw new RuntimeException(
+                sprintf('Environment variable "%s" should be set', self::ENV_STREAM_FILE_PATH)
+            );
         }
 
         if (!is_file($streamFilePath)) {

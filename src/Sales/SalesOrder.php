@@ -23,27 +23,27 @@ final class SalesOrder implements IdentifiableObject
     /**
      * @var string
      */
-    private $salesOrderId;
+    private string $salesOrderId;
 
     /**
      * @var string
      */
-    private $productId;
+    private string $productId;
 
     /**
      * @var int
      */
-    private $quantity;
+    private int $quantity;
 
     /**
      * @var bool
      */
-    private $wasDelivered;
+    private bool $wasDelivered;
 
     /**
      * @var bool
      */
-    private $isDeliverable = false;
+    private bool $isDeliverable = false;
 
     public function __construct(SalesOrderId $salesOrderId, string $productId, int $quantity)
     {

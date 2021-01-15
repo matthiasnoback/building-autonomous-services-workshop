@@ -24,9 +24,14 @@ trait UuidBasedId
         return new self($id);
     }
 
-    public function __toString(): string
+    public function asString(): string
     {
         return $this->id;
+    }
+
+    public function __toString(): string
+    {
+        return $this->asString();
     }
 
     /**

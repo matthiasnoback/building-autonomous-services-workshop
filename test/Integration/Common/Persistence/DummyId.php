@@ -3,9 +3,7 @@ declare(strict_types = 1);
 
 namespace Test\Integration\Common\Persistence;
 
-use Common\Persistence\Id;
-
-final class DummyId implements Id
+final class DummyId
 {
     /**
      * @var string
