@@ -26,8 +26,16 @@ Stream::consume(
         elseif ($messageType === 'purchase.goods_received') {
             /** @var Balance $balance */
             $balance = Database::retrieve(Balance::class, $data['productId']);
-            $balance->increase($data['quantity']);
+            $reservationId = $balance->processReceivedGoodsAndRetryRejectedReservations(
+                $data['quantity']
+            );
             Database::persist($balance);
+
+            if (is_string($reservationId)) {
+                Stream::produce('stock.reservation_accepted', [
+                    'reservationId' => $reservationId
+                ]);
+            }
 
             Stream::produce('stock.stock_level_changed', [
                 'productId' => $data['productId'],
