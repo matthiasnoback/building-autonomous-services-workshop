@@ -16,13 +16,11 @@ Feature:
     And we have sold and delivered 5 items of this product
     Then I should see that "Mars rover" has a stock level of 5
 
-  @skip
   Scenario: We order a product that isn't in stock
     Given the catalog has a product "Mars rover"
     When we sell 1 item of this product
     Then a purchase order should have been created for 1 item of this product
 
-  @skip
   Scenario: We receive goods for the purchase order that was created for a sales order
     Given the catalog has a product "Mars rover"
     And we have sold 1 item of this product
