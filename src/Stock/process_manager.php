@@ -33,16 +33,6 @@ Stream::consume(
                 'productId' => $data['productId'],
                 'stockLevel' => $balance->stockLevel()
             ]);
-        } elseif ($messageType === 'sales.goods_delivered') {
-            /** @var Balance $balance */
-            $balance = Database::retrieve(Balance::class, $data['productId']);
-            $balance->decrease($data['quantity']);
-            Database::persist($balance);
-
-            Stream::produce('stock.stock_level_changed', [
-                'productId' => $data['productId'],
-                'stockLevel' => $balance->stockLevel()
-            ]);
         }
 
         KeyValueStore::incr($startAtIndexKey);
