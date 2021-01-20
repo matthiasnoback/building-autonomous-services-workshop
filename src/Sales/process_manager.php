@@ -56,24 +56,6 @@ Stream::consume(
             $orderStatus = Database::retrieve(OrderStatus::class, $data['reservationId']);
             $orderStatus->setPurchaseOrderId($purchaseOrderId);
             Database::persist($orderStatus);
-        } elseif ($messageType === 'purchase.goods_received') {
-            $purchaseOrderId = $data['purchaseOrderId'];
-            $orderStatus = Database::findOne(OrderStatus::class, function (OrderStatus $orderStatus) use ($purchaseOrderId) {
-                return $orderStatus->purchaseOrderId() === $purchaseOrderId;
-            });
-            if ($orderStatus instanceof OrderStatus) {
-                sleep(3);
-                echo "Making another reservation\n";
-                echo HttpApi::postFormData(
-                    'http://stock_web/makeStockReservation',
-                    [
-                        'reservationId' => $orderStatus->id(),
-                        'productId' => $data['productId'],
-                        'quantity' => $data['quantity']
-                    ]
-                );
-            }
-            echo "No order status found\n";
         }
 
         KeyValueStore::incr($startAtIndexKey);

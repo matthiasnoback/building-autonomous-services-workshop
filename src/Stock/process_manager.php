@@ -5,6 +5,7 @@ use Common\Persistence\Database;
 use Common\Persistence\KeyValueStore;
 use Common\Stream\Stream;
 use Stock\Balance;
+use Stock\Reservation;
 use Symfony\Component\ErrorHandler\Debug;
 
 require __DIR__ . '/../../vendor/autoload.php';
@@ -24,8 +25,16 @@ Stream::consume(
         }
         elseif ($messageType === 'purchase.goods_received') {
             $balance = Database::retrieve(Balance::class, $data['productId']);
-            $balance->increase($data['quantity']);
+            $reservation = $balance->processReceivedGoodsAndRetryRejectedReservations(
+                $data['quantity']
+            );
             Database::persist($balance);
+
+            if ($reservation instanceof Reservation) {
+                Stream::produce('stock.reservation_accepted', [
+                    'reservationId' => $reservation->reservationId()
+                ]);
+            }
 
             Stream::produce('stock.stock_level_changed', [
                 'productId' => $data['productId'],

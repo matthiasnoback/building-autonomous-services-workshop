@@ -103,7 +103,7 @@ final class FeatureContext extends MinkContext
      */
     public function weSellQuantityOfProduct(string $quantity): void
     {
-        throw new PendingException();
+        $this->createSalesOrder($quantity);
     }
 
     /**
@@ -111,7 +111,7 @@ final class FeatureContext extends MinkContext
      */
     public function weReceiveGoodsForThePurchaseOrder(): void
     {
-        throw new PendingException();
+        $this->receiveGoods();
     }
 
     /**
@@ -119,7 +119,7 @@ final class FeatureContext extends MinkContext
      */
     public function theSalesOrderShouldBeDeliverable(): void
     {
-        throw new PendingException();
+        $this->deliverSalesOrder();
     }
 
     /**
@@ -127,7 +127,18 @@ final class FeatureContext extends MinkContext
      */
     public function aPurchaseOrderShouldHaveBeenCreated(string $quantity): void
     {
-        throw new PendingException();
+        self::assertEventually(function () use ($quantity) {
+            $jsonDecodedData = $this->getResponseAsDecodedJsonData(
+                'http://purchase.localtest.me/listPurchaseOrders'
+            );
+
+            $purchaseOrder = reset($jsonDecodedData);
+
+            Assert::assertEquals(
+                (int)$quantity,
+                $purchaseOrder['quantity']
+            );
+        });
     }
 
     /**

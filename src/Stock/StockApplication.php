@@ -33,9 +33,7 @@ final class StockApplication
 
         if ($reservationWasAccepted) {
             Stream::produce('stock.reservation_accepted', [
-                'reservationId' => $_POST['reservationId'],
-                'productId' => $_POST['productId'],
-                'quantity' => (int)$_POST['quantity']
+                'reservationId' => $_POST['reservationId']
             ]);
 
             Stream::produce('stock.stock_level_changed', [
