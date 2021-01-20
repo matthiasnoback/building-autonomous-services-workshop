@@ -27,11 +27,15 @@ final class StockApplication
         Database::persist($balance);
 
         if ($reservationWasAccepted) {
-            Database::persist($balance);
             Stream::produce('stock.reservation_accepted', [
                 'reservationId' => $_POST['reservationId'],
                 'productId' => $_POST['productId'],
                 'quantity' => (int)$_POST['quantity']
+            ]);
+
+            Stream::produce('stock.stock_level_changed', [
+                'productId' => $_POST['productId'],
+                'stockLevel' => $balance->stockLevel()
             ]);
         } else {
             Stream::produce('stock.reservation_rejected', [
