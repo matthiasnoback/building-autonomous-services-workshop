@@ -95,6 +95,46 @@ final class FeatureContext extends MinkContext
         $this->deliverSalesOrder();
     }
 
+
+    /**
+     * @When we sell :quantity item of this product
+     * @Given we have sold :quantity item of this product
+     */
+    public function weSellQuantityOfProduct(string $quantity): void
+    {
+        $this->createSalesOrder($quantity);
+    }
+
+    /**
+     * @Then the sales order should be deliverable
+     */
+    public function theSalesOrderShouldBeDeliverable(): void
+    {
+        $this->deliverSalesOrder();
+    }
+
+    /**
+     * @When we receive the goods for the purchase order that has been created
+     */
+    public function weReceiveGoodsForThePurchaseOrder(): void
+    {
+        $this->receiveGoods();
+    }
+
+    /**
+     * @Then a purchase order should have been created for :quantity item of this product
+     */
+    public function aPurchaseOrderShouldHaveBeenCreated(string $quantity): void
+    {
+        self::assertEventually(function () use ($quantity) {
+            $jsonDecodedData = $this->getResponseAsDecodedJsonData('http://purchase.localtest.me/listPurchaseOrders');
+
+            Assert::assertCount(1, $jsonDecodedData);
+            $firstItem = reset($jsonDecodedData);
+            Assert::assertEquals((int)$quantity, $firstItem['quantity']);
+        });
+    }
+
     /**
      * Proxy for `$this->find(...)`, which fails if no element matched the given locator.
      *
@@ -196,7 +236,9 @@ final class FeatureContext extends MinkContext
             }
         );
 
-        Assert::assertNotNull($this->purchasedQuantity);
+        if ($this->purchasedQuantity === null) {
+            return;
+        }
 
         self::assertEventually(
             function () {
