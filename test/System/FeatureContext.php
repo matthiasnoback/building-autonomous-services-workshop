@@ -82,6 +82,8 @@ final class FeatureContext extends MinkContext
         $this->createPurchaseOrder($quantity);
 
         $this->receiveGoods();
+
+        sleep(2);
     }
 
     /**
