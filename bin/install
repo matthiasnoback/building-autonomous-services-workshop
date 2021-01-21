@@ -8,3 +8,6 @@ docker-compose -f docker-compose.web.yml -f docker-compose.consumers.yml pull
 # Pull Composer Docker image and run composer install
 docker pull composer:latest
 docker run --rm --interactive --tty --volume "$(pwd)":/app:cached --user "$(id -u):$(id -g)" composer:latest install --prefer-dist
+
+# Copy user and group ID into .env file
+printf "HOST_UID=%s\nHOST_GID=%s\n" "$(id -u)" "$(id -g)" > .env

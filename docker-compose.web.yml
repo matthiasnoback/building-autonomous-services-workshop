@@ -14,8 +14,11 @@ services:
 
     dashboard_web:
         extends:
-            file: docker/templates.yml
+            file: docker-compose.templates.yml
             service: web
+        networks:
+            - traefik
+            - default
         depends_on:
             - dashboard_php
         environment:
@@ -28,8 +31,10 @@ services:
 
     dashboard_php:
         extends:
-            file: docker/templates.yml
+            file: docker-compose.templates.yml
             service: php-fpm
+        networks:
+            - default
         depends_on:
             - catalog_web
             - purchase_web
@@ -37,8 +42,11 @@ services:
 
     catalog_web:
         extends:
-            file: docker/templates.yml
+            file: docker-compose.templates.yml
             service: web
+        networks:
+            - traefik
+            - default
         depends_on:
             - catalog_php
         environment:
@@ -51,15 +59,20 @@ services:
 
     catalog_php:
         extends:
-            file: docker/templates.yml
+            file: docker-compose.templates.yml
             service: php-fpm
+        networks:
+            - default
         volumes:
             - ./:/opt:cached
 
     sales_web:
         extends:
-            file: docker/templates.yml
+            file: docker-compose.templates.yml
             service: web
+        networks:
+            - traefik
+            - default
         depends_on:
             - sales_php
         environment:
@@ -72,13 +85,18 @@ services:
 
     sales_php:
         extends:
-            file: docker/templates.yml
+            file: docker-compose.templates.yml
             service: php-fpm
+        networks:
+            - default
 
     purchase_web:
         extends:
-            file: docker/templates.yml
+            file: docker-compose.templates.yml
             service: web
+        networks:
+            - traefik
+            - default
         depends_on:
             - purchase_php
         environment:
@@ -91,13 +109,18 @@ services:
 
     purchase_php:
         extends:
-            file: docker/templates.yml
+            file: docker-compose.templates.yml
             service: php-fpm
+        networks:
+            - default
 
     stock_web:
         extends:
-            file: docker/templates.yml
+            file: docker-compose.templates.yml
             service: web
+        networks:
+            - traefik
+            - default
         depends_on:
             - stock_php
         environment:
@@ -110,8 +133,10 @@ services:
 
     stock_php:
         extends:
-            file: docker/templates.yml
+            file: docker-compose.templates.yml
             service: php-fpm
+        networks:
+            - default
 
 networks:
     traefik: ~

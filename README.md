@@ -32,10 +32,6 @@ You should finally see a message asking you to open [http://dashboard.localtest.
 
 ## Troubleshooting
 
-### Docker says: "unknown option: cached"
-
-You need to upgrade Docker.
-
 ### Docker says: "Bind for 0.0.0.0:80 failed: port is already allocated"
 
 You have some service running that's already listening on port 80 (like a local Apache or Nginx or something). Close it first, then try again.

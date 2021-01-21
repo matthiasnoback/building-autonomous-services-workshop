@@ -3,12 +3,16 @@ version: '2'
 services:
     projector:
         extends:
-            file: docker/templates.yml
+            file: docker-compose.templates.yml
             service: php-cli
         command: php src/Common/projector.php
+        networks:
+            - default
 
     process_manager:
         extends:
-            file: docker/templates.yml
+            file: docker-compose.templates.yml
             service: php-cli
         command: php src/Common/process_manager.php
+        networks:
+            - default

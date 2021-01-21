@@ -5,5 +5,8 @@ cache:
 services:
   - docker
 
+install:
+  - bin/install
+
 script:
-  - make test
+  - bin/test

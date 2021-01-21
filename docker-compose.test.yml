@@ -2,6 +2,7 @@ version: '2'
 
 services:
     test:
+        build: docker/php-cli
         image: matthiasnoback/building_autonomous_services_php_cli
         env_file: docker/.env
         user: ${HOST_UID}:${HOST_GID}

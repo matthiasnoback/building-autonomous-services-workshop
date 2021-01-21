@@ -17,7 +17,7 @@ Debug::enable();
  * prints the message to `stdout`. Hence, if you want to visually keep
  * track of the stream, run:
  *
- *     make logs
+ *     bin/logs
  */
 
 Stream::consume(function(string $messageType, $data) {

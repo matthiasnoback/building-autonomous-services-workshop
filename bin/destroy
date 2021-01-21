@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Remove everything to be able to start all over
+
+set -eu
+
+# Remove installed dependencies
+rm -rvf vendor/*
+
+# Remove generated .env file
+rm .env
+
+# Stop all Docker services and remove all images
+docker-compose -f docker-compose.web.yml -f docker-compose.consumers.yml down -v --remove-orphans --rmi all
