@@ -1,0 +1,17 @@
+name: Tests
+
+on:
+  pull_request: null
+  push:
+    branches:
+      - master
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Pull images, install dependencies, etc.
+        run: bin/install
+      - name: Run the tests
+        run: bin/test

@@ -47,7 +47,6 @@ final class StockApplication
      */
     public function makeStockReservationController(): void
     {
-        /** @var Balance $balance */
         $balance = Database::retrieve(Balance::class, $_POST['productId']);
 
         $reservationWasAccepted = $balance->makeReservation($_POST['reservationId'], (int)$_POST['quantity']);

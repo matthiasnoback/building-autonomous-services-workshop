@@ -6,7 +6,6 @@
 
     - Docker Engine CE.
     - Docker Compose (install the latest stable version, don't use `apt-get` and the likes).
-    - GNU Make (should be available if you're running Linux or Mac, just try `make -v` in a terminal).
     - Bash (same here, just try `bash --version` in a terminal).
     - Git (run `git --version` to see if you already have it installed).
     - A PHP IDE, preferably PhpStorm.
@@ -20,16 +19,18 @@
 3. Next, `cd` into the project directory and run:
 
     ```bash
-    make up
+    bin/install
     ```
 
-You should finally see a message asking you to open [http://dashboard.localhost](http://dashboard.localhost) in your browser. When you do this, you should see a nice web application. Feel free to click around.
+4. Run the application:
+
+   ```bash
+   bin/start
+   ```
+
+You should finally see a message asking you to open [http://dashboard.localtest.me](http://dashboard.localtest.me) in your browser. When you do this, you should see a nice web application. Feel free to click around.
 
 ## Troubleshooting
-
-### Docker says: "unknown option: cached"
-
-You need to upgrade Docker.
 
 ### Docker says: "Bind for 0.0.0.0:80 failed: port is already allocated"
 

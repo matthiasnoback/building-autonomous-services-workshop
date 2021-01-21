@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Show the status of the containers
+
+set -eu
+
+docker-compose -f docker-compose.web.yml -f docker-compose.consumers.yml ps

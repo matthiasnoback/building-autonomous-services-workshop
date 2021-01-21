@@ -78,9 +78,7 @@ final class PurchaseApplication
     public function receiveGoodsController(): void
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            /** @var PurchaseOrder $purchaseOrder */
             $purchaseOrder = Database::retrieve(PurchaseOrder::class, $_POST['purchaseOrderId']);
-
             $purchaseOrder->markAsReceived();
 
             FlashMessage::add(FlashMessage::SUCCESS, 'Marked purchase order as received: ' . $_POST['purchaseOrderId']);

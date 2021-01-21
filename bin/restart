@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+set -eu
+
+# Stop consumers
+docker-compose -f docker-compose.consumers.yml stop
+
+# Start all services, including the consumers
+docker-compose -f docker-compose.web.yml -f docker-compose.consumers.yml up -d --no-build --remove-orphans

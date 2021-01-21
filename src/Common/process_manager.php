@@ -21,7 +21,7 @@ Debug::enable();
  *
  * If you want to visually keep track of the stream, run:
  *
- *     make logs
+ *     bin/logs
  */
 
 /*

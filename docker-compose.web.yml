@@ -5,7 +5,7 @@ services:
         image: traefik:1.3-alpine
         command: --docker
         ports:
-            - "80:80"
+            - "127.0.0.1:80:80"
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
         networks:
@@ -14,22 +14,27 @@ services:
 
     dashboard_web:
         extends:
-            file: docker/templates.yml
+            file: docker-compose.templates.yml
             service: web
+        networks:
+            - traefik
+            - default
         depends_on:
             - dashboard_php
         environment:
-            - SERVER_NAME=dashboard.localhost
+            - SERVER_NAME=dashboard.localtest.me
             - PHP_BACKEND=dashboard_php
             - ROOT=/opt/src/Dashboard/public
         labels:
             - "traefik.backend=dashboard_web"
-            - "traefik.frontend.rule=Host:dashboard.localhost"
+            - "traefik.frontend.rule=Host:dashboard.localtest.me"
 
     dashboard_php:
         extends:
-            file: docker/templates.yml
+            file: docker-compose.templates.yml
             service: php-fpm
+        networks:
+            - default
         depends_on:
             - catalog_web
             - purchase_web
@@ -37,81 +42,101 @@ services:
 
     catalog_web:
         extends:
-            file: docker/templates.yml
+            file: docker-compose.templates.yml
             service: web
+        networks:
+            - traefik
+            - default
         depends_on:
             - catalog_php
         environment:
-            - SERVER_NAME=catalog.localhost
+            - SERVER_NAME=catalog.localtest.me
             - PHP_BACKEND=catalog_php
             - ROOT=/opt/src/Catalog/public
         labels:
             - "traefik.backend=catalog_web"
-            - "traefik.frontend.rule=Host:catalog.localhost"
+            - "traefik.frontend.rule=Host:catalog.localtest.me"
 
     catalog_php:
         extends:
-            file: docker/templates.yml
+            file: docker-compose.templates.yml
             service: php-fpm
+        networks:
+            - default
         volumes:
             - ./:/opt:cached
 
     sales_web:
         extends:
-            file: docker/templates.yml
+            file: docker-compose.templates.yml
             service: web
+        networks:
+            - traefik
+            - default
         depends_on:
             - sales_php
         environment:
-            - SERVER_NAME=sales.localhost
+            - SERVER_NAME=sales.localtest.me
             - PHP_BACKEND=sales_php
             - ROOT=/opt/src/Sales/public
         labels:
             - "traefik.backend=sales_web"
-            - "traefik.frontend.rule=Host:sales.localhost"
+            - "traefik.frontend.rule=Host:sales.localtest.me"
 
     sales_php:
         extends:
-            file: docker/templates.yml
+            file: docker-compose.templates.yml
             service: php-fpm
+        networks:
+            - default
 
     purchase_web:
         extends:
-            file: docker/templates.yml
+            file: docker-compose.templates.yml
             service: web
+        networks:
+            - traefik
+            - default
         depends_on:
             - purchase_php
         environment:
-            - SERVER_NAME=purchase.localhost
+            - SERVER_NAME=purchase.localtest.me
             - PHP_BACKEND=purchase_php
             - ROOT=/opt/src/Purchase/public
         labels:
             - "traefik.backend=purchase_web"
-            - "traefik.frontend.rule=Host:purchase.localhost"
+            - "traefik.frontend.rule=Host:purchase.localtest.me"
 
     purchase_php:
         extends:
-            file: docker/templates.yml
+            file: docker-compose.templates.yml
             service: php-fpm
+        networks:
+            - default
 
     stock_web:
         extends:
-            file: docker/templates.yml
+            file: docker-compose.templates.yml
             service: web
+        networks:
+            - traefik
+            - default
         depends_on:
             - stock_php
         environment:
-            - SERVER_NAME=stock.localhost
+            - SERVER_NAME=stock.localtest.me
             - PHP_BACKEND=stock_php
             - ROOT=/opt/src/Stock/public
         labels:
             - "traefik.backend=stock_web"
-            - "traefik.frontend.rule=Host:stock.localhost"
+            - "traefik.frontend.rule=Host:stock.localtest.me"
 
     stock_php:
         extends:
-            file: docker/templates.yml
+            file: docker-compose.templates.yml
             service: php-fpm
+        networks:
+            - default
 
 networks:
     traefik: ~

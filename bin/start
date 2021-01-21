@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+set -eu
+
+# Start all Docker services
+docker-compose -f docker-compose.web.yml -f docker-compose.consumers.yml up -d --no-build --remove-orphans
+
+echo ""
+echo "#############################################################"
+echo ""
+echo "Done, now open http://dashboard.localtest.me in your browser"
+echo ""
+echo "#############################################################"
+echo ""

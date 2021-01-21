@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# Stop and remove all containers and volumes for this project
+
+set -eu
+
+# Stop all Docker services
+docker-compose -f docker-compose.web.yml -f docker-compose.consumers.yml down --remove-orphans -v

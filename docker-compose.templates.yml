@@ -2,11 +2,9 @@ version: '2'
 
 services:
     web:
+        build: docker/nginx
         image: matthiasnoback/building_autonomous_services_nginx
         restart: on-failure
-        networks:
-            - traefik
-            - default
         labels:
             - "traefik.enable=true"
             - "traefik.docker.network=traefik"
@@ -15,21 +13,19 @@ services:
             - ${PWD}:/opt:cached
 
     php-fpm:
+        build: docker/php-fpm
         image: matthiasnoback/building_autonomous_services_php_fpm
         restart: on-failure
-        env_file: .env
+        env_file: docker/.env
         user: ${HOST_UID}:${HOST_GID}
-        networks:
-            - default
         volumes:
             - ${PWD}:/opt:cached
 
     php-cli:
+        build: docker/php-cli
         image: matthiasnoback/building_autonomous_services_php_cli
         restart: on-failure
-        env_file: .env
+        env_file: docker/.env
         user: ${HOST_UID}:${HOST_GID}
-        networks:
-            - default
         volumes:
             - ${PWD}:/opt:cached

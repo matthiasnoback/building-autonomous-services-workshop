@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Remove all database files in var/
+
+set -eu
+
+rm -v var/*.json var/stream.txt || true
