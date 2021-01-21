@@ -23,7 +23,7 @@
     make up
     ```
 
-You should finally see a message asking you to open [http://dashboard.localhost](http://dashboard.localhost) in your browser. When you do this, you should see a nice web application. Feel free to click around.
+You should finally see a message asking you to open [http://dashboard.localtest.me](http://dashboard.localtest.me) in your browser. When you do this, you should see a nice web application. Feel free to click around.
 
 ## Troubleshooting
 
