@@ -11,7 +11,7 @@ Debug::enable();
 /*
  * This is a demo projector which consumes every message from the stream.
  * This effectively makes the projector consume every existing message again
- * after a restart (e.g. when running `make restart`).
+ * after a restart (e.g. when running `bin/restart`).
  *
  * The projector doesn't update a local data store of some sorts; it just
  * prints the message to `stdout`. Hence, if you want to visually keep
