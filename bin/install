@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+set -eu
+
+# Pull Docker images for this project
+docker-compose -f docker-compose.web.yml -f docker-compose.consumers.yml pull
+
+# Pull Composer Docker image and run composer install
+docker pull composer:latest
+docker run --rm --interactive --tty --volume "$(pwd)":/app:cached --user "$(id -u):$(id -g)" composer:latest install --prefer-dist

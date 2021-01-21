@@ -3,26 +3,10 @@ SHELL=/bin/bash
 export HOST_UID := $(shell id -u)
 export HOST_GID := $(shell id -g)
 
-COMPOSER_RUN := docker run --rm --interactive --tty --volume `pwd`:/app:cached --user ${HOST_UID}:${HOST_GID} composer:latest
-
 DOCKER_COMPOSE_ALL := docker-compose -f docker-compose.web.yml -f docker-compose.consumers.yml
 DOCKER_COMPOSE_CONSUMERS := docker-compose -f docker-compose.consumers.yml
 DOCKER_COMPOSE_WEB := docker-compose -f docker-compose.web.yml
 DOCKER_COMPOSE_TEST := docker-compose -f docker-compose.test.yml
-
-.PHONY: vendor
-vendor:
-	 ${COMPOSER_RUN} install
-
-## up: Start all services for this project
-.PHONY: up
-up: vendor
-	${DOCKER_COMPOSE_ALL} up -d --no-build --remove-orphans
-	@echo "#############################################################"
-	@echo ""
-	@echo "Done, now open http://dashboard.localtest.me in your browser"
-	@echo ""
-	@echo "#############################################################"
 
 ## restart: Restart the consumers
 .PHONY: restart
