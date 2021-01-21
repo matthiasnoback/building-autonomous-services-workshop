@@ -1,11 +1,5 @@
 SHELL=/bin/bash
 
-PLATFORM := $(shell uname -s)
-
-ifeq ($(COMPOSER_HOME),)
-export COMPOSER_HOME=~/.composer
-endif
-
 export HOST_UID := $(shell id -u)
 export HOST_GID := $(shell id -g)
 
@@ -16,16 +10,9 @@ DOCKER_COMPOSE_CONSUMERS := docker-compose -f docker-compose.consumers.yml
 DOCKER_COMPOSE_WEB := docker-compose -f docker-compose.web.yml
 DOCKER_COMPOSE_TEST := docker-compose -f docker-compose.test.yml
 
-~/.composer:
-	mkdir -p ~/.composer
-
-vendor: ~/.composer composer.json composer.lock
+.PHONY: vendor
+vendor:
 	 ${COMPOSER_RUN} install
-
-## composer: entrypoint for running Composer (use bin/composer)
-.PHONY: composer
-composer:
-	@${COMPOSER_RUN} $(ARGS) --ansi
 
 ## up: Start all services for this project
 .PHONY: up
@@ -38,7 +25,8 @@ up: vendor
 	@echo "#############################################################"
 
 ## restart: Restart the consumers
-restart: vendor
+.PHONY: restart
+restart:
 	${DOCKER_COMPOSE_CONSUMERS} stop
 	${DOCKER_COMPOSE_ALL} up -d
 
@@ -62,32 +50,19 @@ ps:
 logs:
 	${DOCKER_COMPOSE_ALL} logs -f
 
-docker/nginx/.built: docker/nginx/Dockerfile docker/nginx/template.conf
-	docker build -t matthiasnoback/building_autonomous_services_nginx:latest -f docker/nginx/Dockerfile docker/nginx/
-	touch $@
-
-docker/php-fpm/.built: docker/php-fpm/Dockerfile docker/php-fpm/php.ini
-	docker build -t matthiasnoback/building_autonomous_services_php_fpm:latest -f docker/php-fpm/Dockerfile docker/php-fpm/
-	touch $@
-
-docker/php-cli/.built: docker/php-cli/Dockerfile docker/php-cli/php.ini
-	docker build -t matthiasnoback/building_autonomous_services_php_cli:latest -f docker/php-cli/Dockerfile docker/php-cli/
-	touch $@
-
 ## build: Build the Docker images locally
 .PHONY: build
-build: docker/nginx/.built docker/php-fpm/.built docker/php-cli/.built
+build:
+	docker build -t matthiasnoback/building_autonomous_services_nginx:latest -f docker/nginx/Dockerfile docker/nginx/
+	docker build -t matthiasnoback/building_autonomous_services_php_fpm:latest -f docker/php-fpm/Dockerfile docker/php-fpm/
+	docker build -t matthiasnoback/building_autonomous_services_php_cli:latest -f docker/php-cli/Dockerfile docker/php-cli/
 
 ## push: Push the Docker images (administrator-only)
 .PHONY: push
-push: docker/nginx/.built docker/php-fpm/.built docker/php-cli/.built
+push:
 	docker push matthiasnoback/building_autonomous_services_nginx:latest
 	docker push matthiasnoback/building_autonomous_services_php_fpm:latest
 	docker push matthiasnoback/building_autonomous_services_php_cli:latest
-
-.PHONY: clean
-clean:
-	find . -name .built -type f | xargs rm -v
 
 ## destroy: remove everything to be able to start all over
 .PHONY: destroy

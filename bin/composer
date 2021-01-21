@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-
-set -eu
-
-# Runs composer in Docker ARGS="$@" make entrypoint-composer
-ARGS="$@" make composer
