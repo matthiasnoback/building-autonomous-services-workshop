@@ -78,7 +78,6 @@ final class SalesApplication
     public function deliverSalesOrderController(): void
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            /** @var SalesOrder $salesOrder */
             $salesOrder = Database::retrieve(SalesOrder::class, $_POST['salesOrderId']);
 
             // TODO make this judgement based on actual stock levels (assignment 05)
