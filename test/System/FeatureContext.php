@@ -48,7 +48,7 @@ final class FeatureContext extends MinkContext
      */
     public function theCatalogHasAProduct(string $productName): void
     {
-        $this->visit('http://catalog.localhost/createProduct');
+        $this->visit('http://catalog.localtest.me/createProduct');
         $this->assertSuccessfulResponse();
         $this->fillField('name', $productName);
         $this->pressButton('Create');
@@ -65,7 +65,7 @@ final class FeatureContext extends MinkContext
     public function iShouldSeeThatHasAStockLevelOf(string $productName, string $stockLevel): void
     {
         self::assertEventually(function () use ($productName, $stockLevel) {
-            $this->visit('http://dashboard.localhost/');
+            $this->visit('http://dashboard.localtest.me/');
             $this->assertSuccessfulResponse();
 
             $nameField = $this->findOrFail('css', '.product-name:contains("' . addslashes($productName) . '")');
@@ -82,7 +82,7 @@ final class FeatureContext extends MinkContext
     public function weHavePurchasedAndReceivedItemsOfThisProduct(string $quantity): void
     {
         self::assertEventually(function () use ($quantity) {
-            $this->visit('http://purchase.localhost/createPurchaseOrder');
+            $this->visit('http://purchase.localtest.me/createPurchaseOrder');
             $this->assertSuccessfulResponse();
 
             $this->selectOption('Product', $this->product);
@@ -91,7 +91,7 @@ final class FeatureContext extends MinkContext
         });
 
         self::assertEventually(function () {
-            $this->visit('http://purchase.localhost/receiveGoods');
+            $this->visit('http://purchase.localtest.me/receiveGoods');
             $this->assertSuccessfulResponse();
             $this->pressButton('Receive');
         });
@@ -104,7 +104,7 @@ final class FeatureContext extends MinkContext
     public function weHaveSoldAndDeliveredItemsOfThisProduct(string $quantity): void
     {
         self::assertEventually(function () use ($quantity) {
-            $this->visit('http://sales.localhost/createSalesOrder');
+            $this->visit('http://sales.localtest.me/createSalesOrder');
             $this->assertSuccessfulResponse();
             $this->selectOption('Product', $this->product);
             $this->fillField('Quantity', $quantity);
@@ -112,7 +112,7 @@ final class FeatureContext extends MinkContext
         });
 
         self::assertEventually(function () {
-            $this->visit('http://sales.localhost/deliverSalesOrder');
+            $this->visit('http://sales.localtest.me/deliverSalesOrder');
             $this->assertSuccessfulResponse();
             $this->pressButton('Deliver');
         });

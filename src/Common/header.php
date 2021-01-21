@@ -18,16 +18,16 @@ use Common\Web\FlashMessage;
             </div>
             <ul class="nav navbar-nav">
                 <li>
-                    <a href="http://dashboard.localhost/">Dashboard</a>
+                    <a href="http://dashboard.localtest.me/">Dashboard</a>
                 </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Catalog <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a href="http://catalog.localhost/listProducts">List Products</a>
+                            <a href="http://catalog.localtest.me/listProducts">List Products</a>
                         </li>
                         <li>
-                            <a href="http://catalog.localhost/createProduct">Create a Product</a>
+                            <a href="http://catalog.localtest.me/createProduct">Create a Product</a>
                         </li>
                     </ul>
                 </li>
@@ -35,7 +35,7 @@ use Common\Web\FlashMessage;
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Stock <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a href="http://stock.localhost/stockLevels">Stock levels</a>
+                            <a href="http://stock.localtest.me/stockLevels">Stock levels</a>
                         </li>
                     </ul>
                 </li>
@@ -43,13 +43,13 @@ use Common\Web\FlashMessage;
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Sales <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a href="http://sales.localhost/listSalesOrders">List Sales orders</a>
+                            <a href="http://sales.localtest.me/listSalesOrders">List Sales orders</a>
                         </li>
                         <li>
-                            <a href="http://sales.localhost/createSalesOrder">Create a Sales order</a>
+                            <a href="http://sales.localtest.me/createSalesOrder">Create a Sales order</a>
                         </li>
                         <li>
-                            <a href="http://sales.localhost/deliverSalesOrder">Deliver a Sales order</a>
+                            <a href="http://sales.localtest.me/deliverSalesOrder">Deliver a Sales order</a>
                         </li>
                     </ul>
                 </li>
@@ -57,13 +57,13 @@ use Common\Web\FlashMessage;
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Purchasing <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a href="http://purchase.localhost/listPurchaseOrders">List Purchase orders</a>
+                            <a href="http://purchase.localtest.me/listPurchaseOrders">List Purchase orders</a>
                         </li>
                         <li>
-                            <a href="http://purchase.localhost/createPurchaseOrder">Create a Purchase order</a>
+                            <a href="http://purchase.localtest.me/createPurchaseOrder">Create a Purchase order</a>
                         </li>
                         <li>
-                            <a href="http://purchase.localhost/receiveGoods">Receive Goods</a>
+                            <a href="http://purchase.localtest.me/receiveGoods">Receive Goods</a>
                         </li>
                     </ul>
                 </li>

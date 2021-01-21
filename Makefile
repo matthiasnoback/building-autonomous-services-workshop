@@ -1,7 +1,5 @@
 SHELL=/bin/bash
 
-HOSTS_ENTRY:=127.0.0.1 dashboard.localhost sales.localhost purchase.localhost catalog.localhost stock.localhost
-
 PLATFORM := $(shell uname -s)
 
 ifeq ($(COMPOSER_HOME),)
@@ -18,15 +16,6 @@ DOCKER_COMPOSE_CONSUMERS := docker-compose -f docker-compose.consumers.yml
 DOCKER_COMPOSE_WEB := docker-compose -f docker-compose.web.yml
 DOCKER_COMPOSE_TEST := docker-compose -f docker-compose.test.yml
 
-## hosts-entry: Set up an entry for this project's host names in /etc/hosts
-.PHONY: hosts-entry
-hosts-entry:
-ifeq ($(PLATFORM),$(filter $(PLATFORM),Darwin Linux))
-	(grep "$(HOSTS_ENTRY)" /etc/hosts) || echo '$(HOSTS_ENTRY)' | sudo tee -a /etc/hosts
-else
-	$(warning You have to manually add $(HOSTS_ENTRY) to your hosts file)
-endif
-
 ~/.composer:
 	mkdir -p ~/.composer
 
@@ -40,16 +29,16 @@ composer:
 
 ## up: Start all services for this project
 .PHONY: up
-up: hosts-entry vendor
+up: vendor
 	${DOCKER_COMPOSE_ALL} up -d --no-build --remove-orphans
-	@echo "#########################################################"
+	@echo "#############################################################"
 	@echo ""
-	@echo "Done, now open http://dashboard.localhost in your browser"
+	@echo "Done, now open http://dashboard.localtest.me in your browser"
 	@echo ""
-	@echo "#########################################################"
+	@echo "#############################################################"
 
 ## restart: Restart the consumers
-restart: hosts-entry vendor
+restart: vendor
 	${DOCKER_COMPOSE_CONSUMERS} stop
 	${DOCKER_COMPOSE_ALL} up -d
 
