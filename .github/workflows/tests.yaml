@@ -12,4 +12,4 @@ jobs:
       - name: Pull images, install dependencies, etc.
         run: bin/install
       - name: Run the tests
-        run: bin/tests
+        run: bin/test
