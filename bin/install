@@ -2,12 +2,13 @@
 
 set -eu
 
-# Pull Docker images for this project
-docker-compose -f docker-compose.web.yml -f docker-compose.consumers.yml pull
+echo "Pulling Docker images"
+docker-compose -f docker-compose.web.yml -f docker-compose.consumers.yml pull --quiet
 
 # Pull Composer Docker image and run composer install
-docker pull composer:latest
-docker run --rm --interactive --tty --volume "$(pwd)":/app:cached --user "$(id -u):$(id -g)" composer:latest install --prefer-dist
+echo "Installing Composer dependencies"
+docker pull composer:latest --quiet
+docker run --rm --volume "$(pwd)":/app:cached --user "$(id -u):$(id -g)" composer:latest install --prefer-dist --no-progress
 
 # Copy user and group ID into .env file
 printf "HOST_UID=%s\nHOST_GID=%s\n" "$(id -u)" "$(id -g)" > .env
