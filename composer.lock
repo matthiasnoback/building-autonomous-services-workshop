@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "19df92d437ab5ef4fdfe74cd064b94f0",
+    "content-hash": "f1ecd81de950feeba04553104453c992",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -200,22 +200,22 @@
         },
         {
             "name": "matthiasnoback/naive-serializer",
-            "version": "v0.10.1",
+            "version": "v0.11.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/matthiasnoback/naive-serializer.git",
-                "reference": "477275dbb7cb6ea43fc1532515077c86344f6101"
+                "reference": "f6cf79cfc195f93c0c9fe5e01837a246f1bc30c9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matthiasnoback/naive-serializer/zipball/477275dbb7cb6ea43fc1532515077c86344f6101",
-                "reference": "477275dbb7cb6ea43fc1532515077c86344f6101",
+                "url": "https://api.github.com/repos/matthiasnoback/naive-serializer/zipball/f6cf79cfc195f93c0c9fe5e01837a246f1bc30c9",
+                "reference": "f6cf79cfc195f93c0c9fe5e01837a246f1bc30c9",
                 "shasum": ""
             },
             "require": {
                 "beberlei/assert": "^3.2",
                 "ext-json": "*",
-                "php": "^7.4",
+                "php": "^7.4|^8.0",
                 "phpdocumentor/reflection-docblock": "^5.2"
             },
             "require-dev": {
@@ -243,9 +243,9 @@
             "description": "A naive JSON serializer which recursively converts an object graph to and from JSON, without any configuration or custom code.",
             "support": {
                 "issues": "https://github.com/matthiasnoback/naive-serializer/issues",
-                "source": "https://github.com/matthiasnoback/naive-serializer/tree/v0.10.1"
+                "source": "https://github.com/matthiasnoback/naive-serializer/tree/v0.11.1"
             },
-            "time": "2020-09-08T07:11:53+00:00"
+            "time": "2021-01-29T11:14:52+00:00"
         },
         {
             "name": "nyholm/psr7",

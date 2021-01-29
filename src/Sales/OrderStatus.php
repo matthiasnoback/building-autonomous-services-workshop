@@ -10,14 +10,8 @@ use Common\Persistence\IdentifiableObject;
  */
 final class OrderStatus implements IdentifiableObject
 {
-    /**
-     * @var string
-     */
     private string $salesOrderId;
 
-    /**
-     * @var string|null
-     */
     private ?string $purchaseOrderId = null;
 
     public function __construct(string $salesOrderId)

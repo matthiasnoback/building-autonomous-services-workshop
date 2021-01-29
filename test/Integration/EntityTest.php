@@ -5,15 +5,16 @@ namespace Test\Integration;
 
 use Common\Persistence\Database;
 use Common\Persistence\IdentifiableObject;
+use Generator;
 use PHPUnit\Framework\TestCase;
 use function get_class;
 
 abstract class EntityTest extends TestCase
 {
     /**
-     * @return IdentifiableObject The object that needs persisting
+     * @return Generator<IdentifiableObject> The object that needs persisting
      */
-    abstract protected function getObject(): IdentifiableObject;
+    abstract protected function getObject(): Generator;
 
     /**
      * This is an integration test to verify that an entity can be persisted using `Common\Database`.
@@ -23,12 +24,12 @@ abstract class EntityTest extends TestCase
      */
     public function it_can_be_persisted(): void
     {
-        $originalObject = $this->getObject();
+        foreach ($this->getObject() as $originalObject) {
+            Database::persist($originalObject);
 
-        Database::persist($originalObject);
+            $retrieved = Database::retrieve(get_class($originalObject), $originalObject->id());
 
-        $retrieved = Database::retrieve(get_class($originalObject), $originalObject->id());
-
-        self::assertEquals($retrieved, $originalObject);
+            self::assertEquals($retrieved, $originalObject);
+        }
     }
 }

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Purchase;
 
-use Common\Persistence\IdentifiableObject;
+use Generator;
 use Test\Integration\EntityTest;
 
 final class PurchaseOrderTest extends EntityTest
@@ -57,8 +57,13 @@ final class PurchaseOrderTest extends EntityTest
         );
     }
 
-    protected function getObject(): IdentifiableObject
+    protected function getObject(): Generator
     {
-        return $this->somePurchaseOrder();
+        yield $this->somePurchaseOrder();
+
+        $receivedPurchaseOrder = $this->somePurchaseOrder();
+        $receivedPurchaseOrder->markAsReceived();
+
+        yield $receivedPurchaseOrder;
     }
 }
