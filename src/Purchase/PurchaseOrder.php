@@ -18,24 +18,12 @@ use Common\Persistence\IdentifiableObject;
  */
 final class PurchaseOrder implements IdentifiableObject
 {
-    /**
-     * @var string
-     */
     private string $purchaseOrderId;
 
-    /**
-     * @var string
-     */
     private string $productId;
 
-    /**
-     * @var int
-     */
     private int $quantity;
 
-    /**
-     * @var bool
-     */
     private bool $received = false;
 
     public function __construct(PurchaseOrderId $purchaseOrderId, string $productId, int $quantity)

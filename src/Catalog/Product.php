@@ -11,14 +11,8 @@ use Common\Persistence\IdentifiableObject;
  */
 final class Product implements IdentifiableObject
 {
-    /**
-     * @var string
-     */
     private string $productId;
 
-    /**
-     * @var string
-     */
     private string $name;
 
     /**

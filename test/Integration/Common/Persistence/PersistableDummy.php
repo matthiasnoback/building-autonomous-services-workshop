@@ -7,14 +7,8 @@ use Common\Persistence\IdentifiableObject;
 
 final class PersistableDummy implements IdentifiableObject
 {
-    /**
-     * @var string
-     */
     private string $id;
 
-    /**
-     * @var string
-     */
     private string $secretValue;
 
     public function __construct(DummyId $id)

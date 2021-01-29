@@ -10,14 +10,8 @@ use Common\Persistence\IdentifiableObject;
  */
 final class Balance implements IdentifiableObject
 {
-    /**
-     * @var string
-     */
     private string $productId;
 
-    /**
-     * @var int
-     */
     private int $stockLevel;
 
     /**

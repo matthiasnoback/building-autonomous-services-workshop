@@ -20,29 +20,14 @@ use LogicException;
  */
 final class SalesOrder implements IdentifiableObject
 {
-    /**
-     * @var string
-     */
     private string $salesOrderId;
 
-    /**
-     * @var string
-     */
     private string $productId;
 
-    /**
-     * @var int
-     */
     private int $quantity;
 
-    /**
-     * @var bool
-     */
     private bool $wasDelivered;
 
-    /**
-     * @var bool
-     */
     private bool $isDeliverable = false;
 
     public function __construct(SalesOrderId $salesOrderId, string $productId, int $quantity)
