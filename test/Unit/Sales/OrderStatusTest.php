@@ -3,9 +3,11 @@ declare(strict_types=1);
 
 namespace Sales;
 
-use PHPUnit\Framework\TestCase;
+use Generator;
+use Purchase\PurchaseOrderId;
+use Test\Integration\EntityTest;
 
-final class OrderStatusTest extends TestCase
+final class OrderStatusTest extends EntityTest
 {
     /**
      * @test
@@ -14,5 +16,14 @@ final class OrderStatusTest extends TestCase
     {
         $status = new OrderStatus('1eabf902-0c60-4e1f-adae-0db116c97f16');
         self::assertNull($status->purchaseOrderId());
+    }
+
+    protected function getObject(): Generator
+    {
+        yield new OrderStatus(SalesOrderId::create()->asString());
+
+        $orderStatusWithPurchaseOrderId = new OrderStatus(SalesOrderId::create()->asString());
+        $orderStatusWithPurchaseOrderId->setPurchaseOrderId(PurchaseOrderId::create()->asString());
+        yield $orderStatusWithPurchaseOrderId;
     }
 }

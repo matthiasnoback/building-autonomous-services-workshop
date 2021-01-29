@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Catalog;
 
-use Common\Persistence\IdentifiableObject;
+use Generator;
 use Test\Integration\EntityTest;
 
 final class ProductTest extends EntityTest
@@ -22,8 +22,8 @@ final class ProductTest extends EntityTest
         self::assertEquals($name, $product->name());
     }
 
-    protected function getObject(): IdentifiableObject
+    protected function getObject(): Generator
     {
-        return new Product(ProductId::create(), 'Name');
+        yield new Product(ProductId::create(), 'Name');
     }
 }

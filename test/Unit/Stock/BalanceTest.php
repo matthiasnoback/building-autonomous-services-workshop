@@ -3,7 +3,8 @@ declare(strict_types=1);
 
 namespace Stock;
 
-use Common\Persistence\IdentifiableObject;
+use Catalog\ProductId;
+use Generator;
 use Test\Integration\EntityTest;
 
 final class BalanceTest extends EntityTest
@@ -126,12 +127,26 @@ final class BalanceTest extends EntityTest
         self::assertEquals(3, $balance->stockLevel());
     }
 
-    protected function getObject(): IdentifiableObject
+    protected function getObject(): Generator
     {
-        $balance = new Balance('3257474b-09cb-4339-8e55-8b2476f493c1');
-        $balance->increase(4);
-        $balance->makeReservation('23bb342d-5ac1-433a-b0ae-8beb6a2490ae', 3);
+        yield new Balance(ProductId::create()->asString());
 
-        return $balance;
+        $increasedBalance = new Balance('3257474b-09cb-4339-8e55-8b2476f493c1');
+        $increasedBalance->increase(4);
+        yield $increasedBalance;
+
+        $modifiedBalance = new Balance('3257474b-09cb-4339-8e55-8b2476f493c1');
+        $modifiedBalance->increase(4);
+        $modifiedBalance->decrease(2);
+        yield $modifiedBalance;
+
+        $balanceWithReservation = new Balance('3257474b-09cb-4339-8e55-8b2476f493c1');
+        $balanceWithReservation->increase(4);
+        $balanceWithReservation->makeReservation('23bb342d-5ac1-433a-b0ae-8beb6a2490ae', 3);
+        yield $balanceWithReservation;
+
+        $balanceWithRejectedReservation = new Balance('3257474b-09cb-4339-8e55-8b2476f493c1');
+        $balanceWithRejectedReservation->makeReservation('23bb342d-5ac1-433a-b0ae-8beb6a2490ae', 3);
+        yield $balanceWithRejectedReservation;
     }
 }

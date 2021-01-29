@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Sales;
 
-use Common\Persistence\IdentifiableObject;
+use Generator;
 use LogicException;
 use Test\Integration\EntityTest;
 
@@ -81,8 +81,17 @@ final class SalesOrderTest extends EntityTest
         return new SalesOrder(SalesOrderId::create(), '8513f8f0-9ed6-4096-b84c-3274dc0394d1', 10);
     }
 
-    protected function getObject(): IdentifiableObject
+    protected function getObject(): Generator
     {
-        return $this->someSalesOrder();
+        yield $this->someSalesOrder();
+
+        $deliverableSalesOrder = $this->someSalesOrder();
+        $deliverableSalesOrder->markAsDeliverable();
+        yield $deliverableSalesOrder;
+
+        $deliveredSalesOrder = $this->someSalesOrder();
+        $deliveredSalesOrder->markAsDeliverable();
+        $deliveredSalesOrder->deliver();
+        yield $deliveredSalesOrder;
     }
 }
