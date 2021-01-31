@@ -2,7 +2,7 @@ version: '2'
 
 services:
     ingress:
-        image: traefik:1.3-alpine
+        image: traefik:1.7-alpine
         command: --docker
         ports:
             - "127.0.0.1:80:80"
