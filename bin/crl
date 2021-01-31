@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+set -eu
+
+source bin/cleanup
+
+source bin/restart
+
+source bin/logs
