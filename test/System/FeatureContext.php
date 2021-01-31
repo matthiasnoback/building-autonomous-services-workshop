@@ -6,7 +6,6 @@ use Asynchronicity\PHPUnit\Asynchronicity;
 use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Mink\Element\NodeElement;
 use Behat\MinkExtension\Context\MinkContext;
-use Common\String\Json;
 use PHPUnit\Framework\Assert;
 use RuntimeException;
 use Symfony\Component\Filesystem\Filesystem;
@@ -19,10 +18,8 @@ final class FeatureContext extends MinkContext
 
     /**
      * The name of the most recently discussed product
-     *
-     * @var string
      */
-    private $product;
+    private ?string $product = null;
 
     /**
      * @BeforeScenario
@@ -48,13 +45,7 @@ final class FeatureContext extends MinkContext
      */
     public function theCatalogHasAProduct(string $productName): void
     {
-        $this->visit('http://catalog.localtest.me/createProduct');
-        $this->assertSuccessfulResponse();
-        $this->fillField('name', $productName);
-        $this->pressButton('Create');
-        $this->assertUrlRegExp('#/listProducts#');
-
-        $this->product = $productName;
+        $this->createProduct($productName);
     }
 
     /**
@@ -64,15 +55,17 @@ final class FeatureContext extends MinkContext
      */
     public function iShouldSeeThatHasAStockLevelOf(string $productName, string $stockLevel): void
     {
-        self::assertEventually(function () use ($productName, $stockLevel) {
-            $this->visit('http://dashboard.localtest.me/');
-            $this->assertSuccessfulResponse();
+        self::assertEventually(
+            function () use ($productName, $stockLevel) {
+                $this->visit('http://dashboard.localtest.me/');
+                $this->assertSuccessfulResponse();
 
-            $nameField = $this->findOrFail('css', '.product-name:contains("' . addslashes($productName) . '")');
-            $actualStockLevel = (int)$this->findOrFail('css', '.stock-level', $nameField->getParent())->getText();
+                $nameField = $this->findOrFail('css', '.product-name:contains("' . addslashes($productName) . '")');
+                $actualStockLevel = (int)$this->findOrFail('css', '.stock-level', $nameField->getParent())->getText();
 
-            Assert::assertEquals($stockLevel, $actualStockLevel);
-        });
+                Assert::assertEquals($stockLevel, $actualStockLevel);
+            }
+        );
     }
 
     /**
@@ -81,20 +74,9 @@ final class FeatureContext extends MinkContext
      */
     public function weHavePurchasedAndReceivedItemsOfThisProduct(string $quantity): void
     {
-        self::assertEventually(function () use ($quantity) {
-            $this->visit('http://purchase.localtest.me/createPurchaseOrder');
-            $this->assertSuccessfulResponse();
+        $this->createPurchaseOrder($quantity);
 
-            $this->selectOption('Product', $this->product);
-            $this->fillField('Quantity', $quantity);
-            $this->pressButton('Order');
-        });
-
-        self::assertEventually(function () {
-            $this->visit('http://purchase.localtest.me/receiveGoods');
-            $this->assertSuccessfulResponse();
-            $this->pressButton('Receive');
-        });
+        $this->receiveGoods();
     }
 
     /**
@@ -103,19 +85,9 @@ final class FeatureContext extends MinkContext
      */
     public function weHaveSoldAndDeliveredItemsOfThisProduct(string $quantity): void
     {
-        self::assertEventually(function () use ($quantity) {
-            $this->visit('http://sales.localtest.me/createSalesOrder');
-            $this->assertSuccessfulResponse();
-            $this->selectOption('Product', $this->product);
-            $this->fillField('Quantity', $quantity);
-            $this->pressButton('Order');
-        });
+        $this->createSalesOrder($quantity);
 
-        self::assertEventually(function () {
-            $this->visit('http://sales.localtest.me/deliverSalesOrder');
-            $this->assertSuccessfulResponse();
-            $this->pressButton('Deliver');
-        });
+        $this->deliverSalesOrder();
     }
 
     /**
@@ -141,12 +113,15 @@ final class FeatureContext extends MinkContext
     {
         $this->assertSession();
 
-        Assert::assertEquals(
-            200,
-            intval($this->getSession()->getStatusCode()),
+        $statusCode = intval($this->getSession()->getStatusCode());
+        Assert::assertTrue(
+            $statusCode >= 200 && $statusCode < 400,
             sprintf(
-                "Expected a successful response. Response body: \n\n%s",
-                $this->getReadableResponseBody()
+                "Expected a successful response status. Actual status code: %d. Response body: \n\n%s",
+                $statusCode,
+                strpos($this->getSession()->getPage()->getContent(), '<html') === false
+                    ? $this->getSession()->getPage()->getContent()
+                    : $this->getReadableResponseBody()
             )
         );
     }
@@ -174,5 +149,72 @@ final class FeatureContext extends MinkContext
         $jsonData = (string)$this->getSession()->getPage()->getContent();
 
         return json_decode($jsonData, true);
+    }
+
+    private function createProduct(string $productName): void
+    {
+        $this->visit('http://catalog.localtest.me/createProduct');
+        $this->assertSuccessfulResponse();
+        $this->fillField('name', $productName);
+        $this->pressButton('Create');
+        $this->assertUrlRegExp('#/listProducts#');
+
+        $this->product = $productName;
+    }
+
+    private function createPurchaseOrder(string $quantity): void
+    {
+        self::assertEventually(
+            function () use ($quantity) {
+                $this->visit('http://purchase.localtest.me/createPurchaseOrder');
+                $this->assertSuccessfulResponse();
+
+                Assert::assertIsString($this->product);
+                $this->selectOption('Product', $this->product);
+                $this->fillField('Quantity', $quantity);
+                $this->pressButton('Order');
+                $this->assertSuccessfulResponse();
+            }
+        );
+    }
+
+    private function receiveGoods(): void
+    {
+        self::assertEventually(
+            function () {
+                $this->visit('http://purchase.localtest.me/receiveGoods');
+                $this->assertSuccessfulResponse();
+                $this->pressButton('Receive');
+                $this->assertSuccessfulResponse();
+            }
+        );
+    }
+
+    private function createSalesOrder(string $quantity): void
+    {
+        self::assertEventually(
+            function () use ($quantity) {
+                $this->visit('http://sales.localtest.me/createSalesOrder');
+                $this->assertSuccessfulResponse();
+
+                Assert::assertIsString($this->product);
+                $this->selectOption('Product', $this->product);
+                $this->fillField('Quantity', $quantity);
+                $this->pressButton('Order');
+                $this->assertSuccessfulResponse();
+            }
+        );
+    }
+
+    private function deliverSalesOrder(): void
+    {
+        self::assertEventually(
+            function () {
+                $this->visit('http://sales.localtest.me/deliverSalesOrder');
+                $this->assertSuccessfulResponse();
+                $this->pressButton('Deliver');
+                $this->assertSuccessfulResponse();
+            }
+        );
     }
 }
