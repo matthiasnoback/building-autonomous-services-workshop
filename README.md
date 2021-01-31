@@ -32,6 +32,14 @@ You should finally see a message asking you to open [http://dashboard.localtest.
 
 ## Troubleshooting
 
+### Server Not Found
+
+In some cases your OS may not be able to resolve `*.localtest.me` hostnames. In that case, add the following to your `hosts` file (e.g. `/etc/hosts` or the equivalent on Windows):
+
+```text
+127.0.0.1 dashboard.localtest.me catalog.localtest.me sales.localtest.me purchase.localtest.me stock.localtest.me
+```
+
 ### Docker says: "Bind for 0.0.0.0:80 failed: port is already allocated"
 
 You have some service running that's already listening on port 80 (like a local Apache or Nginx or something). Close it first, then try again.
