@@ -22,6 +22,11 @@ final class FeatureContext extends MinkContext
     private ?string $product = null;
 
     /**
+     * The most recently purchased quantity
+     */
+    private ?int $purchasedQuantity = null;
+
+    /**
      * @BeforeScenario
      */
     public function clearDatabase(): void
@@ -77,8 +82,6 @@ final class FeatureContext extends MinkContext
         $this->createPurchaseOrder($quantity);
 
         $this->receiveGoods();
-
-        sleep(2);
     }
 
     /**
@@ -176,6 +179,8 @@ final class FeatureContext extends MinkContext
                 $this->fillField('Quantity', $quantity);
                 $this->pressButton('Order');
                 $this->assertSuccessfulResponse();
+
+                $this->purchasedQuantity = (int)$quantity;
             }
         );
     }
@@ -188,6 +193,16 @@ final class FeatureContext extends MinkContext
                 $this->assertSuccessfulResponse();
                 $this->pressButton('Receive');
                 $this->assertSuccessfulResponse();
+            }
+        );
+
+        Assert::assertNotNull($this->purchasedQuantity);
+
+        self::assertEventually(
+            function () {
+                $stockLevels = $this->getResponseAsDecodedJsonData('http://stock.localtest.me/stockLevels');
+                $firstProduct = reset($stockLevels);
+                Assert::assertEquals($this->purchasedQuantity, $firstProduct['stockLevel']);
             }
         );
     }
