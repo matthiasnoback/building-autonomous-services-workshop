@@ -13,9 +13,11 @@ services:
             - default
 
     dashboard_web:
-        extends:
-            file: docker-compose.templates.yml
-            service: web
+        build: docker/nginx
+        image: matthiasnoback/building_autonomous_services_nginx
+        restart: on-failure
+        volumes:
+            - ./:/opt:cached
         networks:
             - traefik
             - default
@@ -26,13 +28,20 @@ services:
             - PHP_BACKEND=dashboard_php
             - ROOT=/opt/src/Dashboard/public
         labels:
+            - "traefik.enable=true"
+            - "traefik.docker.network=traefik"
+            - "traefik.port=80"
             - "traefik.backend=dashboard_web"
             - "traefik.frontend.rule=Host:dashboard.localtest.me"
 
     dashboard_php:
-        extends:
-            file: docker-compose.templates.yml
-            service: php-fpm
+        build: docker/php-fpm
+        image: matthiasnoback/building_autonomous_services_php_fpm
+        restart: on-failure
+        env_file: docker/.env
+        user: ${HOST_UID}:${HOST_GID}
+        volumes:
+            - ./:/opt:cached
         networks:
             - default
         depends_on:
@@ -41,9 +50,11 @@ services:
             - sales_web
 
     catalog_web:
-        extends:
-            file: docker-compose.templates.yml
-            service: web
+        build: docker/nginx
+        image: matthiasnoback/building_autonomous_services_nginx
+        restart: on-failure
+        volumes:
+            - ./:/opt:cached
         networks:
             - traefik
             - default
@@ -54,22 +65,29 @@ services:
             - PHP_BACKEND=catalog_php
             - ROOT=/opt/src/Catalog/public
         labels:
+            - "traefik.enable=true"
+            - "traefik.docker.network=traefik"
+            - "traefik.port=80"
             - "traefik.backend=catalog_web"
             - "traefik.frontend.rule=Host:catalog.localtest.me"
 
     catalog_php:
-        extends:
-            file: docker-compose.templates.yml
-            service: php-fpm
+        build: docker/php-fpm
+        image: matthiasnoback/building_autonomous_services_php_fpm
+        restart: on-failure
+        env_file: docker/.env
+        user: ${HOST_UID}:${HOST_GID}
         networks:
             - default
         volumes:
             - ./:/opt:cached
 
     sales_web:
-        extends:
-            file: docker-compose.templates.yml
-            service: web
+        build: docker/nginx
+        image: matthiasnoback/building_autonomous_services_nginx
+        restart: on-failure
+        volumes:
+            - ./:/opt:cached
         networks:
             - traefik
             - default
@@ -80,20 +98,29 @@ services:
             - PHP_BACKEND=sales_php
             - ROOT=/opt/src/Sales/public
         labels:
+            - "traefik.enable=true"
+            - "traefik.docker.network=traefik"
+            - "traefik.port=80"
             - "traefik.backend=sales_web"
             - "traefik.frontend.rule=Host:sales.localtest.me"
 
     sales_php:
-        extends:
-            file: docker-compose.templates.yml
-            service: php-fpm
+        build: docker/php-fpm
+        image: matthiasnoback/building_autonomous_services_php_fpm
+        restart: on-failure
+        env_file: docker/.env
+        user: ${HOST_UID}:${HOST_GID}
+        volumes:
+            - ./:/opt:cached
         networks:
             - default
 
     purchase_web:
-        extends:
-            file: docker-compose.templates.yml
-            service: web
+        build: docker/nginx
+        image: matthiasnoback/building_autonomous_services_nginx
+        restart: on-failure
+        volumes:
+            - ./:/opt:cached
         networks:
             - traefik
             - default
@@ -104,20 +131,29 @@ services:
             - PHP_BACKEND=purchase_php
             - ROOT=/opt/src/Purchase/public
         labels:
+            - "traefik.enable=true"
+            - "traefik.docker.network=traefik"
+            - "traefik.port=80"
             - "traefik.backend=purchase_web"
             - "traefik.frontend.rule=Host:purchase.localtest.me"
 
     purchase_php:
-        extends:
-            file: docker-compose.templates.yml
-            service: php-fpm
+        build: docker/php-fpm
+        image: matthiasnoback/building_autonomous_services_php_fpm
+        restart: on-failure
+        env_file: docker/.env
+        user: ${HOST_UID}:${HOST_GID}
+        volumes:
+            - ./:/opt:cached
         networks:
             - default
 
     stock_web:
-        extends:
-            file: docker-compose.templates.yml
-            service: web
+        build: docker/nginx
+        image: matthiasnoback/building_autonomous_services_nginx
+        restart: on-failure
+        volumes:
+            - ./:/opt:cached
         networks:
             - traefik
             - default
@@ -128,13 +164,20 @@ services:
             - PHP_BACKEND=stock_php
             - ROOT=/opt/src/Stock/public
         labels:
+            - "traefik.enable=true"
+            - "traefik.docker.network=traefik"
+            - "traefik.port=80"
             - "traefik.backend=stock_web"
             - "traefik.frontend.rule=Host:stock.localtest.me"
 
     stock_php:
-        extends:
-            file: docker-compose.templates.yml
-            service: php-fpm
+        build: docker/php-fpm
+        image: matthiasnoback/building_autonomous_services_php_fpm
+        restart: on-failure
+        env_file: docker/.env
+        user: ${HOST_UID}:${HOST_GID}
+        volumes:
+            - ./:/opt:cached
         networks:
             - default
 

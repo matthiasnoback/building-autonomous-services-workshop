@@ -2,17 +2,25 @@ version: '2'
 
 services:
     projector:
-        extends:
-            file: docker-compose.templates.yml
-            service: php-cli
+        build: docker/php-cli
+        image: matthiasnoback/building_autonomous_services_php_cli
+        restart: on-failure
+        env_file: docker/.env
+        user: ${HOST_UID}:${HOST_GID}
+        volumes:
+            - ./:/opt:cached
         command: php src/Common/projector.php
         networks:
             - default
 
     process_manager:
-        extends:
-            file: docker-compose.templates.yml
-            service: php-cli
+        build: docker/php-cli
+        image: matthiasnoback/building_autonomous_services_php_cli
+        restart: on-failure
+        env_file: docker/.env
+        user: ${HOST_UID}:${HOST_GID}
+        volumes:
+            - ./:/opt:cached
         command: php src/Common/process_manager.php
         networks:
             - default

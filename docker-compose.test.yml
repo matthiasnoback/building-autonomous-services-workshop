@@ -7,6 +7,6 @@ services:
         env_file: docker/.env
         user: ${HOST_UID}:${HOST_GID}
         volumes:
-            - ${PWD}:/opt:cached
+            - ./:/opt:cached
         network_mode: host
         command: "true" # do nothing when started by `docker-compose up`
