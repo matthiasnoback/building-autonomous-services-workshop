@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Stock;
@@ -79,18 +80,20 @@ final class Balance implements IdentifiableObject
     /**
      * This will be useful in assignment 10
      */
-    public function processReceivedGoodsAndRetryRejectedReservations(int $quantity): ?string
+    public function processReceivedGoodsAndRetryRejectedReservations(int $quantity): ?Reservation
     {
-        foreach ($this->rejectedReservations as $key => $rejectedReservation) {
-            if ($rejectedReservation->quantity() <= $quantity) {
-                unset($this->reservations[$key]);
-                $this->increase($quantity - $rejectedReservation->quantity());
+        $this->increase($quantity);
 
-                return $rejectedReservation->reservationId();
+        foreach ($this->rejectedReservations as $key => $rejectedReservation) {
+            if ($rejectedReservation->quantity() <= $this->stockLevel) {
+                unset($this->rejectedReservations[$key]);
+                $this->reservations[] = $rejectedReservation;
+
+                $this->decrease($rejectedReservation->quantity());
+
+                return $rejectedReservation;
             }
         }
-
-        $this->increase($quantity);
 
         return null;
     }

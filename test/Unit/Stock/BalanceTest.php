@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Stock;
@@ -92,7 +93,8 @@ final class BalanceTest extends EntityTest
 
         $result = $balance->processReceivedGoodsAndRetryRejectedReservations(5);
 
-        self::assertEquals($rejectedReservationId, $result);
+        self::assertInstanceOf(Reservation::class, $result);
+        self::assertEquals($rejectedReservationId, $result->reservationId());
         self::assertEquals(1, $balance->stockLevel());
     }
 
