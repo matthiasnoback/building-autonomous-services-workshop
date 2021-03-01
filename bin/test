@@ -9,4 +9,4 @@ source bin/restart
 DOCKER_COMPOSE_TEST="docker-compose -f docker-compose.test.yml run --rm test"
 ${DOCKER_COMPOSE_TEST} vendor/bin/phpstan analyze
 ${DOCKER_COMPOSE_TEST} vendor/bin/phpunit -v --stop-on-error
-${DOCKER_COMPOSE_TEST} vendor/bin/behat -vvv --stop-on-failure
+${DOCKER_COMPOSE_TEST} vendor/bin/behat -vvv --stop-on-failure --tags "~skip"

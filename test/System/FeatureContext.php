@@ -96,6 +96,39 @@ final class FeatureContext extends MinkContext
     }
 
     /**
+     * @When we sell :quantity item of this product
+     * @Given we have sold :quantity item of this product
+     */
+    public function weSellQuantityOfProduct(string $quantity): void
+    {
+        throw new PendingException();
+    }
+
+    /**
+     * @When we receive the goods for the purchase order that has been created
+     */
+    public function weReceiveGoodsForThePurchaseOrder(): void
+    {
+        throw new PendingException();
+    }
+
+    /**
+     * @Then the sales order should be deliverable
+     */
+    public function theSalesOrderShouldBeDeliverable(): void
+    {
+        throw new PendingException();
+    }
+
+    /**
+     * @Then a purchase order should have been created for :quantity item of this product
+     */
+    public function aPurchaseOrderShouldHaveBeenCreated(string $quantity): void
+    {
+        throw new PendingException();
+    }
+
+    /**
      * Proxy for `$this->find(...)`, which fails if no element matched the given locator.
      *
      * @param string $selector
