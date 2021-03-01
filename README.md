@@ -36,6 +36,14 @@ You should finally see a message asking you to open [http://dashboard.localtest.
 
 You have some service running that's already listening on port 80 (like a local Apache or Nginx or something). Close it first, then try again.
 
+## dashboard.localtest.me can't be resolved
+
+In rare cases the `*.localtest.me` domains used by this project don't resolve to `127.0.0.1`. If that's the case you have to add them your `hosts` file:
+
+```
+127.0.0.1 dashboard.localtest.me catalog.localtest.me stock.localtest.me sales.localtest.me purchase.localtest.me
+```
+
 ## A note for Windows users
 
 This setup should work on Windows too, with Docker for Windows and Git Bash. 
