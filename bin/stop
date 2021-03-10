@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+set -eu
+
+# Stop a specific docker-compose service
+docker-compose -f docker-compose.web.yml -f docker-compose.consumers.yml stop "${1-}"
