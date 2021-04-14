@@ -49,3 +49,7 @@ In rare cases the `*.localtest.me` domains used by this project don't resolve to
 This setup should work on Windows too, with Docker for Windows and Git Bash. 
 
 If you feel like you won't be able to install all the tools listed above on your Windows machine, you may want to take a look at [Get started with Docker Machine and a local VM](https://docs.docker.com/machine/get-started/)).
+
+## A note for Linux users
+
+On Linux, to run docker without super user privileges, the desired user needs to be a member of the `docker` group (see https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user).
