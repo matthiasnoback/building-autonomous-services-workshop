@@ -12,7 +12,10 @@ fi
 printf "HOST_UID=%s\nHOST_GID=%s\n" "$(id -u)" "$(id -g)" > .env
 
 echo "Pulling Docker images"
-docker-compose -f docker-compose.web.yml -f docker-compose.consumers.yml pull --quiet
+docker pull traefik:1.7-alpine
+docker pull matthiasnoback/building_autonomous_services_nginx
+docker pull matthiasnoback/building_autonomous_services_php_fpm
+docker pull matthiasnoback/building_autonomous_services_php_cli
 
 # Pull Composer Docker image and run composer install
 echo "Installing Composer dependencies"
